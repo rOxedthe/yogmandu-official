@@ -34,17 +34,18 @@ function useCounter(target: number, duration = 1400) {
   return { count, ref };
 }
 
-/* ── 3-D tilt card ── */
+/* ── 3-D tilt card — entrance wrapper is separate so delay doesn't bleed into tilt ── */
 function TiltCard({ p, delay }: { p: typeof pillars[0]; delay: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const wrapRef  = useRef<HTMLDivElement>(null);
+  const cardRef  = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = cardRef.current;
+    const el = wrapRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) setVisible(true); },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -56,81 +57,79 @@ function TiltCard({ p, delay }: { p: typeof pillars[0]; delay: number }) {
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width  - 0.5;
     const y = (e.clientY - r.top)  / r.height - 0.5;
-    el.style.transform = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 10}deg) scale(1.03)`;
-    el.style.boxShadow = `${-x * 16}px ${y * 16}px 48px ${p.color}28, 0 8px 32px rgba(42,18,8,0.08)`;
+    el.style.transform = `perspective(700px) rotateY(${x * 14}deg) rotateX(${-y * 12}deg) scale(1.04)`;
+    el.style.boxShadow = `${-x * 20}px ${y * 20}px 56px ${p.color}25, 0 8px 32px rgba(42,18,8,0.07)`;
   }, [p.color]);
 
   const handleLeave = useCallback(() => {
     const el = cardRef.current;
     if (!el) return;
-    el.style.transform = "perspective(800px) rotateY(0deg) rotateX(0deg) scale(1)";
+    el.style.transform = "perspective(700px) rotateY(0deg) rotateX(0deg) scale(1)";
     el.style.boxShadow = "0 4px 24px rgba(42,18,8,0.06)";
   }, []);
 
   return (
+    /* Outer div owns ONLY the entrance animation — delay here doesn't affect tilt */
     <div
-      ref={cardRef}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
+      ref={wrapRef}
       style={{
-        background: "white",
-        borderRadius: "1.5rem",
-        padding: "2rem",
-        border: `1px solid ${p.color}18`,
-        boxShadow: "0 4px 24px rgba(42,18,8,0.06)",
-        transition: "transform 0.12s ease, box-shadow 0.12s ease, opacity 0.7s ease, translate 0.7s ease",
-        willChange: "transform",
-        cursor: "default",
         opacity: visible ? 1 : 0,
-        translate: visible ? "0 0" : "0 40px",
-        transitionDelay: `${delay}ms`,
-        position: "relative",
-        overflow: "hidden",
+        transform: visible ? "translateY(0)" : "translateY(44px)",
+        transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms`,
       }}
     >
-      {/* Top gradient line */}
-      <div style={{
-        position: "absolute", top: 0, left: "10%", right: "10%", height: 2,
-        background: `linear-gradient(90deg, transparent, ${p.color}, transparent)`,
-        opacity: 0.5,
-      }} />
-
-      {/* Corner glow */}
-      <div style={{
-        position: "absolute", top: 0, right: 0, width: 120, height: 120, pointerEvents: "none",
-        background: `radial-gradient(circle at 100% 0%, ${p.color}14 0%, transparent 65%)`,
-      }} />
-
-      {/* Icon */}
-      <div style={{
-        width: 52, height: 52, borderRadius: "1rem", marginBottom: 20,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        background: `${p.color}10`, border: `1.5px solid ${p.color}25`,
-        position: "relative",
-      }}>
-        {p.icon}
-        {/* Icon inner glow */}
+      {/* Inner div owns ONLY the tilt — zero delay, instant response */}
+      <div
+        ref={cardRef}
+        onMouseMove={handleMove}
+        onMouseLeave={handleLeave}
+        style={{
+          background: "white",
+          borderRadius: "1.5rem",
+          padding: "2rem",
+          border: `1px solid ${p.color}18`,
+          boxShadow: "0 4px 24px rgba(42,18,8,0.06)",
+          transition: "transform 0.1s ease, box-shadow 0.1s ease",
+          willChange: "transform",
+          cursor: "default",
+          position: "relative",
+          overflow: "hidden",
+          height: "100%",
+        }}
+      >
+        {/* Top gradient line */}
         <div style={{
-          position: "absolute", inset: 0, borderRadius: "inherit",
-          background: `radial-gradient(circle at 50% 0%, ${p.color}20, transparent 70%)`,
+          position: "absolute", top: 0, left: "10%", right: "10%", height: 2,
+          background: `linear-gradient(90deg, transparent, ${p.color}, transparent)`,
+          opacity: 0.5,
+        }} />
+        {/* Corner glow */}
+        <div style={{
+          position: "absolute", top: 0, right: 0, width: 130, height: 130, pointerEvents: "none",
+          background: `radial-gradient(circle at 100% 0%, ${p.color}14 0%, transparent 65%)`,
+        }} />
+        {/* Icon */}
+        <div style={{
+          width: 52, height: 52, borderRadius: "1rem", marginBottom: 20,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          background: `${p.color}10`, border: `1.5px solid ${p.color}25`,
+        }}>
+          {p.icon}
+        </div>
+        <h3 style={{
+          fontFamily: "Cormorant Garamond, serif", fontSize: "1.35rem",
+          fontWeight: 400, color: "#2A1208", marginBottom: 10,
+        }}>
+          {p.title}
+        </h3>
+        <p style={{ fontSize: "0.85rem", fontWeight: 300, lineHeight: 1.75, color: "rgba(42,18,8,0.5)" }}>
+          {p.body}
+        </p>
+        <div style={{
+          position: "absolute", bottom: 20, right: 20, width: 8, height: 8,
+          borderRadius: "50%", background: p.color, opacity: 0.25,
         }} />
       </div>
-
-      <h3 style={{
-        fontFamily: "Cormorant Garamond, serif", fontSize: "1.35rem",
-        fontWeight: 400, color: "#2A1208", marginBottom: 10,
-      }}>
-        {p.title}
-      </h3>
-      <p style={{ fontSize: "0.85rem", fontWeight: 300, lineHeight: 1.75, color: "rgba(42,18,8,0.5)" }}>
-        {p.body}
-      </p>
-
-      {/* Bottom accent dot */}
-      <div style={{
-        position: "absolute", bottom: 20, right: 20, width: 8, height: 8,
-        borderRadius: "50%", background: p.color, opacity: 0.25,
-      }} />
     </div>
   );
 }
@@ -156,24 +155,20 @@ function StatOrb({ s, i }: { s: typeof stats[0]; i: number }) {
     <div ref={wrapRef} style={{
       display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
       opacity: visible ? 1 : 0,
-      translate: visible ? "0 0" : "0 30px",
-      transition: `opacity 0.6s ease ${i * 120}ms, translate 0.6s ease ${i * 120}ms`,
+      transform: visible ? "translateY(0)" : "translateY(30px)",
+      transition: `opacity 0.6s ease ${i * 120}ms, transform 0.6s ease ${i * 120}ms`,
     }}>
-      {/* Rings */}
       <div style={{ position: "relative", width: 100, height: 100 }}>
-        {/* Outer pulse ring */}
         <div style={{
           position: "absolute", inset: -8, borderRadius: "50%",
           border: `1px solid ${s.color}`,
           opacity: 0.15,
           animation: `orb-pulse 2.4s ease-in-out ${i * 0.3}s infinite`,
         }} />
-        {/* Mid ring */}
         <div style={{
           position: "absolute", inset: -2, borderRadius: "50%",
           border: `1px solid ${s.color}30`,
         }} />
-        {/* Main orb */}
         <div ref={ref} style={{
           width: "100%", height: "100%", borderRadius: "50%",
           background: `radial-gradient(circle at 35% 35%, ${s.color}28 0%, ${s.color}10 60%, transparent 100%)`,
@@ -231,9 +226,9 @@ const pillars = [
 ];
 
 const stats = [
-  { value: "500+", numeric: 500, suffix: "+", label: "Graduates worldwide",    color: "#F7941D" },
-  { value: "40+",  numeric: 40,  suffix: "+", label: "Countries represented",  color: "#6B2D8B" },
-  { value: "10+",  numeric: 10,  suffix: "+", label: "Years in Kathmandu",     color: "#8DC63F" },
+  { value: "500+", numeric: 500, suffix: "+", label: "Graduates worldwide",     color: "#F7941D" },
+  { value: "40+",  numeric: 40,  suffix: "+", label: "Countries represented",   color: "#6B2D8B" },
+  { value: "10+",  numeric: 10,  suffix: "+", label: "Years in Kathmandu",      color: "#8DC63F" },
   { value: "RYS",  numeric: undefined,         label: "Yoga Alliance certified", color: "#F7941D" },
 ];
 
@@ -241,36 +236,91 @@ export default function WhySection() {
   return (
     <section style={{ background: "#FAF6F0", padding: "6rem 1.5rem", position: "relative", overflow: "hidden" }}>
 
-      {/* Layered background */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+      {/* ── 3-D CSS background elements ── */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", perspective: "600px" }}>
+        {/* Rotating mandala ring — top left */}
         <div style={{
-          position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
-          width: 800, height: 400, borderRadius: "50%",
-          background: "radial-gradient(ellipse, rgba(247,148,29,0.07) 0%, transparent 65%)",
-        }} />
+          position: "absolute", top: "8%", left: "3%", width: 200, height: 200,
+          animation: "why-spin-slow 18s linear infinite",
+          willChange: "transform",
+        }}>
+          <svg viewBox="0 0 200 200" fill="none" opacity="0.07">
+            <circle cx="100" cy="100" r="90" stroke="#F7941D" strokeWidth="1"/>
+            <circle cx="100" cy="100" r="70" stroke="#F7941D" strokeWidth="0.8"/>
+            <circle cx="100" cy="100" r="50" stroke="#6B2D8B" strokeWidth="0.8"/>
+            {[0,45,90,135,180,225,270,315].map(d => (
+              <line key={d} x1="100" y1="10" x2="100" y2="190"
+                stroke="#F7941D" strokeWidth="0.5"
+                transform={`rotate(${d} 100 100)`}/>
+            ))}
+          </svg>
+        </div>
+
+        {/* Counter-rotating ring — bottom right */}
         <div style={{
-          position: "absolute", bottom: 0, right: 0, width: 300, height: 300,
-          background: "radial-gradient(circle, rgba(107,45,139,0.07) 0%, transparent 70%)",
-        }} />
-        {/* Subtle grid */}
+          position: "absolute", bottom: "5%", right: "2%", width: 240, height: 240,
+          animation: "why-spin-slow 24s linear infinite reverse",
+          willChange: "transform",
+        }}>
+          <svg viewBox="0 0 240 240" fill="none" opacity="0.06">
+            <circle cx="120" cy="120" r="110" stroke="#6B2D8B" strokeWidth="1"/>
+            <circle cx="120" cy="120" r="85"  stroke="#8DC63F" strokeWidth="0.8"/>
+            <circle cx="120" cy="120" r="60"  stroke="#6B2D8B" strokeWidth="0.6"/>
+            {[0,60,120,180,240,300].map(d => (
+              <line key={d} x1="120" y1="10" x2="120" y2="230"
+                stroke="#6B2D8B" strokeWidth="0.5"
+                transform={`rotate(${d} 120 120)`}/>
+            ))}
+          </svg>
+        </div>
+
+        {/* Floating 3-D torus-like ring — mid right */}
+        <div style={{
+          position: "absolute", top: "40%", right: "5%", width: 120, height: 120,
+          animation: "why-float-a 7s ease-in-out infinite",
+          willChange: "transform",
+        }}>
+          <svg viewBox="0 0 120 120" fill="none" opacity="0.09">
+            <ellipse cx="60" cy="60" rx="52" ry="22" stroke="#F7941D" strokeWidth="1.5"/>
+            <ellipse cx="60" cy="60" rx="52" ry="52" stroke="#F7941D" strokeWidth="0.6"/>
+          </svg>
+        </div>
+
+        {/* Small lotus — mid left */}
+        <div style={{
+          position: "absolute", top: "55%", left: "4%", width: 90, height: 90,
+          animation: "why-float-b 9s ease-in-out infinite",
+          willChange: "transform",
+        }}>
+          <svg viewBox="0 0 90 90" fill="none" opacity="0.08">
+            <circle cx="45" cy="45" r="38" stroke="#8DC63F" strokeWidth="1"/>
+            {[0,36,72,108,144,180,216,252,288,324].map(d => (
+              <ellipse key={d} cx="45" cy="20" rx="7" ry="14"
+                fill="#8DC63F" fillOpacity="0.15" stroke="#8DC63F" strokeWidth="0.5"
+                transform={`rotate(${d} 45 45)`}/>
+            ))}
+          </svg>
+        </div>
+
+        {/* Dot grid */}
         <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.025 }}>
           <defs>
-            <pattern id="why-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+            <pattern id="why-dots" width="48" height="48" patternUnits="userSpaceOnUse">
               <circle cx="24" cy="24" r="1" fill="#6B2D8B" />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#why-grid)" />
+          <rect width="100%" height="100%" fill="url(#why-dots)" />
         </svg>
-        {/* Floating decorative rings */}
+
+        {/* Soft glow blobs */}
         <div style={{
-          position: "absolute", left: "5%", top: "20%", width: 160, height: 160,
-          borderRadius: "50%", border: "1px solid rgba(247,148,29,0.1)",
-          animation: "float 9s ease-in-out infinite",
+          position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+          width: 700, height: 350, borderRadius: "50%",
+          background: "radial-gradient(ellipse, rgba(247,148,29,0.07) 0%, transparent 65%)",
         }} />
         <div style={{
-          position: "absolute", right: "8%", bottom: "25%", width: 100, height: 100,
-          borderRadius: "50%", border: "1px solid rgba(107,45,139,0.1)",
-          animation: "float 7s ease-in-out 1.5s infinite",
+          position: "absolute", bottom: 0, right: 0, width: 280, height: 280,
+          background: "radial-gradient(circle, rgba(107,45,139,0.07) 0%, transparent 70%)",
         }} />
       </div>
 
@@ -293,21 +343,32 @@ export default function WhySection() {
         {/* Stats */}
         <div style={{
           display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem",
-          marginBottom: "4.5rem", maxWidth: 680, margin: "0 auto 4.5rem",
+          maxWidth: 680, margin: "0 auto 4.5rem",
         }}>
           {stats.map((s, i) => <StatOrb key={s.value} s={s} i={i} />)}
         </div>
 
-        {/* Pillars */}
+        {/* Pillar cards */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
-          {pillars.map((p, i) => <TiltCard key={p.title} p={p} delay={i * 100} />)}
+          {pillars.map((p, i) => <TiltCard key={p.title} p={p} delay={i * 120} />)}
         </div>
       </div>
 
       <style>{`
         @keyframes orb-pulse {
-          0%, 100% { transform: scale(1);   opacity: 0.15; }
-          50%       { transform: scale(1.25); opacity: 0.05; }
+          0%, 100% { transform: scale(1);    opacity: 0.15; }
+          50%       { transform: scale(1.28); opacity: 0.04; }
+        }
+        @keyframes why-spin-slow {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes why-float-a {
+          0%, 100% { transform: translateY(0px)   rotate(0deg); }
+          50%       { transform: translateY(-18px) rotate(8deg); }
+        }
+        @keyframes why-float-b {
+          0%, 100% { transform: translateY(0px)  rotate(0deg); }
+          50%       { transform: translateY(14px) rotate(-6deg); }
         }
       `}</style>
     </section>
