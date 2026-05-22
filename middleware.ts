@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+export const runtime = "experimental-edge";
+
 const ADMIN_COOKIE = "yogmandu_admin_session";
 const USER_COOKIE  = "yogmandu_user_session";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // ── Admin protection ──────────────────────────────────────────────────────
-  // Redirect to /admin/login if no session cookie present.
-  // Full HMAC verification happens server-side in requireAdminSession().
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
     if (!request.cookies.get(ADMIN_COOKIE)?.value) {
       const loginUrl = new URL("/admin/login", request.url);
