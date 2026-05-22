@@ -13,10 +13,30 @@ const programs = [
 export default function ContactForm() {
   const [form, setForm] = useState({ name: "", email: "", program: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState("");
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Something went wrong. Please try again.");
+      } else {
+        setSubmitted(true);
+      }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -153,9 +173,15 @@ export default function ContactForm() {
                     placeholder="Tell us a little about where you are in your practice and what you're looking for…" />
                 </div>
 
-                <button type="submit" className="cta-lift w-full py-3.5 rounded-full font-medium text-sm"
-                  style={{ background: "#F7941D", color: "#FFFFFF" }}>
-                  Send Message
+                {error && (
+                  <div style={{ background: "rgba(220,38,38,0.07)", border: "1px solid rgba(220,38,38,0.2)", borderRadius: 12, padding: "10px 16px", fontSize: 13, color: "#b91c1c" }}>
+                    {error}
+                  </div>
+                )}
+
+                <button type="submit" disabled={loading} className="cta-lift w-full py-3.5 rounded-full font-medium text-sm"
+                  style={{ background: loading ? "rgba(247,148,29,0.55)" : "#F7941D", color: "#FFFFFF", cursor: loading ? "not-allowed" : "pointer" }}>
+                  {loading ? "Sending…" : "Send Message"}
                 </button>
 
                 <p className="text-xs text-center font-light" style={{ color: "#7A5840" }}>

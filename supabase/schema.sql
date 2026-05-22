@@ -1,77 +1,96 @@
--- Yogmandu CMS backend schema.
--- Run this in the Supabase SQL editor. It creates the CMS tables and a public
--- Storage bucket named "yogmandu-media".
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Yogmandu Website — Supabase Schema
+-- Run this SQL in the Supabase SQL Editor once to set up all required tables.
+-- ─────────────────────────────────────────────────────────────────────────────
 
-create table if not exists public.yogmandu_blogs (
-  id text primary key,
-  slug text unique not null,
-  title text not null,
-  status text not null default 'Draft',
+-- ── Class Sessions ────────────────────────────────────────────────────────────
+create table if not exists yogmandu_sessions (
+  id            text         primary key,
+  slug          text         not null,
+  name          text         not null,
+  type          text,
+  status        text         not null default 'Active',
+  display_order integer      not null default 100,
+  data          jsonb        not null,
+  created_at    timestamptz  not null default now(),
+  updated_at    timestamptz  not null default now()
+);
+
+create index if not exists yogmandu_sessions_status_idx on yogmandu_sessions (status);
+create index if not exists yogmandu_sessions_order_idx  on yogmandu_sessions (display_order);
+
+-- ── Blog Posts ────────────────────────────────────────────────────────────────
+create table if not exists yogmandu_blogs (
+  id           text         primary key,
+  slug         text         not null unique,
+  title        text         not null,
+  status       text         not null default 'Draft',
   published_at timestamptz,
-  data jsonb not null default '{}'::jsonb,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  data         jsonb        not null,
+  created_at   timestamptz  not null default now(),
+  updated_at   timestamptz  not null default now()
 );
 
-create index if not exists yogmandu_blogs_status_idx on public.yogmandu_blogs(status);
-create index if not exists yogmandu_blogs_published_at_idx on public.yogmandu_blogs(published_at desc);
+create index if not exists yogmandu_blogs_status_idx on yogmandu_blogs (status);
+create index if not exists yogmandu_blogs_slug_idx   on yogmandu_blogs (slug);
+create index if not exists yogmandu_blogs_pub_idx    on yogmandu_blogs (published_at desc);
 
-create table if not exists public.yogmandu_sessions (
-  id text primary key,
-  slug text unique not null,
-  name text not null,
-  type text not null,
-  status text not null default 'Active',
-  display_order integer not null default 100,
-  data jsonb not null default '{}'::jsonb,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+-- ── Media Library ─────────────────────────────────────────────────────────────
+create table if not exists yogmandu_media (
+  id         text         primary key,
+  url        text         not null,
+  caption    text         not null default '',
+  used_by    text         not null default '',
+  data       jsonb        not null,
+  created_at timestamptz  not null default now(),
+  updated_at timestamptz  not null default now()
 );
 
-create index if not exists yogmandu_sessions_status_idx on public.yogmandu_sessions(status);
-create index if not exists yogmandu_sessions_display_order_idx on public.yogmandu_sessions(display_order);
-
-create table if not exists public.yogmandu_media (
-  id text primary key,
-  url text not null,
-  caption text not null default '',
-  used_by text not null default '',
-  data jsonb not null default '{}'::jsonb,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+-- ── Contact Submissions ───────────────────────────────────────────────────────
+-- Stores enquiries submitted via the /contact form.
+create table if not exists yogmandu_contacts (
+  id         bigserial    primary key,
+  name       text         not null,
+  email      text         not null,
+  program    text,
+  message    text         not null,
+  ip_hash    text,
+  created_at timestamptz  not null default now()
 );
 
-create index if not exists yogmandu_media_used_by_idx on public.yogmandu_media(used_by);
+create index if not exists yogmandu_contacts_created_idx on yogmandu_contacts (created_at desc);
+create index if not exists yogmandu_contacts_email_idx   on yogmandu_contacts (email);
 
-alter table public.yogmandu_blogs enable row level security;
-alter table public.yogmandu_sessions enable row level security;
-alter table public.yogmandu_media enable row level security;
+-- ── User Accounts ─────────────────────────────────────────────────────────────
+create table if not exists yogmandu_users (
+  id               uuid         primary key default gen_random_uuid(),
+  email            text         not null unique,
+  password_hash    text         not null,
+  full_name        text         not null,
+  phone            text         not null default '',
+  nationality      text         not null default '',
+  experience_level text         not null default 'Beginner',
+  bio              text         not null default '',
+  avatar_url       text         not null default '',
+  created_at       timestamptz  not null default now(),
+  updated_at       timestamptz  not null default now()
+);
 
-drop policy if exists "Public can read published blogs" on public.yogmandu_blogs;
-create policy "Public can read published blogs"
-on public.yogmandu_blogs for select
-using (status = 'Published');
+create index if not exists yogmandu_users_email_idx on yogmandu_users (email);
 
-drop policy if exists "Public can read active sessions" on public.yogmandu_sessions;
-create policy "Public can read active sessions"
-on public.yogmandu_sessions for select
-using (status in ('Active', 'Upcoming'));
+-- ── Row Level Security (RLS) ──────────────────────────────────────────────────
+-- All tables are accessed exclusively via the service role key (server-side).
+-- RLS is enabled to block any direct browser/anon access.
 
-drop policy if exists "Public can read media" on public.yogmandu_media;
-create policy "Public can read media"
-on public.yogmandu_media for select
-using (true);
+alter table yogmandu_sessions  enable row level security;
+alter table yogmandu_blogs     enable row level security;
+alter table yogmandu_media     enable row level security;
+alter table yogmandu_contacts  enable row level security;
+alter table yogmandu_users     enable row level security;
 
-insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values (
-  'yogmandu-media',
-  'yogmandu-media',
-  true,
-  10485760,
-  array['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-)
-on conflict (id) do update
-set
-  public = excluded.public,
-  file_size_limit = excluded.file_size_limit,
-  allowed_mime_types = excluded.allowed_mime_types;
+-- Service role bypasses RLS automatically — no policies needed for server-side calls.
+
+-- ── Storage Bucket ────────────────────────────────────────────────────────────
+-- Create a public bucket named "yogmandu-media" in Supabase Storage:
+--   Dashboard → Storage → New bucket → Name: yogmandu-media → Public: on
+-- No SQL needed; this is done via the Supabase dashboard.

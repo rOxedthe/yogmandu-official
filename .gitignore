@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# runtime site config (written by siteConfigStore at runtime, not committed)
+/data/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

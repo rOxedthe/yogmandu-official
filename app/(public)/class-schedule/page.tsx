@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ScheduleGrid from "./ScheduleGrid";
+import { getActiveSessions } from "@/lib/publicData";
 
 export const metadata: Metadata = {
   title: "Yoga Class Schedule Kathmandu | Daily Classes at Yogmandu Nepal",
@@ -40,7 +41,8 @@ const levelColor = (level: string) => {
   return                               { bg: "rgba(107,45,139,0.08)", text: "#6B2D8B",  border: "rgba(107,45,139,0.2)" };
 };
 
-export default function ClassSchedulePage() {
+export default async function ClassSchedulePage() {
+  const sessions = await getActiveSessions();
   return (
     <main style={{ background: "#FFFFFF", minHeight: "100vh" }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
@@ -105,7 +107,7 @@ export default function ClassSchedulePage() {
       </div>
 
       {/* ── Interactive schedule grid (client component) ── */}
-      <ScheduleGrid />
+      <ScheduleGrid sessions={sessions} />
     </main>
   );
 }

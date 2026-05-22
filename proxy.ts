@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 const ADMIN_COOKIE = "yogmandu_admin_session";
 const USER_COOKIE  = "yogmandu_user_session";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // ── Admin protection ──────────────────────────────────────────────────────

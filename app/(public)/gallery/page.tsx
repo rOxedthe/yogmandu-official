@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GalleryGrid from "./GalleryGrid";
+import { getMediaItems } from "@/lib/publicData";
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
@@ -26,11 +27,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const media = await getMediaItems();
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <GalleryGrid />
+      <GalleryGrid media={media} />
     </>
   );
 }

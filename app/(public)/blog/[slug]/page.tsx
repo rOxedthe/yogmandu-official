@@ -1,79 +1,44 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getBlogBySlug, getPublishedBlogs } from "@/lib/publicData";
 
-const posts = [
-  {
-    slug: "what-yoga-alliance-certification-actually-means",
-    category: "Teacher Training",
-    title: "What Yoga Alliance Certification Actually Means — And What It Doesn't",
-    excerpt: "The RYS 200 stamp is everywhere. But what does it guarantee, what does it leave open, and how should a student actually evaluate a teacher training program?",
-    readTime: "6 min",
-    date: "April 2025",
-    color: "#6B2D8B",
-    author: "Dr. Chintamani Gautam",
-  },
-  {
-    slug: "tibetan-singing-bowls-science-of-sound",
-    category: "Sound Healing",
-    title: "The Science Behind Tibetan Singing Bowls: What Research Actually Says",
-    excerpt: "Sound healing is ancient. But modern neuroscience is beginning to understand why it works. Here's what the evidence shows about brainwave entrainment and the autonomic nervous system.",
-    readTime: "8 min",
-    date: "March 2025",
-    color: "#F7941D",
-    author: "Dr. Chintamani Gautam",
-  },
-  {
-    slug: "kathmandu-yoga-travel-guide",
-    category: "Nepal",
-    title: "Kathmandu for the Yoga Traveller: A Practical and Soulful Guide",
-    excerpt: "Where to stay, what to visit, which temples to walk through at dawn, and how to begin integrating this extraordinary city into your practice.",
-    readTime: "10 min",
-    date: "February 2025",
-    color: "#8DC63F",
-    author: "Yogi Arjun Rakhal",
-  },
-  {
-    slug: "pranayama-beyond-breathwork",
-    category: "Practice",
-    title: "Pranayama Is Not Breathwork: Understanding the Difference",
-    excerpt: "The word 'breathwork' has colonised yoga spaces worldwide. But pranayama is something older, more precise, and more demanding. Here's the distinction that matters.",
-    readTime: "7 min",
-    date: "January 2025",
-    color: "#6B2D8B",
-    author: "Dr. Chintamani Gautam",
-  },
-  {
-    slug: "why-small-yoga-teacher-training-groups",
-    category: "Teacher Training",
-    title: "Why We Keep Our Training Groups Small — And Why It Costs You Less Than You Think",
-    excerpt: "We limit every cohort to 12 students. Here's the pedagogical reasoning, and why a small group is actually better value than a 40-person intensive.",
-    readTime: "5 min",
-    date: "December 2024",
-    color: "#F7941D",
-    author: "Dr. Chintamani Gautam",
-  },
-  {
-    slug: "sound-healing-trauma",
-    category: "Sound Healing",
-    title: "Sound Healing and Trauma: What to Know Before Your First Session",
-    excerpt: "Sound baths can move deep material. For people with trauma histories, that can be both profound and destabilising. What you should tell your practitioner before you begin.",
-    readTime: "9 min",
-    date: "November 2024",
-    color: "#8DC63F",
-    author: "Dr. Dipika",
-  },
+const CATEGORY_COLORS: Record<string, string> = {
+  "Teacher Training": "#6B2D8B",
+  "Sound Healing":    "#F7941D",
+  "Nepal":            "#8DC63F",
+  "Practice":         "#6B2D8B",
+  "Breathwork":       "#6B2D8B",
+  "Community":        "#8DC63F",
+  "Restorative":      "#8DC63F",
+  "Yoga Philosophy":  "#F7941D",
+};
+
+const FALLBACK_POSTS = [
+  { slug: "what-yoga-alliance-certification-actually-means", category: "Teacher Training", title: "What Yoga Alliance Certification Actually Means — And What It Doesn't", excerpt: "The RYS 200 stamp is everywhere. But what does it guarantee, what does it leave open, and how should a student actually evaluate a teacher training program?", readTime: "6 min", date: "April 2025", color: "#6B2D8B", author: "Dr. Chintamani Gautam", body: "" },
+  { slug: "tibetan-singing-bowls-science-of-sound", category: "Sound Healing", title: "The Science Behind Tibetan Singing Bowls: What Research Actually Says", excerpt: "Sound healing is ancient. But modern neuroscience is beginning to understand why it works.", readTime: "8 min", date: "March 2025", color: "#F7941D", author: "Dr. Chintamani Gautam", body: "" },
+  { slug: "kathmandu-yoga-travel-guide", category: "Nepal", title: "Kathmandu for the Yoga Traveller: A Practical and Soulful Guide", excerpt: "Where to stay, what to visit, which temples to walk through at dawn.", readTime: "10 min", date: "February 2025", color: "#8DC63F", author: "Arjun Rakhal Magar", body: "" },
+  { slug: "pranayama-beyond-breathwork", category: "Practice", title: "Pranayama Is Not Breathwork: Understanding the Difference", excerpt: "Pranayama is something older, more precise, and more demanding.", readTime: "7 min", date: "January 2025", color: "#6B2D8B", author: "Dr. Chintamani Gautam", body: "" },
+  { slug: "why-small-yoga-teacher-training-groups", category: "Teacher Training", title: "Why We Keep Our Training Groups Small", excerpt: "We limit every cohort to 12 students.", readTime: "5 min", date: "December 2024", color: "#F7941D", author: "Dr. Chintamani Gautam", body: "" },
+  { slug: "sound-healing-trauma", category: "Sound Healing", title: "Sound Healing and Trauma: What to Know Before Your First Session", excerpt: "Sound baths can move deep material. What you should tell your practitioner before you begin.", readTime: "9 min", date: "November 2024", color: "#8DC63F", author: "Arjun Neupane", body: "" },
 ];
 
 type Params = Promise<{ slug: string }>;
 
 export async function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+  const db = await getPublishedBlogs();
+  const slugs = db && db.length > 0
+    ? db.map((p) => p.slug)
+    : FALLBACK_POSTS.map((p) => p.slug);
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+  const db = await getBlogBySlug(slug);
+  const post = db
+    ? { ...db, color: CATEGORY_COLORS[db.category] ?? "#6B2D8B", readTime: `${Math.max(1, Math.ceil((db.body ?? "").split(/\s+/).length / 200))} min`, date: db.publishDate ? new Date(db.publishDate).toLocaleDateString("en", { month: "long", year: "numeric" }) : "" }
+    : FALLBACK_POSTS.find((p) => p.slug === slug);
   if (!post) return {};
 
   return {
@@ -99,7 +64,10 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function BlogPostPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+  const [db, allDb] = await Promise.all([getBlogBySlug(slug), getPublishedBlogs()]);
+  const post = db
+    ? { ...db, color: CATEGORY_COLORS[db.category] ?? "#6B2D8B", readTime: `${Math.max(1, Math.ceil((db.body ?? "").split(/\s+/).length / 200))} min`, date: db.publishDate ? new Date(db.publishDate).toLocaleDateString("en", { month: "long", year: "numeric" }) : "" }
+    : FALLBACK_POSTS.find((p) => p.slug === slug);
   if (!post) notFound();
 
   const blogPostingSchema = {
@@ -134,7 +102,18 @@ export default async function BlogPostPage({ params }: { params: Params }) {
     ],
   };
 
-  const relatedPosts = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
+  // Prefer DB posts for related articles; fall back to static list
+  const relatedPosts = allDb && allDb.length > 1
+    ? allDb
+        .filter((p) => p.slug !== post.slug)
+        .slice(0, 3)
+        .map((p) => ({
+          slug:     p.slug,
+          category: p.category,
+          title:    p.title,
+          color:    CATEGORY_COLORS[p.category] ?? "#6B2D8B",
+        }))
+    : FALLBACK_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
     <>
@@ -185,23 +164,35 @@ export default async function BlogPostPage({ params }: { params: Params }) {
             {post.excerpt}
           </p>
 
-          {/* Coming soon placeholder */}
-          <div className="rounded-2xl p-10 text-center" style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(42,18,8,0.08)" }}>
-            <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center"
-              style={{ background: `${post.color}15` }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={post.color} strokeWidth="1.5">
-                <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-              </svg>
+          {/* Article body */}
+          {"body" in post && post.body ? (
+            <div className="prose-yogmandu">
+              {post.body.split(/\n\n+/).map((block, i) => {
+                if (block.startsWith("## ")) {
+                  return <h2 key={i} style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "1.8rem", fontWeight: 400, color: "#2A1208", margin: "2.5rem 0 1rem" }}>{block.slice(3)}</h2>;
+                }
+                if (block.startsWith("# ")) {
+                  return <h1 key={i} style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "2.2rem", fontWeight: 400, color: "#2A1208", margin: "2.5rem 0 1rem" }}>{block.slice(2)}</h1>;
+                }
+                if (block.startsWith("- ")) {
+                  const items = block.split("\n").filter(l => l.startsWith("- ")).map(l => l.slice(2));
+                  return <ul key={i} style={{ margin: "1.5rem 0", paddingLeft: "1.5rem" }}>{items.map((item, j) => <li key={j} style={{ fontSize: "1rem", lineHeight: 1.9, color: "#4A2E1A", marginBottom: "0.5rem" }}>{item}</li>)}</ul>;
+                }
+                return <p key={i} style={{ fontSize: "1.05rem", lineHeight: 1.9, color: "#4A2E1A", marginBottom: "1.5rem" }}>{block}</p>;
+              })}
             </div>
-            <p className="text-sm font-light mb-6" style={{ color: "rgba(42,18,8,0.5)" }}>
-              Full article coming soon. In the meantime, reach out to our teaching team directly.
-            </p>
-            <a href="https://wa.me/9779862909469"
-              className="inline-block px-6 py-2.5 rounded-full text-sm font-medium text-white"
-              style={{ background: post.color }}>
-              Ask on WhatsApp
-            </a>
-          </div>
+          ) : (
+            <div className="rounded-2xl p-10 text-center" style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(42,18,8,0.08)" }}>
+              <p className="text-sm font-light mb-6" style={{ color: "rgba(42,18,8,0.5)" }}>
+                Full article coming soon. In the meantime, reach out to our teaching team directly.
+              </p>
+              <a href="https://wa.me/9779862909469"
+                className="inline-block px-6 py-2.5 rounded-full text-sm font-medium text-white"
+                style={{ background: post.color }}>
+                Ask on WhatsApp
+              </a>
+            </div>
+          )}
         </div>
       </section>
 

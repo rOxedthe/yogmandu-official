@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getPublishedBlogs } from "@/lib/publicData";
+import type { DBBlog } from "@/lib/publicData";
 
 const blogSchema = {
   "@context": "https://schema.org",
@@ -40,64 +42,43 @@ export const metadata: Metadata = {
   },
 };
 
-const posts = [
-  {
-    slug: "what-yoga-alliance-certification-actually-means",
-    category: "Teacher Training",
-    title: "What Yoga Alliance Certification Actually Means — And What It Doesn't",
-    excerpt: "The RYS 200 stamp is everywhere. But what does it guarantee, what does it leave open, and how should a student actually evaluate a teacher training program?",
-    readTime: "6 min",
-    date: "April 2025",
-    color: "#6B2D8B",
-  },
-  {
-    slug: "tibetan-singing-bowls-science-of-sound",
-    category: "Sound Healing",
-    title: "The Science Behind Tibetan Singing Bowls: What Research Actually Says",
-    excerpt: "Sound healing is ancient. But modern neuroscience is beginning to understand why it works. Here's what the evidence shows about brainwave entrainment and the autonomic nervous system.",
-    readTime: "8 min",
-    date: "March 2025",
-    color: "#F7941D",
-  },
-  {
-    slug: "kathmandu-yoga-travel-guide",
-    category: "Nepal",
-    title: "Kathmandu for the Yoga Traveller: A Practical and Soulful Guide",
-    excerpt: "Where to stay, what to visit, which temples to walk through at dawn, and how to begin integrating this extraordinary city into your practice.",
-    readTime: "10 min",
-    date: "February 2025",
-    color: "#8DC63F",
-  },
-  {
-    slug: "pranayama-beyond-breathwork",
-    category: "Practice",
-    title: "Pranayama Is Not Breathwork: Understanding the Difference",
-    excerpt: "The word 'breathwork' has colonised yoga spaces worldwide. But pranayama is something older, more precise, and more demanding. Here's the distinction that matters.",
-    readTime: "7 min",
-    date: "January 2025",
-    color: "#6B2D8B",
-  },
-  {
-    slug: "why-small-yoga-teacher-training-groups",
-    category: "Teacher Training",
-    title: "Why We Keep Our Training Groups Small — And Why It Costs You Less Than You Think",
-    excerpt: "We limit every cohort to 12 students. Here's the pedagogical reasoning, and why a small group is actually better value than a 40-person intensive.",
-    readTime: "5 min",
-    date: "December 2024",
-    color: "#F7941D",
-  },
-  {
-    slug: "sound-healing-trauma",
-    category: "Sound Healing",
-    title: "Sound Healing and Trauma: What to Know Before Your First Session",
-    excerpt: "Sound baths can move deep material. For people with trauma histories, that can be both profound and destabilising. What you should tell your practitioner before you begin.",
-    readTime: "9 min",
-    date: "November 2024",
-    color: "#8DC63F",
-  },
+const CATEGORY_COLORS: Record<string, string> = {
+  "Teacher Training": "#6B2D8B",
+  "Sound Healing":    "#F7941D",
+  "Nepal":            "#8DC63F",
+  "Practice":         "#6B2D8B",
+  "Breathwork":       "#6B2D8B",
+  "Community":        "#8DC63F",
+  "Restorative":      "#8DC63F",
+  "Yoga Philosophy":  "#F7941D",
+};
+
+const FALLBACK_POSTS = [
+  { slug: "what-yoga-alliance-certification-actually-means", category: "Teacher Training", title: "What Yoga Alliance Certification Actually Means — And What It Doesn't", excerpt: "The RYS 200 stamp is everywhere. But what does it guarantee, what does it leave open, and how should a student actually evaluate a teacher training program?", readTime: "6 min", date: "April 2025", color: "#6B2D8B" },
+  { slug: "tibetan-singing-bowls-science-of-sound", category: "Sound Healing", title: "The Science Behind Tibetan Singing Bowls: What Research Actually Says", excerpt: "Sound healing is ancient. But modern neuroscience is beginning to understand why it works.", readTime: "8 min", date: "March 2025", color: "#F7941D" },
+  { slug: "kathmandu-yoga-travel-guide", category: "Nepal", title: "Kathmandu for the Yoga Traveller: A Practical and Soulful Guide", excerpt: "Where to stay, what to visit, which temples to walk through at dawn.", readTime: "10 min", date: "February 2025", color: "#8DC63F" },
+  { slug: "pranayama-beyond-breathwork", category: "Practice", title: "Pranayama Is Not Breathwork: Understanding the Difference", excerpt: "Pranayama is something older, more precise, and more demanding than modern breathwork.", readTime: "7 min", date: "January 2025", color: "#6B2D8B" },
+  { slug: "why-small-yoga-teacher-training-groups", category: "Teacher Training", title: "Why We Keep Our Training Groups Small", excerpt: "We limit every cohort to 12 students. Here's the pedagogical reasoning.", readTime: "5 min", date: "December 2024", color: "#F7941D" },
+  { slug: "sound-healing-trauma", category: "Sound Healing", title: "Sound Healing and Trauma: What to Know Before Your First Session", excerpt: "Sound baths can move deep material. What you should tell your practitioner before you begin.", readTime: "9 min", date: "November 2024", color: "#8DC63F" },
 ];
 
-export default function BlogPage() {
+function dbToPost(p: DBBlog) {
+  const wordCount = (p.body ?? "").trim().split(/\s+/).filter(Boolean).length;
+  const readTime = Math.max(1, Math.ceil(wordCount / 200));
+  return {
+    slug:     p.slug,
+    category: p.category,
+    title:    p.title,
+    excerpt:  p.excerpt,
+    readTime: `${readTime} min`,
+    date:     p.publishDate ? new Date(p.publishDate).toLocaleDateString("en", { month: "long", year: "numeric" }) : "",
+    color:    CATEGORY_COLORS[p.category] ?? "#6B2D8B",
+  };
+}
+
+export default async function BlogPage() {
+  const dbPosts = await getPublishedBlogs();
+  const posts = dbPosts && dbPosts.length > 0 ? dbPosts.map(dbToPost) : FALLBACK_POSTS;
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
@@ -117,31 +98,33 @@ export default function BlogPage() {
       </section>
 
       {/* Featured post */}
-      <section className="px-6 pb-12" style={{ background: "#FAF6F0" }}>
-        <div className="max-w-5xl mx-auto">
-          <div className="card-light p-10 md:p-12 rounded-3xl"
-            style={{ borderLeft: "3px solid #F7941D" }}>
-            <span className="text-xs tracking-[0.25em] uppercase font-light" style={{ color: "#F7941D" }}>
-              {posts[0].category} · {posts[0].date}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-light mt-3 mb-5 max-w-2xl leading-[1.2]"
-              style={{ fontFamily: "Cormorant Garamond, serif", color: "#2A1208" }}>
-              {posts[0].title}
-            </h2>
-            <p className="text-sm font-light leading-relaxed mb-8 max-w-xl" style={{ color: "rgba(42,18,8,0.5)" }}>
-              {posts[0].excerpt}
-            </p>
-            <div className="flex items-center gap-6">
-              <Link href={`/blog/${posts[0].slug}`}
-                className="cta-lift px-6 py-2.5 rounded-full text-sm font-medium"
-                style={{ background: "#F7941D", color: "#FAF6F0" }}>
-                Read Article
-              </Link>
-              <span className="text-xs font-light" style={{ color: "rgba(42,18,8,0.3)" }}>{posts[0].readTime} read</span>
+      {posts.length > 0 && (
+        <section className="px-6 pb-12" style={{ background: "#FAF6F0" }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="card-light p-10 md:p-12 rounded-3xl"
+              style={{ borderLeft: "3px solid #F7941D" }}>
+              <span className="text-xs tracking-[0.25em] uppercase font-light" style={{ color: "#F7941D" }}>
+                {posts[0].category} · {posts[0].date}
+              </span>
+              <h2 className="text-3xl md:text-4xl font-light mt-3 mb-5 max-w-2xl leading-[1.2]"
+                style={{ fontFamily: "Cormorant Garamond, serif", color: "#2A1208" }}>
+                {posts[0].title}
+              </h2>
+              <p className="text-sm font-light leading-relaxed mb-8 max-w-xl" style={{ color: "rgba(42,18,8,0.5)" }}>
+                {posts[0].excerpt}
+              </p>
+              <div className="flex items-center gap-6">
+                <Link href={`/blog/${posts[0].slug}`}
+                  className="cta-lift px-6 py-2.5 rounded-full text-sm font-medium"
+                  style={{ background: "#F7941D", color: "#FAF6F0" }}>
+                  Read Article
+                </Link>
+                <span className="text-xs font-light" style={{ color: "rgba(42,18,8,0.3)" }}>{posts[0].readTime} read</span>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Grid */}
       <section className="px-6 pb-28" style={{ background: "#FAF6F0" }}>

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
-import LoadingScreen from "@/components/LoadingScreen";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://yogmandu.com"),
