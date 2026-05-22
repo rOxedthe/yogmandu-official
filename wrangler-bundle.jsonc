@@ -1,0 +1,9 @@
+{
+  // Used only by the build:cf script to bundle .open-next/worker.js into a
+  // self-contained file via `wrangler deploy --dry-run`. This is NOT the
+  // Cloudflare Pages deployment config — that is wrangler.jsonc.
+  "name": "yogmandu-official",
+  "compatibility_date": "2025-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": ".open-next/worker.js"
+}

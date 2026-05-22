@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "build:cf": "opennextjs-cloudflare build && wrangler deploy --dry-run --outdir .open-next/cf-bundle && cp .open-next/cf-bundle/worker.js .open-next/assets/_worker.js"
+    "build:cf": "opennextjs-cloudflare build && wrangler deploy --config wrangler-bundle.jsonc --dry-run --outdir .open-next/cf-bundle && cp .open-next/cf-bundle/worker.js .open-next/assets/_worker.js"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
