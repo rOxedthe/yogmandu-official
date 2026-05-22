@@ -1,10 +1,39 @@
 "use client";
 
-import { Suspense, useRef, useState, useMemo, useEffect } from "react";
+import { Suspense, useRef, useState, useMemo, useEffect, Component } from "react";
+import type { ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Text } from "@react-three/drei";
+import { OrbitControls, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import type { DBMedia } from "@/lib/publicData";
+
+// ── Per-photo error boundary (useTexture throws on load failure) ──────────────
+class TexBoundary extends Component<
+  { children: ReactNode; fallback: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() { return this.state.failed ? this.props.fallback : this.props.children; }
+}
+
+// Inner component — useTexture suspends while loading, then provides the texture
+function TexturedMaterial({ src }: { src: string }) {
+  const tex = useTexture(src);
+  // meshBasicMaterial: unlit, no lighting dependency — photos show at full brightness
+  return <meshBasicMaterial map={tex} />;
+}
+
+// Dark placeholder material shown while loading or on error
+function DarkMaterial({ cat, isError = false }: { cat: string; isError?: boolean }) {
+  return (
+    <meshStandardMaterial
+      color={isError ? "#1a0030" : "#2a0050"}
+      emissive={new THREE.Color(CAT_ACCENT[cat] ?? "#6B2D8B")}
+      emissiveIntensity={0.2}
+    />
+  );
+}
 
 // ── Static gallery images (fallback when Supabase not configured) ─────────────
 const STATIC_PHOTOS = [
@@ -61,35 +90,6 @@ function PhotoPlane({
 }) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [hovered, setHovered] = useState(false);
-  const [tex, setTex] = useState<THREE.Texture | null>(null);
-  const [error, setError]   = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    // Use the native Image constructor instead of THREE.TextureLoader to avoid
-    // WebGL cross-origin issues and React 19 Strict Mode double-effect races.
-    const img = new window.Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      if (cancelled) return;
-      const texture = new THREE.Texture(img);
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.needsUpdate = true;   // required: tells Three.js to upload to GPU
-      setTex(texture);
-    };
-    img.onerror = () => { if (!cancelled) setError(true); };
-    img.src = photo.src;
-    return () => {
-      cancelled = true;
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [photo.src]);
-
-  // Dispose GPU texture when the plane is removed
-  useEffect(() => {
-    return () => { tex?.dispose(); };
-  }, [tex]);
 
   const targetScale = isSelected ? scale * 2.2 : hovered ? scale * 1.12 : scale;
   const targetZ     = isSelected ? 4 : hovered ? 0.4 : 0;
@@ -111,15 +111,12 @@ function PhotoPlane({
       onPointerOut={() => setHovered(false)}
     >
       <planeGeometry args={[1.6, 1.1]} />
-      {tex && !error ? (
-        <meshStandardMaterial map={tex} toneMapped={false} />
-      ) : (
-        <meshStandardMaterial
-          color={error ? "#1a0030" : "#2a0050"}
-          emissive={new THREE.Color(CAT_ACCENT[photo.cat] ?? "#6B2D8B")}
-          emissiveIntensity={0.15}
-        />
-      )}
+      {/* useTexture (R3F native) suspends per-photo; fallback shown while loading */}
+      <Suspense fallback={<DarkMaterial cat={photo.cat} />}>
+        <TexBoundary fallback={<DarkMaterial cat={photo.cat} isError />}>
+          <TexturedMaterial src={photo.src} />
+        </TexBoundary>
+      </Suspense>
 
       {/* Glow border when selected/hovered */}
       {(isSelected || hovered) && (
