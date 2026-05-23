@@ -7,7 +7,15 @@ const USER_COOKIE = "yogmandu_user_session";
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 function getSessionSecret() {
-  return process.env.ADMIN_SESSION_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || "change-me";
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  if (secret && secret.length >= 16) return secret;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "ADMIN_SESSION_SECRET is not set (or is too short). Generate one with `openssl rand -hex 32` and set it in your environment."
+    );
+  }
+  // Dev only: stable per-process fallback so sessions survive HMR reloads.
+  return process.env.SUPABASE_SERVICE_ROLE_KEY || "dev-insecure-session-secret-do-not-use-in-prod";
 }
 
 export async function hashPassword(password: string): Promise<string> {

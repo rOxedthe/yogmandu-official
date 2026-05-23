@@ -173,21 +173,14 @@ export default function AccountDashboardPage() {
   const displayAvatar = avatarPreview || (user.avatar_url || null);
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg, #fdf8f4 0%, #f5f0fa 60%, #fff8f0 100%)", fontFamily: "'DM Sans', sans-serif", paddingBottom: 80 }}>
-      {/* Header */}
-      <header style={{ background: "#fff", borderBottom: "1px solid rgba(107,45,139,0.1)", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 2px 12px rgba(107,45,139,0.06)", position: "sticky", top: 0, zIndex: 50 }}>
-        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg, #6B2D8B, #F7941D)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1C9 1 4 5 4 9C4 11.8 6.2 14.1 9 15C11.8 14.1 14 11.8 14 9C14 5 9 1 9 1Z" fill="white"/><circle cx="9" cy="9" r="1.8" fill="rgba(247,148,29,0.9)"/></svg>
-          </div>
-          <span style={{ fontSize: 18, fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600, color: "#2A1208" }}>Yogmandu</span>
-        </Link>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg, #fdf8f4 0%, #f5f0fa 60%, #fff8f0 100%)", fontFamily: "'DM Sans', sans-serif", paddingBottom: 80, paddingTop: 96 }}>
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "16px 24px 0", display: "flex", justifyContent: "flex-end" }}>
         <button onClick={handleLogout} disabled={loggingOut} style={{ padding: "8px 18px", border: "1.5px solid rgba(107,45,139,0.3)", borderRadius: 10, background: "transparent", color: "#6B2D8B", fontSize: 13, fontWeight: 500, cursor: loggingOut ? "not-allowed" : "pointer", fontFamily: "'DM Sans', sans-serif" }}>
           {loggingOut ? "Signing out…" : "Sign out"}
         </button>
-      </header>
+      </div>
 
-      <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px 0" }}>
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "16px 24px 0" }}>
 
         {/* Profile hero */}
         <div style={{ background: "#fff", borderRadius: 20, padding: "32px", boxShadow: "0 4px 32px rgba(107,45,139,0.09)", border: "1px solid rgba(107,45,139,0.08)", marginBottom: 24, display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>

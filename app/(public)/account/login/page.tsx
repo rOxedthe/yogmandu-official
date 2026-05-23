@@ -3,10 +3,20 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
+// Reject anything that isn't an internal, single-leading-slash path.
+// Blocks open-redirect via `?from=//evil.com` or `?from=https://evil.com`.
+function safeRedirect(target: string | null): string {
+  if (!target) return "/account";
+  if (!target.startsWith("/")) return "/account";
+  if (target.startsWith("//")) return "/account";
+  if (target.startsWith("/\\")) return "/account";
+  return target;
+}
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const from = searchParams.get("from") || "/account";
+  const from = safeRedirect(searchParams.get("from"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
