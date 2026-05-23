@@ -1,6 +1,6 @@
-import { hashPassword } from "@/lib/userAuth";
+import { hashPassword, setUserSessionCookie } from "@/lib/userAuth";
 import { createUser } from "@/lib/supabaseUsers";
-import { setUserSessionCookie } from "@/lib/userAuth";
+import { sendWelcomeEmail } from "@/lib/email";
 import { rateLimit, getClientIp } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +41,12 @@ export async function POST(request: Request) {
         ? experience_level
         : "Beginner",
     });
+
+    // Fire-and-forget welcome email. Don't fail registration if email isn't configured.
+    sendWelcomeEmail({
+      to:       user.email,
+      fullName: user.full_name,
+    }).catch(err => console.error("[register] welcome email failed:", err));
 
     await setUserSessionCookie(user.id);
     return Response.json({ user: { id: user.id, email: user.email, full_name: user.full_name } });

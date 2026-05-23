@@ -1,18 +1,12 @@
 import { rateLimit, getClientIp } from "@/lib/rateLimit";
 import { getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabaseAdmin";
 import { sanitizeDeep } from "@/lib/sanitize";
+import { sendContactAck, sendContactNotify } from "@/lib/email";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export const dynamic = "force-dynamic";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const PROGRAMS = [
-  "200hr Yoga Teacher Training",
-  "300hr Advanced Teacher Training",
-  "Sound Healing Session",
-  "Sound Healing Certification",
-  "General Inquiry",
-] as const;
 
 export async function POST(request: Request) {
   // Rate limit: 5 submissions per IP per hour
@@ -29,6 +23,9 @@ export async function POST(request: Request) {
   if (!body || typeof body !== "object") {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
+
+  const captcha = await verifyTurnstile((body as { captchaToken?: string }).captchaToken, ip);
+  if (!captcha.ok) return Response.json({ error: captcha.error }, { status: 400 });
 
   // Validate required fields
   const name    = String(body.name    ?? "").trim().slice(0, 100);
@@ -68,6 +65,22 @@ export async function POST(request: Request) {
       // Table may not exist yet; submission still acknowledged to the user
     }
   }
+
+  // Send emails in parallel — failures are non-fatal so the user still gets the success screen.
+  await Promise.allSettled([
+    sendContactNotify({
+      name:    sanitized.name,
+      email:   sanitized.email,
+      program: sanitized.program,
+      message: sanitized.message,
+    }),
+    sendContactAck({
+      to:      sanitized.email,
+      name:    sanitized.name,
+      program: sanitized.program,
+      message: sanitized.message,
+    }),
+  ]);
 
   return Response.json({ ok: true });
 }
