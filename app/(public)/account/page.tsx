@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import PasswordInput from "@/components/PasswordInput";
 
 type UserProfile = {
   id: string;
@@ -389,15 +390,15 @@ export default function AccountDashboardPage() {
               <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 400 }}>
                 <div>
                   <label style={labelStyle}>Current password</label>
-                  <input type="password" value={pwForm.current_password} onChange={e => setPwForm(f => ({ ...f, current_password: e.target.value }))} required placeholder="Your current password" style={inputStyle} />
+                  <PasswordInput value={pwForm.current_password} onChange={e => setPwForm(f => ({ ...f, current_password: e.target.value }))} required placeholder="Your current password" />
                 </div>
                 <div>
                   <label style={labelStyle}>New password</label>
-                  <input type="password" value={pwForm.new_password} onChange={e => setPwForm(f => ({ ...f, new_password: e.target.value }))} required minLength={8} placeholder="At least 8 characters" style={inputStyle} />
+                  <PasswordInput value={pwForm.new_password} onChange={e => setPwForm(f => ({ ...f, new_password: e.target.value }))} required minLength={8} placeholder="At least 8 characters" />
                 </div>
                 <div>
                   <label style={labelStyle}>Confirm new password</label>
-                  <input type="password" value={pwForm.confirm} onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))} required placeholder="Repeat new password" style={{ ...inputStyle, borderColor: pwForm.confirm && pwForm.confirm !== pwForm.new_password ? "#ffaaaa" : "" }} />
+                  <PasswordInput value={pwForm.confirm} onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))} required placeholder="Repeat new password" style={{ borderColor: pwForm.confirm && pwForm.confirm !== pwForm.new_password ? "#ffaaaa" : "" }} />
                   {pwForm.confirm && pwForm.confirm !== pwForm.new_password && (
                     <div style={{ fontSize: 12, color: "#c0392b", marginTop: 4 }}>Passwords do not match</div>
                   )}

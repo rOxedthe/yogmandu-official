@@ -2,6 +2,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import PasswordInput from "@/components/PasswordInput";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -93,11 +94,11 @@ function ResetPasswordForm() {
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: 16 }}>
                 <label style={labelStyle}>New password</label>
-                <input type="password" required minLength={8} value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 8 characters" style={inputStyle} autoFocus />
+                <PasswordInput required minLength={8} value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 8 characters" autoFocus />
               </div>
               <div style={{ marginBottom: 22 }}>
                 <label style={labelStyle}>Confirm new password</label>
-                <input type="password" required value={confirm} onChange={e => setConfirm(e.target.value)} placeholder="Repeat password" style={{ ...inputStyle, borderColor: confirm && confirm !== password ? "#ffaaaa" : "#e8ddf5" }} />
+                <PasswordInput required value={confirm} onChange={e => setConfirm(e.target.value)} placeholder="Repeat password" style={{ borderColor: confirm && confirm !== password ? "#ffaaaa" : "#e8ddf5" }} />
               </div>
 
               {error && (

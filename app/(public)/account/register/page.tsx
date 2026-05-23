@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import PasswordInput from "@/components/PasswordInput";
 
 const EXPERIENCE_LEVELS = ["Beginner", "Intermediate", "Advanced"] as const;
 
@@ -175,14 +176,12 @@ export default function AccountRegisterPage() {
             {/* Password */}
             <div style={{ marginBottom: 16 }}>
               <label style={labelStyle}>Password *</label>
-              <input
-                type="password"
+              <PasswordInput
                 value={form.password}
                 onChange={e => update("password", e.target.value)}
                 placeholder="At least 8 characters"
                 required
                 minLength={8}
-                style={inputStyle}
               />
             </div>
 

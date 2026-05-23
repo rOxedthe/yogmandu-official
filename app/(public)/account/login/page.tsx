@@ -2,6 +2,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import PasswordInput from "@/components/PasswordInput";
 
 // Reject anything that isn't an internal, single-leading-slash path.
 // Blocks open-redirect via `?from=//evil.com` or `?from=https://evil.com`.
@@ -92,7 +93,7 @@ function LoginForm() {
                   Forgot password?
                 </Link>
               </div>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Your password" required style={inputStyle} />
+              <PasswordInput value={password} onChange={e => setPassword(e.target.value)} placeholder="Your password" required />
             </div>
 
             {error && (

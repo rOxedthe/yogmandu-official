@@ -9,10 +9,21 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home",    item: "https://yogmandu.com" },
+    { "@type": "ListItem", position: 2, name: "Privacy", item: "https://yogmandu.com/privacy" },
+  ],
+};
+
 const LAST_UPDATED = "May 2026";
 
 export default function PrivacyPolicyPage() {
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
     <main className="pt-32 pb-24 px-6" style={{ background: "#FFFFFF" }}>
       <article className="max-w-3xl mx-auto">
         <p className="text-xs tracking-[0.3em] uppercase mb-6" style={{ color: "#8DC63F" }}>
@@ -138,6 +149,7 @@ export default function PrivacyPolicyPage() {
         </div>
       </article>
     </main>
+    </>
   );
 }
 
