@@ -86,7 +86,12 @@ function LoginForm() {
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com" required autoFocus style={inputStyle} />
             </div>
             <div style={{ marginBottom: 24 }}>
-              <label style={labelStyle}>Password</label>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <label style={labelStyle}>Password</label>
+                <Link href="/account/forgot-password" style={{ fontSize: 12, color: "#6B2D8B", textDecoration: "none" }}>
+                  Forgot password?
+                </Link>
+              </div>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Your password" required style={inputStyle} />
             </div>
 
