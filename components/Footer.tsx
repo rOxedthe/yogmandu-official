@@ -25,6 +25,8 @@ const DEFAULT_CONFIG = {
     { href: "/gallery", label: "Gallery" },
     { href: "/blog",    label: "Blog" },
     { href: "/contact", label: "Contact" },
+    { href: "/privacy", label: "Privacy" },
+    { href: "/terms",   label: "Terms" },
   ],
   contact: [
     { icon: "📍", text: "Miteri Marg, Mid-Baneshwor-31, Kathmandu, Nepal" },

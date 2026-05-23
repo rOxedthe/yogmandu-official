@@ -282,7 +282,15 @@ export default function AccountRegisterPage() {
             </button>
 
             <p style={{ fontSize: 11, color: "#9A7860", textAlign: "center", marginTop: 14 }}>
-              By registering you agree to our terms of service.
+              By registering you agree to our{" "}
+              <Link href="/terms" style={{ color: "#6B2D8B", textDecoration: "underline" }}>
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy" style={{ color: "#6B2D8B", textDecoration: "underline" }}>
+                Privacy Policy
+              </Link>
+              .
             </p>
           </form>
 
