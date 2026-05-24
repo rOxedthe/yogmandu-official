@@ -21,7 +21,7 @@
 
 * { box-sizing: border-box; }
 html {
-  font-size: 17px; /* 16px browser default → 17px: a modest +6% bump for readability */
+  font-size: 18px; /* 16px → 18px base for readability */
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
