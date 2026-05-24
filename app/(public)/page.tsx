@@ -258,13 +258,13 @@ export default function HomePage() {
                 background: `linear-gradient(90deg, ${item.accent}, ${item.accent}55)`,
               }} />
               <span style={{ fontSize: "2rem", display: "block", marginBottom: 12 }}>{item.icon}</span>
-              <h3 style={{
+              <h2 style={{
                 fontFamily: "Cormorant Garamond, serif",
                 fontSize: "1.4rem", fontWeight: 400,
                 color: "#2A1208", marginBottom: 8,
               }}>
                 {item.title}
-              </h3>
+              </h2>
               <p style={{ fontSize: "0.95rem", lineHeight: 1.75, color: "#4A2E1A", fontWeight: 400, marginBottom: 18 }}>
                 {item.desc}
               </p>

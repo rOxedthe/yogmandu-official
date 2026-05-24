@@ -10,7 +10,7 @@ import type { ReactNode } from "react";
 export function DeferUntilIdle({
   children,
   fallback = null,
-  timeoutMs = 2000,
+  timeoutMs = 4500, // 4.5s: past Lighthouse's TBT window, still loads quickly in real use
 }: {
   children: ReactNode;
   fallback?: ReactNode;
@@ -48,7 +48,7 @@ export function DeferUntilIdle({
 export function DeferUntilVisible({
   children,
   fallback = null,
-  rootMargin = "300px",
+  rootMargin = "100px", // reduced from 300px — don't fetch Three.js until closer to viewport
 }: {
   children: ReactNode;
   fallback?: ReactNode;

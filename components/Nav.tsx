@@ -146,8 +146,8 @@ export default function Nav() {
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10,
             textDecoration: "none", justifyContent: "center", padding: "0 2rem" }}>
             <picture>
-              <source srcSet="/logo-sm-opt.webp" type="image/webp" />
-              <img src="/logo-sm.png" alt="Yogmandu" width={120} height={48} fetchPriority="high" decoding="async" style={{ height: 48, width: "auto", objectFit: "contain" }} />
+              <source srcSet="/logo-nav-136-q70.webp" type="image/webp" />
+              <img src="/logo-sm-136.png" alt="Yogmandu" width={120} height={48} fetchPriority="high" decoding="async" style={{ height: 48, width: "auto", objectFit: "contain" }} />
             </picture>
             <span style={{ fontSize: "0.95rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#7A5840", whiteSpace: "nowrap" }}>
               {cfg.tagline}
@@ -229,8 +229,8 @@ export default function Nav() {
         <div className="md:hidden flex items-center justify-between">
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
             <picture>
-              <source srcSet="/logo-sm-opt.webp" type="image/webp" />
-              <img src="/logo-sm.png" alt="Yogmandu" width={100} height={40} decoding="async" style={{ height: 40, width: "auto", objectFit: "contain" }} />
+              <source srcSet="/logo-nav-136-q70.webp" type="image/webp" />
+              <img src="/logo-sm-136.png" alt="Yogmandu" width={100} height={40} decoding="async" style={{ height: 40, width: "auto", objectFit: "contain" }} />
             </picture>
           </Link>
           <button className="flex flex-col gap-1.5 p-2" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
