@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import {
-  Activity,
   Archive,
-  BarChart3,
   Bell,
   BookOpen,
   CalendarDays,
@@ -36,23 +34,6 @@ import {
   Users,
   X,
 } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Legend,
-  Line,
-  LineChart,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 const STORAGE_KEY = "yogmandu-admin-state-v2";
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -61,15 +42,6 @@ const LEVELS = ["All Levels", "Beginner", "Intermediate", "Advanced"];
 const STATUSES = ["Draft", "Published", "Scheduled", "Archived"];
 const SESSION_STATUSES = ["Active", "Paused", "Full", "Cancelled", "Upcoming", "Archived"];
 const STYLES = ["Vinyasa", "Hatha", "Ashtanga", "Yin", "Restorative", "Pranayama", "Meditation", "Sound Healing"];
-const COLORS = ["#059669", "#0f766e", "#d97706", "#7c3aed", "#64748b"];
-
-function seededRandom(seed) {
-  let value = seed;
-  return () => {
-    value = (value * 9301 + 49297) % 233280;
-    return value / 233280;
-  };
-}
 
 function uid(prefix = "id") {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -764,20 +736,6 @@ async function loadRemoteCms() {
   };
 }
 
-function generateTraffic(days = 30) {
-  const rand = seededRandom(days * 17);
-  return Array.from({ length: days }, (_, index) => {
-    const date = new Date(2026, 4, 19 - days + index + 1);
-    const weekend = [0, 6].includes(date.getDay());
-    const views = Math.round(2600 + rand() * 1200 + (weekend ? 900 : 0));
-    return {
-      date: date.toLocaleDateString("en", { month: "short", day: "numeric" }),
-      views,
-      visitors: Math.round(views * (0.28 + rand() * 0.1)),
-      conversions: Math.round(18 + rand() * 28 + (weekend ? 12 : 0)),
-    };
-  });
-}
 
 function classNames(...items) {
   return items.filter(Boolean).join(" ");
@@ -1014,59 +972,35 @@ function SeoEditorFields({ value, onChange, allPages = [] }) {
   );
 }
 
-function Dashboard({ data, setActive, toast }) {
-  const [range, setRange] = useState("30");
-  const traffic = useMemo(() => generateTraffic(Number(range) || 30), [range]);
-  const topPages = useMemo(() => data.seoPages.slice(0, 5).map((page, index) => {
-    const name = String(page.pageName || page.path || "Page");
-    const short = name.length > 22 ? `${name.slice(0, 20)}…` : name;
-    return { page: short, fullPage: name, views: [32100, 24100, 18600, 14200, 11900][index] };
-  }), [data.seoPages]);
-  const sources = [
-    { name: "Organic", value: 46 },
-    { name: "Direct", value: 24 },
-    { name: "Social", value: 15 },
-    { name: "Referral", value: 10 },
-    { name: "Email", value: 5 },
-  ];
-  const activeSessions = data.sessions.filter((item) => item.status === "Active");
-  const lowSpots = data.sessions.filter((item) => item.capacity - item.enrolled < 3 && item.status !== "Archived");
-  const mostPopular = [...data.sessions].sort((a, b) => b.views - a.views)[0];
+function Dashboard({ data, setActive }) {
+  const [bookings, setBookings] = useState([]);
+  const [bookingsLoading, setBookingsLoading] = useState(true);
 
-  function exportCsv() {
-    const rows = [["Metric", "Value"], ["Total Page Views", "128450"], ["Unique Visitors", "34820"], ["Sessions This Month", data.sessions.length], ["Enquiries", "318"], [], ["Top Pages", "Views"], ...topPages.map((item) => [item.page, item.views])];
-    const csv = rows.map((row) => row.join(",")).join("\n");
-    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "yogmandu-dashboard.csv";
-    link.click();
-    URL.revokeObjectURL(url);
-    toast("Dashboard CSV exported");
-  }
+  useEffect(() => {
+    fetch("/api/admin/bookings")
+      .then((r) => r.json())
+      .then((json) => { if (json.data) setBookings(json.data); })
+      .catch(() => {})
+      .finally(() => setBookingsLoading(false));
+  }, []);
+
+  const activeSessions = data.sessions.filter((s) => s.status === "Active");
+  const lowSpots       = data.sessions.filter((s) => s.capacity - s.enrolled < 3 && s.status !== "Archived");
+  const mostPopular    = [...data.sessions].sort((a, b) => b.views - a.views)[0];
+  const pendingBookings = bookings.filter((b) => b.status === "pending").length;
+  const publishedPosts  = data.blogs.filter((b) => b.status === "Published").length;
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex gap-2">
-          {["7", "30", "90"].map((item) => <Button key={item} variant={range === item ? "primary" : "secondary"} onClick={() => setRange(item)}>Last {item} days</Button>)}
-          <Button variant={range === "45" ? "primary" : "secondary"} onClick={() => setRange("45")}>Custom</Button>
-        </div>
-        <Button variant="secondary" onClick={exportCsv}><Download size={16} /> Export CSV</Button>
-      </div>
-
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
-          ["Total Page Views", "128,450", "+12.4%", Activity],
-          ["Unique Visitors", "34,820", "+8.1%", Users],
-          ["Sessions This Month", "124", "+6", CalendarDays],
-          ["Enquiries / Bookings", "318", "+22%", Bell],
-        ].map(([label, value, change, Icon]) => (
+          ["Total Bookings",        bookingsLoading ? "—" : bookings.length, Bell],
+          ["Pending Bookings",      bookingsLoading ? "—" : pendingBookings,  Clock],
+          ["Active Sessions",       activeSessions.length,                     CalendarDays],
+          ["Published Blog Posts",  publishedPosts,                            BookOpen],
+        ].map(([label, value, Icon]) => (
           <div key={label} className="rounded-xl border border-stone-200 bg-white p-4 shadow-sm">
-            <div className="flex items-start justify-between">
-              <Icon className="text-emerald-600" />
-              <Badge className="bg-emerald-100 text-emerald-700">{change}</Badge>
-            </div>
+            <Icon className="text-emerald-600" />
             <p className="mt-4 text-sm text-stone-500">{label}</p>
             <p className="mt-1 text-3xl font-semibold text-stone-900">{value}</p>
           </div>
@@ -1077,49 +1011,19 @@ function Dashboard({ data, setActive, toast }) {
         <h3 className="mb-4 font-semibold text-stone-900">Sessions Overview</h3>
         <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
           <div className="rounded-lg bg-emerald-50 p-3"><p className="text-xs text-emerald-700">Active this week</p><p className="mt-1 text-2xl font-semibold text-emerald-900">{activeSessions.length}</p></div>
-          <div className="rounded-lg bg-teal-50 p-3 min-w-0"><p className="text-xs text-teal-700">Most popular</p><p className="mt-1 truncate text-sm font-semibold text-teal-900" title={mostPopular?.name}>{mostPopular?.name}</p></div>
-          <div className="rounded-lg bg-amber-50 p-3"><p className="text-xs text-amber-700">Low spots</p><p className="mt-1 text-2xl font-semibold text-amber-900">{lowSpots.length}</p></div>
-          <div className="rounded-lg bg-red-50 p-3"><p className="text-xs text-red-700">Fully booked</p><p className="mt-1 text-2xl font-semibold text-red-900">{data.sessions.filter((item) => item.enrolled >= item.capacity).length}</p></div>
-          <div className="rounded-lg bg-stone-100 p-3"><p className="text-xs text-stone-600">Upcoming workshops</p><p className="mt-1 text-2xl font-semibold text-stone-900">{data.sessions.filter((item) => item.status === "Upcoming").length}</p></div>
+          <div className="rounded-lg bg-teal-50 p-3 min-w-0"><p className="text-xs text-teal-700">Most popular</p><p className="mt-1 truncate text-sm font-semibold text-teal-900" title={mostPopular?.name}>{mostPopular?.name || "—"}</p></div>
+          <div className="rounded-lg bg-amber-50 p-3"><p className="text-xs text-amber-700">Low spots (&lt;3)</p><p className="mt-1 text-2xl font-semibold text-amber-900">{lowSpots.length}</p></div>
+          <div className="rounded-lg bg-red-50 p-3"><p className="text-xs text-red-700">Fully booked</p><p className="mt-1 text-2xl font-semibold text-red-900">{data.sessions.filter((s) => s.enrolled >= s.capacity).length}</p></div>
+          <div className="rounded-lg bg-stone-100 p-3"><p className="text-xs text-stone-600">Upcoming</p><p className="mt-1 text-2xl font-semibold text-stone-900">{data.sessions.filter((s) => s.status === "Upcoming").length}</p></div>
         </div>
       </section>
 
-      <div className="grid gap-4 xl:grid-cols-2">
-        <ChartCard title="Traffic Over Last 30 Days">
-          <LineChart data={traffic}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="date" /><YAxis /><Tooltip /><Legend /><Line type="monotone" dataKey="views" stroke="#059669" strokeWidth={2} dot={false} /><Line type="monotone" dataKey="visitors" stroke="#0f766e" strokeWidth={2} dot={false} /></LineChart>
-        </ChartCard>
-        <ChartCard title="Top 5 Pages by Views">
-          <BarChart data={topPages} layout="vertical" margin={{ left: 4, right: 16, top: 8, bottom: 8 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" tick={{ fontSize: 11 }} />
-            <YAxis dataKey="page" type="category" width={160} tick={{ fontSize: 11 }} interval={0} />
-            <Tooltip formatter={(value, _, item) => [value, item.payload?.fullPage || item.payload?.page]} labelFormatter={(label, payload) => payload?.[0]?.payload?.fullPage || label} />
-            <Bar dataKey="views" fill="#059669" radius={[0, 8, 8, 0]} />
-          </BarChart>
-        </ChartCard>
-        <ChartCard title="Traffic Sources">
-          <PieChart><Pie data={sources} dataKey="value" nameKey="name" innerRadius={58} outerRadius={90} paddingAngle={3}>{sources.map((_, index) => <Cell key={index} fill={COLORS[index]} />)}</Pie><Tooltip /><Legend /></PieChart>
-        </ChartCard>
-        <ChartCard title="Conversions Over Time">
-          <AreaChart data={traffic}><defs><linearGradient id="conversionFill" x1="0" x2="0" y1="0" y2="1"><stop offset="5%" stopColor="#059669" stopOpacity={0.35} /><stop offset="95%" stopColor="#059669" stopOpacity={0} /></linearGradient></defs><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="date" /><YAxis /><Tooltip /><Area type="monotone" dataKey="conversions" stroke="#059669" fill="url(#conversionFill)" /></AreaChart>
-        </ChartCard>
-      </div>
-
       <div className="grid gap-4 xl:grid-cols-3">
-        <MiniTable title="Recent Blog Posts" action={() => setActive("blog")} columns={["Title", "Views", "Status"]} rows={data.blogs.slice(0, 5).map((post) => [post.title, post.views.toLocaleString(), post.status])} />
+        <MiniTable title="Recent Blog Posts" action={() => setActive("blog")} columns={["Title", "Status"]} rows={data.blogs.slice(0, 5).map((post) => [post.title, post.status])} />
         <MiniTable title="Upcoming Sessions" action={() => setActive("sessions")} columns={["Session", "Instructor", "Spots"]} rows={data.sessions.slice(0, 5).map((session) => [session.name, data.instructors.find((item) => item.id === session.instructorId)?.name || "", `${session.capacity - session.enrolled}/${session.capacity}`])} />
         <MiniTable title="SEO Health Overview" action={() => setActive("seo")} columns={["Page", "Score", "Missing"]} rows={data.seoPages.slice(0, 5).map((page) => [page.pageName, `${scoreSeo(page, data.seoPages)}/100`, scoreSeo(page, data.seoPages) > 80 ? "None" : "Review tags"])} />
       </div>
     </div>
-  );
-}
-
-function ChartCard({ title, children }) {
-  return (
-    <section className="rounded-xl border border-stone-200 bg-white p-4 shadow-sm">
-      <h3 className="mb-4 font-semibold text-stone-900">{title}</h3>
-      <div className="h-72"><ResponsiveContainer width="100%" height="100%">{children}</ResponsiveContainer></div>
-    </section>
   );
 }
 
