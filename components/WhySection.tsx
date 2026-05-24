@@ -184,7 +184,7 @@ function StatOrb({ s, i }: { s: typeof stats[0]; i: number }) {
           </span>
         </div>
       </div>
-      <p style={{ fontSize: "0.75rem", fontWeight: 400, color: "#5C3D2E", letterSpacing: "0.04em", textAlign: "center" }}>
+      <p style={{ fontSize: "0.92rem", fontWeight: 400, color: "#5C3D2E", letterSpacing: "0.04em", textAlign: "center" }}>
         {s.label}
       </p>
     </div>
@@ -328,7 +328,7 @@ export default function WhySection() {
 
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: "4rem" }}>
-          <p style={{ fontSize: "0.62rem", letterSpacing: "0.3em", textTransform: "uppercase",
+          <p style={{ fontSize: "0.95rem", letterSpacing: "0.3em", textTransform: "uppercase",
             color: "#6B2D8B", marginBottom: 12 }}>Why Yogmandu</p>
           <h2 style={{
             fontFamily: "Cormorant Garamond, serif",

@@ -77,7 +77,7 @@ export function TiltPhotoCard({ photo, onOpen }: { photo: PhotoItem; onOpen: () 
         background:"linear-gradient(to top, rgba(5,0,18,0.85) 0%, rgba(5,0,18,0.1) 40%, transparent 65%)",
         pointerEvents:"none" }} />
       <div style={{ position:"absolute", bottom:0, left:0, right:0, padding:"1rem 1.2rem", zIndex:1 }}>
-        <span style={{ display:"inline-block", fontSize:"0.55rem", letterSpacing:"0.25em",
+        <span style={{ display:"inline-block", fontSize:"0.95rem", letterSpacing:"0.25em",
           textTransform:"uppercase", color:accent, background:`${accent}1a`,
           padding:"2px 8px", borderRadius:99, marginBottom:6 }}>{photo.cat}</span>
         <p style={{ fontFamily:"Cormorant Garamond, serif", fontSize:"1.1rem", fontWeight:400,
@@ -146,14 +146,14 @@ export function Lightbox({
               animation:"lbUp 0.25s ease", display:"block" }} />
         </picture>
         <div style={{ textAlign:"center", animation:"lbUp 0.3s ease" }}>
-          <span style={{ display:"inline-block", fontSize:"0.6rem", letterSpacing:"0.28em",
+          <span style={{ display:"inline-block", fontSize:"0.95rem", letterSpacing:"0.28em",
             textTransform:"uppercase", color:accent, background:`${accent}1a`,
             padding:"3px 10px", borderRadius:99, marginBottom:10 }}>{photo.cat}</span>
           <p style={{ fontFamily:"Cormorant Garamond, serif", fontSize:"1.4rem", fontWeight:300, color:"#fff", marginBottom:4 }}>
             {photo.title}
           </p>
           {photo.desc && <p style={{ fontSize:"0.8rem", color:"rgba(255,255,255,0.38)" }}>{photo.desc}</p>}
-          <p style={{ marginTop:12, fontSize:"0.58rem", color:"rgba(255,255,255,0.16)", letterSpacing:"0.15em" }}>
+          <p style={{ marginTop:12, fontSize:"0.95rem", color:"rgba(255,255,255,0.16)", letterSpacing:"0.15em" }}>
             {index + 1} / {photos.length}
           </p>
         </div>
@@ -169,7 +169,7 @@ export function Lightbox({
         onMouseEnter={e => (e.currentTarget.style.color="#fff")}
         onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.35)")}>✕</button>
       <p style={{ position:"absolute", bottom:18, left:"50%", transform:"translateX(-50%)",
-        fontSize:"0.56rem", letterSpacing:"0.18em", textTransform:"uppercase",
+        fontSize:"0.95rem", letterSpacing:"0.18em", textTransform:"uppercase",
         color:"rgba(255,255,255,0.13)", pointerEvents:"none", whiteSpace:"nowrap" }}>
         ← → navigate · Esc close
       </p>
@@ -298,7 +298,7 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
         <div style={{ maxWidth:1100, margin:"0 auto", width:"100%", position:"relative", zIndex:1,
           display:"grid", gridTemplateColumns:"1fr auto", gap:"2rem", alignItems:"center" }}>
           <div>
-            <p style={{ fontSize:"0.68rem", letterSpacing:"0.35em", textTransform:"uppercase", color:"#8DC63F", marginBottom:20 }}>
+            <p style={{ fontSize:"1rem", letterSpacing:"0.35em", textTransform:"uppercase", color:"#8DC63F", marginBottom:20 }}>
               Visual Journey
             </p>
             <h1 style={{ fontFamily:"Cormorant Garamond, serif",
@@ -329,14 +329,14 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
                 onClick={() => activeCategory !== cat && setActiveCategory(cat)}
                 style={{
                   padding:"0.36rem 1.05rem", borderRadius:99,
-                  fontSize:"0.78rem", fontWeight:500, cursor:"pointer",
+                  fontSize:"0.95rem", fontWeight:500, cursor:"pointer",
                   background: active ? "#F7941D" : "transparent",
                   color:  active ? "#fff" : "#7a6a58",
                   border: active ? "1.5px solid #F7941D" : "1.5px solid #d9d0c4",
                 }}>{cat}</button>
             );
           })}
-          <span style={{ marginLeft:"auto", fontSize:"0.7rem", color:"#b0a898" }}>
+          <span style={{ marginLeft:"auto", fontSize:"0.85rem", color:"#b0a898" }}>
             {filtered.length} photos
           </span>
         </div>
@@ -346,7 +346,7 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
       <section style={{ background:"#F9F5F0", padding:"3rem 1.5rem 5rem" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"1.5rem" }}>
-            <p style={{ fontSize:"0.72rem", color:"#b0a898", letterSpacing:"0.1em" }}>
+            <p style={{ fontSize:"0.88rem", color:"#b0a898", letterSpacing:"0.1em" }}>
               Showing {startIdx + 1}–{Math.min(startIdx + VISIBLE, filtered.length)} of {filtered.length}
             </p>
             <div style={{ display:"flex", gap:10, alignItems:"center" }}>

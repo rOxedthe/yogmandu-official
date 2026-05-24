@@ -204,7 +204,7 @@ function PricingCard({ tier }: { tier: Tier }) {
             padding: "8px 18px",
             background: `linear-gradient(135deg, ${tier.color}, ${tier.color}cc)`,
             color: "#fff",
-            fontSize: "0.62rem",
+            fontSize: "0.95rem",
             letterSpacing: "0.22em",
             fontWeight: 600,
             textTransform: "uppercase",

@@ -501,7 +501,7 @@ export default function SoundHealingPage() {
                     <span style={{ filter: "drop-shadow(0 1.5px 1px rgba(0,0,0,0.20))" }}>{lvl.icon}</span>
                   </div>
                   <span style={{
-                    fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", fontWeight: 600,
+                    fontSize: "0.85rem", letterSpacing: "0.22em", textTransform: "uppercase", fontWeight: 600,
                     color: "#fff", background: lvl.color,
                     padding: "5px 12px", borderRadius: 99,
                     boxShadow: `0 6px 16px ${lvl.color}55`,

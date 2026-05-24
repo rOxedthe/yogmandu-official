@@ -132,18 +132,18 @@ function ScheduleCard({ cls, day }: {
           {cls.name}
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-          <span style={{ fontSize: "0.72rem", fontWeight: 500, padding: "2px 10px", borderRadius: 999,
+          <span style={{ fontSize: "0.88rem", fontWeight: 500, padding: "2px 10px", borderRadius: 999,
             background: lc.bg, color: lc.text, border: `1px solid ${lc.border}` }}>
             {cls.level}
           </span>
-          <span style={{ fontSize: "0.72rem", color: "#7A5840", display: "flex", alignItems: "center", gap: 3 }}>
+          <span style={{ fontSize: "0.88rem", color: "#7A5840", display: "flex", alignItems: "center", gap: 3 }}>
             ⏱ {cls.duration}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ fontSize: "0.78rem", color: "#7A5840" }}>👤 {cls.instructor}</div>
+          <div style={{ fontSize: "0.95rem", color: "#7A5840" }}>👤 {cls.instructor}</div>
           <span style={{
-            fontSize: "0.7rem", fontWeight: 600, color: "#fff",
+            fontSize: "0.85rem", fontWeight: 600, color: "#fff",
             background: cls.accent, padding: "3px 10px", borderRadius: 999,
             letterSpacing: "0.05em",
           }}>
@@ -301,7 +301,7 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
             {activeDay === todayName && (
               <span style={{
                 marginLeft: 12,
-                fontSize: "0.75rem",
+                fontSize: "0.92rem",
                 fontWeight: 600,
                 color: "#8DC63F",
                 background: "rgba(141,198,63,0.12)",
@@ -317,7 +317,7 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
             )}
           </h2>
           {schedule[activeDay] && (
-            <p style={{ fontSize: "0.82rem", color: "#9A7860", marginTop: 4 }}>
+            <p style={{ fontSize: "1rem", color: "#9A7860", marginTop: 4 }}>
               {schedule[activeDay].length} {schedule[activeDay].length === 1 ? "class" : "classes"} scheduled
             </p>
           )}
@@ -338,7 +338,7 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
                   {day}
                 </h2>
                 <div style={{ flex: 1, height: 1, background: "rgba(107,45,139,0.1)" }} />
-                <span style={{ fontSize: "0.7rem", color: "#9A7860", letterSpacing: "0.12em" }}>
+                <span style={{ fontSize: "0.85rem", color: "#9A7860", letterSpacing: "0.12em" }}>
                   {classes.length} {classes.length === 1 ? "class" : "classes"}
                 </span>
               </div>

@@ -76,7 +76,7 @@ export default function LoadingScreen() {
           <span style={{ color: "#6B2D8B" }}>mandu</span>
         </p>
         <p style={{
-          fontSize: "0.6rem",
+          fontSize: "0.95rem",
           letterSpacing: "0.28em",
           textTransform: "uppercase",
           color: "rgba(42,18,8,0.35)",

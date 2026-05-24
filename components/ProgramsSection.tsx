@@ -173,7 +173,7 @@ export default function ProgramsSection() {
       <div style={{ position:"relative", zIndex:2 }}>
         {/* Header */}
         <div style={{ textAlign:"center", marginBottom:"3rem", padding:"0 1.5rem" }}>
-          <p style={{ fontSize:"0.65rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"#F7941D", marginBottom:10 }}>Our Offerings</p>
+          <p style={{ fontSize:"0.95rem", letterSpacing:"0.3em", textTransform:"uppercase", color:"#F7941D", marginBottom:10 }}>Our Offerings</p>
           <h2 style={{ fontFamily:"Cormorant Garamond, serif", fontSize:"clamp(2rem,5vw,3.2rem)",
             fontWeight:300, color:"#2A1208", margin:0 }}>
             Begin your <em style={{ color:"#6B2D8B" }}>transformation</em>
@@ -216,7 +216,7 @@ export default function ProgramsSection() {
                   borderRadius:"0 1.75rem 0 0" }} />
                 {/* Label badge */}
                 <div style={{ position:"absolute", top:14, right:18,
-                  fontSize:"0.58rem", letterSpacing:"0.18em", textTransform:"uppercase",
+                  fontSize:"0.95rem", letterSpacing:"0.18em", textTransform:"uppercase",
                   color:card.accent, background:`${card.accent}12`, border:`1px solid ${card.accent}30`,
                   borderRadius:999, padding:"3px 10px" }}>
                   {card.label}
@@ -233,7 +233,7 @@ export default function ProgramsSection() {
                   fontWeight:300, color:"#2A1208", marginBottom:10 }}>
                   {card.title}
                 </h3>
-                <p style={{ fontSize:"0.83rem", lineHeight:1.75, color:"#4A2E1A",
+                <p style={{ fontSize:"1rem", lineHeight:1.75, color:"#4A2E1A",
                   fontWeight:400, marginBottom:18 }}>
                   {card.desc}
                 </p>
@@ -241,7 +241,7 @@ export default function ProgramsSection() {
                   display:"flex", flexDirection:"column", gap:9 }}>
                   {card.features.map(f => (
                     <li key={f} style={{ display:"flex", alignItems:"center", gap:9,
-                      fontSize:"0.82rem", fontWeight:400, color:"#3D2015" }}>
+                      fontSize:"1rem", fontWeight:400, color:"#3D2015" }}>
                       <span style={{ width:17, height:17, borderRadius:"50%",
                         background:`${card.accent}15`, display:"flex", alignItems:"center",
                         justifyContent:"center", flexShrink:0 }}>
@@ -255,7 +255,7 @@ export default function ProgramsSection() {
                 </ul>
                 <Link href={card.href} className="cta-lift" style={{
                   display:"inline-block", padding:"0.65rem 1.5rem", borderRadius:999,
-                  background:card.accent, color:"#fff", fontSize:"0.83rem", fontWeight:500,
+                  background:card.accent, color:"#fff", fontSize:"1rem", fontWeight:500,
                   boxShadow:`0 8px 24px ${card.shadow}`,
                 }}>
                   {card.cta}
@@ -308,7 +308,7 @@ export default function ProgramsSection() {
           </div>
 
           {/* Card counter */}
-          <p style={{ fontSize:"0.7rem", letterSpacing:"0.18em", color:"rgba(42,18,8,0.3)", textTransform:"uppercase" }}>
+          <p style={{ fontSize:"0.85rem", letterSpacing:"0.18em", color:"rgba(42,18,8,0.3)", textTransform:"uppercase" }}>
             {active+1} / {CARDS.length} · use ← → keys
           </p>
         </div>

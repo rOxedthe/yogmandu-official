@@ -119,8 +119,8 @@ export default function Nav() {
                     >
                       <span style={{ fontSize: "1.05rem", lineHeight: 1, flexShrink: 0 }}>{s.icon}</span>
                       <div>
-                        <div style={{ fontSize: "0.83rem", fontWeight: 500, color: "#2A1208", lineHeight: 1.2 }}>{s.label}</div>
-                        <div style={{ fontSize: "0.71rem", color: "#7A5840", marginTop: 2 }}>{s.desc}</div>
+                        <div style={{ fontSize: "1rem", fontWeight: 500, color: "#2A1208", lineHeight: 1.2 }}>{s.label}</div>
+                        <div style={{ fontSize: "0.85rem", color: "#7A5840", marginTop: 2 }}>{s.desc}</div>
                       </div>
                     </Link>
                   ))}
@@ -149,7 +149,7 @@ export default function Nav() {
               <source srcSet="/logo-sm-opt.webp" type="image/webp" />
               <img src="/logo-sm.png" alt="Yogmandu" width={120} height={48} fetchPriority="high" decoding="async" style={{ height: 48, width: "auto", objectFit: "contain" }} />
             </picture>
-            <span style={{ fontSize: "0.5rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#7A5840", whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: "0.95rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#7A5840", whiteSpace: "nowrap" }}>
               {cfg.tagline}
             </span>
           </Link>
@@ -245,7 +245,7 @@ export default function Nav() {
       {mobileOpen && (
         <div className="md:hidden px-6 pb-6" style={{ background: "#FFFFFF", borderTop: "1px solid rgba(247,148,29,0.12)" }}>
           <div style={{ paddingTop: "0.75rem", paddingBottom: "0.5rem", borderBottom: "1px solid rgba(42,18,8,0.07)" }}>
-            <p style={{ fontSize: "0.58rem", letterSpacing: "0.24em", textTransform: "uppercase",
+            <p style={{ fontSize: "0.95rem", letterSpacing: "0.24em", textTransform: "uppercase",
               color: "#F7941D", marginBottom: 8, fontWeight: 500 }}>Services</p>
             {cfg.services.map((s) => (
               <Link key={s.label} href={s.href} className="block py-2.5"

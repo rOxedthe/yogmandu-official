@@ -141,7 +141,7 @@ function ServiceCard({
         fontFamily: "Cormorant Garamond, serif", fontSize: "1rem",
         fontWeight: 500, color: "#2A1208", marginBottom: 3, lineHeight: 1.25,
       }}>{s.title}</h3>
-      <p style={{ fontSize: "0.72rem", color: s.color, fontWeight: 600, letterSpacing: "0.05em" }}>
+      <p style={{ fontSize: "0.88rem", color: s.color, fontWeight: 600, letterSpacing: "0.05em" }}>
         {s.subtitle}
       </p>
     </div>
@@ -177,7 +177,7 @@ function StepDots({ step }: { step: number }) {
                 {done ? "✓" : num}
               </div>
               <span style={{
-                fontSize: "0.67rem", fontWeight: 600, letterSpacing: "0.08em",
+                fontSize: "1rem", fontWeight: 600, letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 color: active ? "#6B2D8B" : done ? "#8DC63F" : "#9A7860",
                 transition: "color 0.35s ease",
@@ -226,7 +226,7 @@ function Step1({
           return (
             <button key={g} onClick={() => setActiveGroup(g)}
               style={{
-                padding: "6px 16px", borderRadius: 99, fontSize: "0.75rem",
+                padding: "6px 16px", borderRadius: 99, fontSize: "0.92rem",
                 fontWeight: 500, letterSpacing: "0.06em", cursor: "pointer",
                 border: isActive ? "none" : "1.5px solid rgba(42,18,8,0.14)",
                 background: isActive
@@ -266,7 +266,7 @@ function Step1({
               display: "inline-flex", alignItems: "center", gap: 6,
               padding: "5px 12px", borderRadius: 99,
               background: `${s.color}18`, border: `1.5px solid ${s.color}55`,
-              fontSize: "0.75rem", fontWeight: 600, color: s.color,
+              fontSize: "0.92rem", fontWeight: 600, color: s.color,
               animation: "bookCheckIn 0.2s ease",
             }}>
               <span>{s.icon}</span>
@@ -374,7 +374,7 @@ function Step2({
   };
 
   const labelStyle: React.CSSProperties = {
-    display: "block", fontSize: "0.75rem", fontWeight: 600,
+    display: "block", fontSize: "0.92rem", fontWeight: 600,
     letterSpacing: "0.1em", textTransform: "uppercase",
     color: "#7A5840", marginBottom: 7,
   };
@@ -401,10 +401,10 @@ function Step2({
           }}>
             <span style={{ fontSize: "1.1rem" }}>{svc.icon}</span>
             <div>
-              <p style={{ margin: 0, fontSize: "0.78rem", fontWeight: 700, color: svc.color, letterSpacing: "0.06em" }}>
+              <p style={{ margin: 0, fontSize: "0.95rem", fontWeight: 700, color: svc.color, letterSpacing: "0.06em" }}>
                 {svc.title}
               </p>
-              <p style={{ margin: 0, fontSize: "0.68rem", color: "#9A7860" }}>{svc.subtitle}</p>
+              <p style={{ margin: 0, fontSize: "1rem", color: "#9A7860" }}>{svc.subtitle}</p>
             </div>
           </div>
         ))}
@@ -539,7 +539,7 @@ function Step2({
             )}
           </button>
 
-          <p style={{ textAlign: "center", fontSize: "0.75rem", color: "#9A7860", marginTop: 14 }}>
+          <p style={{ textAlign: "center", fontSize: "0.92rem", color: "#9A7860", marginTop: 14 }}>
             Need a faster reply?{" "}
             <a href="https://wa.me/9779862909469" target="_blank" rel="noopener noreferrer"
               style={{ color: "#6B2D8B", fontWeight: 600 }}>
@@ -579,7 +579,7 @@ function Step3({ services }: { services: BookingService[] }) {
         background: "rgba(141,198,63,0.12)", border: "1px solid rgba(141,198,63,0.4)",
       }}>
         <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#8DC63F", boxShadow: "0 0 8px #8DC63F" }} />
-        <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "#5A7A20", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+        <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "#5A7A20", letterSpacing: "0.12em", textTransform: "uppercase" }}>
           Booking Received
         </span>
       </div>
@@ -680,12 +680,12 @@ function BookPageInner() {
         }}>
           <span style={{ fontSize: "1.5rem" }}>🗓</span>
           <div>
-            <p style={{ margin: 0, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.1em",
+            <p style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, letterSpacing: "0.1em",
               textTransform: "uppercase", color: "#6B2D8B" }}>Selected Class</p>
             <p style={{ margin: 0, fontSize: "0.92rem", fontWeight: 600, color: "#2A1208" }}>
               {parsedClass.name}
             </p>
-            <p style={{ margin: 0, fontSize: "0.78rem", color: "#7A5840" }}>
+            <p style={{ margin: 0, fontSize: "0.95rem", color: "#7A5840" }}>
               {parsedClass.day} · {parsedClass.time}{parsedClass.instructor ? ` · ${parsedClass.instructor}` : ""}
             </p>
           </div>
@@ -802,7 +802,7 @@ export default function BookPage() {
               width: 6, height: 6, borderRadius: "50%", background: "#F7941D",
               boxShadow: "0 0 10px #F7941D", animation: "bookPulse 2s ease-in-out infinite",
             }} />
-            <span style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.25em",
+            <span style={{ fontSize: "1rem", fontWeight: 700, letterSpacing: "0.25em",
               textTransform: "uppercase", color: "#F7941D" }}>Book a Session</span>
           </div>
           <h1 style={{

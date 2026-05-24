@@ -82,7 +82,7 @@ export default function CookieConsent() {
           width: 28, height: 2, background: "linear-gradient(90deg, #6B2D8B, #F7941D)", borderRadius: 2,
         }} />
         <p style={{
-          fontSize: "0.62rem", letterSpacing: "0.26em", textTransform: "uppercase",
+          fontSize: "0.95rem", letterSpacing: "0.26em", textTransform: "uppercase",
           color: "#6B2D8B", fontWeight: 500, margin: 0,
         }}>Privacy</p>
       </div>
@@ -96,7 +96,7 @@ export default function CookieConsent() {
       }}>
         We value your privacy
       </h2>
-      <p style={{ fontSize: "0.82rem", lineHeight: 1.6, color: "#5C3D2E", margin: "0 0 16px" }}>
+      <p style={{ fontSize: "1rem", lineHeight: 1.6, color: "#5C3D2E", margin: "0 0 16px" }}>
         We use cookies to understand how visitors use our site and improve your experience. See our{" "}
         <Link href="/privacy" style={{ color: "#6B2D8B", textDecoration: "underline" }}>privacy policy</Link>.
       </p>
@@ -110,7 +110,7 @@ export default function CookieConsent() {
             color:      "#fff",
             padding:    "9px 18px",
             borderRadius: 999,
-            fontSize:   "0.82rem",
+            fontSize:   "1rem",
             fontWeight: 500,
             cursor:     "pointer",
             fontFamily: "'DM Sans', sans-serif",
@@ -127,7 +127,7 @@ export default function CookieConsent() {
             color:      "#6B2D8B",
             padding:    "9px 18px",
             borderRadius: 999,
-            fontSize:   "0.82rem",
+            fontSize:   "1rem",
             fontWeight: 500,
             cursor:     "pointer",
             fontFamily: "'DM Sans', sans-serif",

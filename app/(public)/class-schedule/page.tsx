@@ -76,7 +76,7 @@ export default async function ClassSchedulePage() {
           </span>
         </div>
 
-        <p style={{ fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase",
+        <p style={{ fontSize: "0.95rem", letterSpacing: "0.3em", textTransform: "uppercase",
           color: "#8DC63F", marginBottom: 12, fontWeight: 500 }}>
           Weekly Timetable
         </p>
@@ -98,17 +98,17 @@ export default async function ClassSchedulePage() {
       {/* ── Legend ── */}
       <div style={{ background: "#F9F5FF", padding: "1.25rem 2rem", borderBottom: "1px solid rgba(107,45,139,0.1)" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "center" }}>
-          <span style={{ fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "#7A5840", fontWeight: 500 }}>Level:</span>
+          <span style={{ fontSize: "0.88rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "#7A5840", fontWeight: 500 }}>Level:</span>
           {(["All levels", "Intermediate", "Beginner"] as const).map(l => {
             const lc = levelColor(l);
             return (
-              <span key={l} style={{ fontSize: "0.75rem", fontWeight: 500, padding: "3px 12px", borderRadius: 999,
+              <span key={l} style={{ fontSize: "0.92rem", fontWeight: 500, padding: "3px 12px", borderRadius: 999,
                 background: lc.bg, color: lc.text, border: `1px solid ${lc.border}` }}>
                 {l}
               </span>
             );
           })}
-          <span style={{ fontSize: "0.72rem", color: "#7A5840", marginLeft: "auto" }}>
+          <span style={{ fontSize: "0.88rem", color: "#7A5840", marginLeft: "auto" }}>
             📍 Mid-Baneshwor, Kathmandu · All times local (NPT UTC+5:45)
           </span>
         </div>

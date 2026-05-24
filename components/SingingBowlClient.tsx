@@ -48,7 +48,7 @@ function CSSBowl() {
           <path d="M16 30 Q40 8 64 30" stroke="rgba(255,255,255,0.45)" strokeWidth="1.2" fill="none" strokeLinecap="round" />
         </svg>
       </div>
-      <p style={{ fontSize: "0.62rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "#A65808", fontWeight: 500 }}>
+      <p style={{ fontSize: "0.95rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "#A65808", fontWeight: 500 }}>
         🎵 Tibetan Singing Bowl
       </p>
       <style>{`

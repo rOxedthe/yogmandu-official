@@ -282,7 +282,7 @@ export default function YogaTeacherTrainingPage() {
                     color: "#2A1208", marginBottom: 4, position: "relative",
                   }}>{d}</div>
                   <div style={{
-                    fontSize: "0.72rem", color: a, fontWeight: 600,
+                    fontSize: "0.88rem", color: a, fontWeight: 600,
                     letterSpacing: "0.12em", textTransform: "uppercase", position: "relative",
                   }}>Limited Spots</div>
                 </div>

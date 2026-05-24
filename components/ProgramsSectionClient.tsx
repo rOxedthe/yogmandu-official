@@ -21,7 +21,7 @@ function MobilePrograms() {
   return (
     <section style={{ background: "#F9F5FF", padding: "3.5rem 0 2rem" }}>
       <div style={{ textAlign: "center", marginBottom: "1.75rem", padding: "0 1.5rem" }}>
-        <p style={{ fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#6B2D8B", marginBottom: 8, fontWeight: 500 }}>
+        <p style={{ fontSize: "0.95rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#6B2D8B", marginBottom: 8, fontWeight: 500 }}>
           Our Offerings
         </p>
         <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "clamp(1.9rem,6vw,2.6rem)", fontWeight: 300, color: "#2A1208", margin: "0 0 4px" }}>
@@ -65,17 +65,17 @@ function MobilePrograms() {
             }}>
               {/* Accent top bar */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: card.accent }} />
-              <p style={{ fontSize: "0.63rem", fontWeight: 600, color: card.darkAccent, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>
+              <p style={{ fontSize: "0.95rem", fontWeight: 600, color: card.darkAccent, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>
                 {card.label}
               </p>
               <h3 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "1.25rem", fontWeight: 400, color: "#2A1208", marginBottom: 8, lineHeight: 1.25 }}>
                 {card.title}
               </h3>
-              <p style={{ fontSize: "0.82rem", lineHeight: 1.65, color: "#4A2E1A", marginBottom: 14 }}>
+              <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "#4A2E1A", marginBottom: 14 }}>
                 {card.desc}
               </p>
               <span style={{
-                fontSize: "0.78rem", fontWeight: 600,
+                fontSize: "0.95rem", fontWeight: 600,
                 color: card.darkAccent,
                 display: "inline-flex", alignItems: "center", gap: 5,
               }}>

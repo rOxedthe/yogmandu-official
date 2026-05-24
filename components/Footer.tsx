@@ -87,7 +87,7 @@ export default function Footer() {
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", flexWrap: "wrap",
           alignItems: "center", justifyContent: "space-between", gap: "1.5rem" }}>
           <div>
-            <p style={{ fontSize: "0.65rem", letterSpacing: "0.28em", textTransform: "uppercase",
+            <p style={{ fontSize: "0.95rem", letterSpacing: "0.28em", textTransform: "uppercase",
               color: "#8DC63F", marginBottom: 8, fontWeight: 500 }}>{cfg.ctaTagline}</p>
             <h3 style={{ fontFamily: "Cormorant Garamond, serif",
               fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 300, lineHeight: 1.15, margin: 0, color: "#2A1208" }}>
@@ -99,7 +99,7 @@ export default function Footer() {
             {cfg.programs.slice(0, 3).map((p, i) => (
               <Link key={p.label} href={p.href} className="cta-lift" style={{
                 padding: "0.7rem 1.6rem", borderRadius: 999, textDecoration: "none",
-                fontSize: "0.83rem", fontWeight: i === 0 ? 500 : 400,
+                fontSize: "1rem", fontWeight: i === 0 ? 500 : 400,
                 background: i === 0 ? "#6B2D8B" : i === 1 ? "#A65808" : "transparent",
                 color: i < 2 ? "#fff" : "#6B2D8B",
                 border: i === 2 ? "1.5px solid #6B2D8B" : "none",
@@ -151,7 +151,7 @@ export default function Footer() {
 
         {/* Programs */}
         <div>
-          <h4 style={{ fontSize: "0.62rem", letterSpacing: "0.26em", textTransform: "uppercase",
+          <h4 style={{ fontSize: "0.95rem", letterSpacing: "0.26em", textTransform: "uppercase",
             color: "#F7941D", marginBottom: 20, fontWeight: 500 }}>Programs</h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 13 }}>
             {cfg.programs.map(l => (
@@ -170,7 +170,7 @@ export default function Footer() {
 
         {/* Company */}
         <div>
-          <h4 style={{ fontSize: "0.62rem", letterSpacing: "0.26em", textTransform: "uppercase",
+          <h4 style={{ fontSize: "0.95rem", letterSpacing: "0.26em", textTransform: "uppercase",
             color: "#8DC63F", marginBottom: 20, fontWeight: 500 }}>Company</h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 13 }}>
             {cfg.company.map(l => (
@@ -210,7 +210,7 @@ export default function Footer() {
 
         {/* Contact */}
         <div>
-          <h4 style={{ fontSize: "0.62rem", letterSpacing: "0.26em", textTransform: "uppercase",
+          <h4 style={{ fontSize: "0.95rem", letterSpacing: "0.26em", textTransform: "uppercase",
             color: "#7A5840", marginBottom: 20, fontWeight: 500 }}>Find Us</h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
             {cfg.contact.map(c => (
@@ -232,7 +232,7 @@ export default function Footer() {
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#8DC63F", opacity: 0.8 }} />
-            <span style={{ fontSize: "0.78rem", color: "#8DC63F", fontWeight: 400, letterSpacing: "0.08em" }}>
+            <span style={{ fontSize: "0.95rem", color: "#8DC63F", fontWeight: 400, letterSpacing: "0.08em" }}>
               {cfg.badge}
             </span>
           </div>

@@ -20,7 +20,11 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html {
+  font-size: 18px; /* 16px browser default → 18px: scales all rem values ×1.125, making all text ~12.5% larger */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
 
 /* Anchor jump offset — accounts for sticky nav */
 [id] { scroll-margin-top: 96px; }
@@ -130,24 +134,24 @@ h1, h2, h3, h4 { font-family: var(--font-cormorant, "Cormorant Garamond"), Georg
   margin: 0 auto 2rem;
 }
 
-/* ── Readability bumps — slightly larger body text in content areas ── */
+/* ── Readability bumps — proportional at 18px base ── */
 /* Targets paragraphs and list items only, not buttons/labels/badges. */
 p.text-sm, li.text-sm, .text-sm p, .text-sm li {
-  font-size: 0.98rem;
+  font-size: 0.94rem;  /* ~17px at 18px base */
   line-height: 1.72;
 }
 p.text-xs, li.text-xs {
-  font-size: 0.86rem;
+  font-size: 0.83rem;  /* ~15px at 18px base */
   line-height: 1.62;
 }
 p.text-base {
-  font-size: 1.08rem;
+  font-size: 1rem;     /* 18px */
   line-height: 1.78;
 }
 /* Stat labels under big numbers ("Teachers Trained", "Countries"…) */
 .flex-col > span.text-xs,
 span.text-xs.font-medium {
-  font-size: 0.78rem;
+  font-size: 0.78rem;  /* ~14px at 18px base — fine for data labels */
   letter-spacing: 0.01em;
 }
 

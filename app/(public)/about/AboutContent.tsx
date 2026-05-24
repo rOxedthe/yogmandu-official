@@ -107,7 +107,7 @@ function AnimatedStat({ value, suffix, label, color, delay = 0 }: { value: numbe
         {count}{suffix}
       </div>
       <div style={{
-        fontSize: "0.72rem", letterSpacing: "0.18em", textTransform: "uppercase",
+        fontSize: "0.88rem", letterSpacing: "0.18em", textTransform: "uppercase",
         color: "#7A5840", marginTop: 10, position: "relative", fontWeight: 500,
       }}>{label}</div>
       <div style={{
@@ -194,7 +194,7 @@ export default function AboutContent() {
 
         <div className="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
           <div>
-            <p style={{ fontSize: "0.72rem", letterSpacing: "0.32em", textTransform: "uppercase", color: "#8DC63F", marginBottom: 20 }}>Our Story</p>
+            <p style={{ fontSize: "0.88rem", letterSpacing: "0.32em", textTransform: "uppercase", color: "#8DC63F", marginBottom: 20 }}>Our Story</p>
             <h1 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "clamp(2.8rem, 6vw, 5rem)", fontWeight: 300, color: "#FFFFFF", lineHeight: 1.08, marginBottom: 24 }}>
               Born from the valley,<br />
               <em style={{ color: "#F7941D" }}>rooted in the mountains</em>
@@ -225,7 +225,7 @@ export default function AboutContent() {
             <div style={{ position: "absolute", width: 280, height: 280, borderRadius: "50%", border: "1px solid rgba(141,198,63,0.2)", animation: "pulseRing 3s ease-in-out infinite" }} />
             <div style={{ position: "absolute", width: 340, height: 340, borderRadius: "50%", border: "1px solid rgba(107,45,139,0.15)", animation: "pulseRing 3s ease-in-out 1s infinite" }} />
             <FloatingLotus size="lg" />
-            <p style={{ fontSize: "0.65rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(141,198,63,0.5)", marginTop: 12 }}>
+            <p style={{ fontSize: "0.95rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(141,198,63,0.5)", marginTop: 12 }}>
               The lotus — rooted in mud, rising in light
             </p>
           </div>
@@ -234,14 +234,14 @@ export default function AboutContent() {
         {/* Scroll cue */}
         <div style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
           <div style={{ width: 1, height: 40, background: "linear-gradient(to bottom, rgba(247,148,29,0.6), transparent)" }} />
-          <span style={{ fontSize: "0.6rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>scroll</span>
+          <span style={{ fontSize: "0.95rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>scroll</span>
         </div>
       </section>
 
       {/* ── STATS ── */}
       <section style={{ background: "#FFFFFF", padding: "5rem 1.5rem" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <p style={{ textAlign: "center", fontSize: "0.72rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#F7941D", marginBottom: 48 }}>By the Numbers</p>
+          <p style={{ textAlign: "center", fontSize: "0.88rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#F7941D", marginBottom: 48 }}>By the Numbers</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1.5rem" }}>
             <AnimatedStat value={2018}  label="Year Founded" color="#F7941D" delay={0} />
             <AnimatedStat value={3000}  suffix="+" label="Teachers Trained" color="#6B2D8B" delay={150} />
@@ -255,7 +255,7 @@ export default function AboutContent() {
       <section style={{ background: "#FAF6F0", padding: "5rem 1.5rem" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "4rem", alignItems: "center" }}>
           <div>
-            <p style={{ fontSize: "0.72rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#8DC63F", marginBottom: 16 }}>Our Mission</p>
+            <p style={{ fontSize: "0.88rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#8DC63F", marginBottom: 16 }}>Our Mission</p>
             <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "2.8rem", fontWeight: 300, color: "#2A1208", lineHeight: 1.15, marginBottom: 24 }}>
               Why we exist
             </h2>
@@ -282,7 +282,7 @@ export default function AboutContent() {
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: a.color }} />
                 </div>
                 <div>
-                  <div style={{ fontSize: "0.75rem", fontWeight: 700, color: a.color, letterSpacing: "0.1em", textTransform: "uppercase" }}>{a.badge}</div>
+                  <div style={{ fontSize: "0.92rem", fontWeight: 700, color: a.color, letterSpacing: "0.1em", textTransform: "uppercase" }}>{a.badge}</div>
                   <div style={{ fontSize: "0.88rem", color: "#2A1208", marginTop: 2 }}>{a.org}</div>
                 </div>
               </TiltCard>
@@ -295,7 +295,7 @@ export default function AboutContent() {
       <section style={{ background: "#FFFFFF", padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <p style={{ fontSize: "0.72rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#8DC63F", marginBottom: 12 }}>The Teachers</p>
+            <p style={{ fontSize: "0.88rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#8DC63F", marginBottom: 12 }}>The Teachers</p>
             <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "3rem", fontWeight: 300, color: "#2A1208" }}>Meet your guides</h2>
           </div>
 
@@ -319,13 +319,13 @@ export default function AboutContent() {
                   {member.initials}
                 </div>
                 <h3 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "1.5rem", fontWeight: 400, color: "#2A1208", marginBottom: 4 }}>{member.name}</h3>
-                <p style={{ fontSize: "0.72rem", fontWeight: 600, color: member.color, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>{member.role}</p>
+                <p style={{ fontSize: "0.88rem", fontWeight: 600, color: member.color, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>{member.role}</p>
                 <p style={{ fontSize: "0.88rem", lineHeight: 1.75, color: "#4A2E1A", marginBottom: 16 }}>{member.bio}</p>
                 {/* Credentials */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                   {member.credentials.map(c => (
                     <span key={c} style={{
-                      fontSize: "0.68rem", padding: "3px 10px", borderRadius: "3rem",
+                      fontSize: "1rem", padding: "3px 10px", borderRadius: "3rem",
                       background: `${member.color}10`, border: `1px solid ${member.color}25`,
                       color: member.color, fontWeight: 500,
                     }}>{c}</span>
@@ -341,7 +341,7 @@ export default function AboutContent() {
       <section style={{ background: "#FAF6F0", padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <p style={{ fontSize: "0.72rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#F7941D", marginBottom: 12 }}>What We Stand For</p>
+            <p style={{ fontSize: "0.88rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#F7941D", marginBottom: 12 }}>What We Stand For</p>
             <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "3rem", fontWeight: 300, color: "#2A1208" }}>Our values</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1.25rem" }}>
@@ -364,7 +364,7 @@ export default function AboutContent() {
       <section style={{ background: "#FFFFFF", padding: "5rem 1.5rem" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <p style={{ fontSize: "0.72rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#6B2D8B", marginBottom: 12 }}>What We Offer</p>
+            <p style={{ fontSize: "0.88rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#6B2D8B", marginBottom: 12 }}>What We Offer</p>
             <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "2.8rem", fontWeight: 300, color: "#2A1208" }}>Our services</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "0.75rem" }}>
@@ -385,7 +385,7 @@ export default function AboutContent() {
                     padding: "0.8rem 1.1rem", borderRadius: "0.85rem",
                     border: `1.5px solid ${accent}28`,
                     background: `linear-gradient(135deg, ${accent}12 0%, ${accent}04 100%)`,
-                    fontSize: "0.83rem", color: "#2A1208",
+                    fontSize: "1rem", color: "#2A1208",
                     display: "flex", alignItems: "center", gap: 10,
                     cursor: "default",
                     position: "relative", overflow: "hidden",

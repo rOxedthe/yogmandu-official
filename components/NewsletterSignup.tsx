@@ -35,7 +35,7 @@ export default function NewsletterSignup() {
 
   return (
     <form onSubmit={handleSubmit} style={{ marginTop: 16 }}>
-      <p style={{ fontSize: "0.78rem", color: "#7A5840", marginBottom: 10, lineHeight: 1.5 }}>
+      <p style={{ fontSize: "0.95rem", color: "#7A5840", marginBottom: 10, lineHeight: 1.5 }}>
         Get class schedules, retreat updates and yoga reflections — once a month, no spam.
       </p>
       <div
@@ -94,7 +94,7 @@ export default function NewsletterSignup() {
         <p
           style={{
             marginTop: 10,
-            fontSize: "0.75rem",
+            fontSize: "0.92rem",
             color: state === "ok" ? "#6A9A20" : "#c0392b",
           }}
           role="status"

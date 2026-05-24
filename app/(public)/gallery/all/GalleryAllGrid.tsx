@@ -79,7 +79,7 @@ function MasonryCard({ photo, onOpen }: { photo: PhotoItem; onOpen: () => void }
         padding: "1rem 1.1rem", zIndex: 1,
       }}>
         <span style={{
-          display: "inline-block", fontSize: "0.52rem", letterSpacing: "0.26em",
+          display: "inline-block", fontSize: "0.95rem", letterSpacing: "0.26em",
           textTransform: "uppercase", color: accent, background: `${accent}1a`,
           padding: "2px 7px", borderRadius: 99, marginBottom: 5,
         }}>{photo.cat}</span>
@@ -176,7 +176,7 @@ export default function GalleryAllGrid({ items }: Props) {
         }}>
           <a href="/gallery" style={{
             display: "inline-flex", alignItems: "center", gap: 6,
-            fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase",
+            fontSize: "0.88rem", letterSpacing: "0.12em", textTransform: "uppercase",
             color: "rgba(255,255,255,0.45)", textDecoration: "none",
             marginBottom: "1.8rem",
             transition: "color 0.2s",
@@ -230,7 +230,7 @@ export default function GalleryAllGrid({ items }: Props) {
                 onClick={() => { if (activeCategory !== cat) { setActiveCategory(cat); setLightboxIdx(null); } }}
                 style={{
                   padding: "0.36rem 1.05rem", borderRadius: 99,
-                  fontSize: "0.78rem", fontWeight: 500, cursor: "pointer",
+                  fontSize: "0.95rem", fontWeight: 500, cursor: "pointer",
                   background: active ? "#F7941D" : "transparent",
                   color:      active ? "#fff"    : "#7a6a58",
                   border:     active ? "1.5px solid #F7941D" : "1.5px solid #d9d0c4",
@@ -238,7 +238,7 @@ export default function GalleryAllGrid({ items }: Props) {
               >{cat}</button>
             );
           })}
-          <span style={{ marginLeft: "auto", fontSize: "0.7rem", color: "#b0a898" }}>
+          <span style={{ marginLeft: "auto", fontSize: "0.85rem", color: "#b0a898" }}>
             {filtered.length} photos
           </span>
         </div>

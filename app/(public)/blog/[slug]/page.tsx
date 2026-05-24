@@ -203,7 +203,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                       <img src={imageMatch[2]} alt={imageMatch[1]} loading="lazy"
                         style={{ width: "100%", borderRadius: 14, display: "block", boxShadow: "0 8px 28px rgba(42,18,8,0.12)" }} />
                       {imageMatch[1] && (
-                        <figcaption style={{ marginTop: 10, fontSize: "0.82rem", color: "rgba(42,18,8,0.55)", textAlign: "center", fontStyle: "italic" }}>
+                        <figcaption style={{ marginTop: 10, fontSize: "1rem", color: "rgba(42,18,8,0.55)", textAlign: "center", fontStyle: "italic" }}>
                           {imageMatch[1]}
                         </figcaption>
                       )}
