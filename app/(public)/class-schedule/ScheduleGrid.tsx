@@ -1,9 +1,11 @@
 "use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { DBSession } from "@/lib/publicData";
 import { resolveInstructor, styleToAccent } from "@/lib/publicData";
 
-const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DAY_ABBR = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 // Day abbreviation map
 const DAY_MAP: Record<string, string> = {
@@ -72,7 +74,6 @@ function buildSchedule(sessions: DBSession[], instructorMap: Record<string, stri
       });
     }
   }
-  // Sort each day by start time
   for (const day of Object.keys(map)) {
     map[day].sort((a, b) => a.time.localeCompare(b.time));
   }
@@ -90,7 +91,6 @@ function ScheduleCard({ cls, day }: {
   day: string;
 }) {
   const lc = levelColor(cls.level);
-  // Encode class context for the booking page
   const cls_param = encodeURIComponent(`${day}|${cls.time}|${cls.name}|${cls.instructor}`);
   const bookHref = `/book?service=drop-in&cls=${cls_param}`;
 
@@ -124,16 +124,6 @@ function ScheduleCard({ cls, day }: {
       >
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3,
           background: `linear-gradient(90deg, ${cls.accent}, ${cls.accent}44)` }} />
-        {/* Hover book hint */}
-        <div style={{
-          position: "absolute", top: 10, right: 10,
-          fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.08em",
-          color: cls.accent, opacity: 0,
-          transition: "opacity 0.2s ease",
-          textTransform: "uppercase",
-        }} className="card-book-hint">
-          Book →
-        </div>
         <div style={{ fontSize: "1.1rem", fontFamily: "Cormorant Garamond, serif",
           fontWeight: 400, color: cls.accent, marginBottom: 6, marginTop: 4 }}>
           {cls.time}
@@ -174,23 +164,185 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
   const map = instructorMap || {};
   const schedule = sessions && sessions.length > 0 ? buildSchedule(sessions, map) : FALLBACK;
 
+  // Default to today's day name
+  const todayIndex = new Date().getDay(); // 0=Sun … 6=Sat
+  const todayName  = DAYS[todayIndex];    // e.g. "Saturday"
+
+  // activeDay: null = show ALL days
+  const [activeDay, setActiveDay] = useState<string | null>(todayName);
+
+  // Recalculate today if component mounts after midnight (rare but clean)
+  useEffect(() => {
+    setActiveDay(DAYS[new Date().getDay()]);
+  }, []);
+
+  const visibleDays = activeDay ? [activeDay] : DAYS;
+
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "3rem 2rem" }}>
-      {DAYS.map(day => {
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "2rem 2rem 3rem" }}>
+
+      {/* ── Day filter pills ── */}
+      <div style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "0.5rem",
+        justifyContent: "center",
+        marginBottom: "2.5rem",
+        padding: "1.5rem 1rem",
+        background: "#F9F5FF",
+        borderRadius: "1.25rem",
+        border: "1px solid rgba(107,45,139,0.1)",
+      }}>
+        {/* "All" pill */}
+        <button
+          onClick={() => setActiveDay(null)}
+          style={{
+            padding: "0.55rem 1.35rem",
+            borderRadius: 999,
+            border: activeDay === null
+              ? "none"
+              : "1.5px solid rgba(107,45,139,0.25)",
+            background: activeDay === null ? "#3D1560" : "transparent",
+            color: activeDay === null ? "#FFFFFF" : "#6B2D8B",
+            fontSize: "0.85rem",
+            fontWeight: activeDay === null ? 600 : 400,
+            cursor: "pointer",
+            transition: "all 0.2s",
+            letterSpacing: "0.02em",
+          }}
+          onMouseEnter={e => {
+            if (activeDay !== null)
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(107,45,139,0.07)";
+          }}
+          onMouseLeave={e => {
+            if (activeDay !== null)
+              (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+          }}
+        >
+          All Days
+        </button>
+
+        {/* One pill per day */}
+        {DAYS.map((day, i) => {
+          const isActive  = activeDay === day;
+          const isToday   = day === todayName;
+          const hasClasses = !!(schedule[day] && schedule[day].length > 0);
+
+          return (
+            <button
+              key={day}
+              onClick={() => setActiveDay(day)}
+              disabled={!hasClasses}
+              style={{
+                padding: "0.55rem 1.35rem",
+                borderRadius: 999,
+                border: isActive
+                  ? "none"
+                  : "1.5px solid rgba(107,45,139,0.25)",
+                background: isActive
+                  ? "#3D1560"
+                  : isToday
+                    ? "rgba(107,45,139,0.08)"
+                    : "transparent",
+                color: isActive
+                  ? "#FFFFFF"
+                  : hasClasses ? "#6B2D8B" : "rgba(107,45,139,0.3)",
+                fontSize: "0.85rem",
+                fontWeight: isActive ? 600 : isToday ? 500 : 400,
+                cursor: hasClasses ? "pointer" : "default",
+                transition: "all 0.2s",
+                letterSpacing: "0.02em",
+                position: "relative",
+                opacity: hasClasses ? 1 : 0.45,
+              }}
+              onMouseEnter={e => {
+                if (!isActive && hasClasses)
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(107,45,139,0.12)";
+              }}
+              onMouseLeave={e => {
+                if (!isActive && hasClasses)
+                  (e.currentTarget as HTMLButtonElement).style.background = isToday
+                    ? "rgba(107,45,139,0.08)"
+                    : "transparent";
+              }}
+            >
+              {DAY_ABBR[i]}
+              {isToday && (
+                <span style={{
+                  position: "absolute",
+                  bottom: -2,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 4,
+                  height: 4,
+                  borderRadius: "50%",
+                  background: isActive ? "#8DC63F" : "#6B2D8B",
+                }} />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Active day label (single-day view) ── */}
+      {activeDay && (
+        <div style={{
+          textAlign: "center",
+          marginBottom: "1.75rem",
+        }}>
+          <h2 style={{
+            fontFamily: "Cormorant Garamond, serif",
+            fontSize: "clamp(2rem, 5vw, 3rem)",
+            fontWeight: 300,
+            color: "#2A1208",
+            margin: 0,
+          }}>
+            {activeDay}
+            {activeDay === todayName && (
+              <span style={{
+                marginLeft: 12,
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                color: "#8DC63F",
+                background: "rgba(141,198,63,0.12)",
+                border: "1px solid rgba(141,198,63,0.3)",
+                borderRadius: 999,
+                padding: "3px 12px",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                verticalAlign: "middle",
+              }}>
+                Today
+              </span>
+            )}
+          </h2>
+          {schedule[activeDay] && (
+            <p style={{ fontSize: "0.82rem", color: "#9A7860", marginTop: 4 }}>
+              {schedule[activeDay].length} {schedule[activeDay].length === 1 ? "class" : "classes"} scheduled
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* ── Schedule content ── */}
+      {visibleDays.map(day => {
         const classes = schedule[day];
         if (!classes || classes.length === 0) return null;
         return (
-          <div key={day} style={{ marginBottom: "2.5rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
-              <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "1.5rem",
-                fontWeight: 400, color: "#2A1208", margin: 0 }}>
-                {day}
-              </h2>
-              <div style={{ flex: 1, height: 1, background: "rgba(107,45,139,0.1)" }} />
-              <span style={{ fontSize: "0.7rem", color: "#9A7860", letterSpacing: "0.12em" }}>
-                {classes.length} {classes.length === 1 ? "class" : "classes"}
-              </span>
-            </div>
+          <div key={day} style={{ marginBottom: activeDay ? "0" : "2.5rem" }}>
+            {/* Day header — only shown in "All" mode */}
+            {!activeDay && (
+              <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
+                <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "1.5rem",
+                  fontWeight: 400, color: "#2A1208", margin: 0 }}>
+                  {day}
+                </h2>
+                <div style={{ flex: 1, height: 1, background: "rgba(107,45,139,0.1)" }} />
+                <span style={{ fontSize: "0.7rem", color: "#9A7860", letterSpacing: "0.12em" }}>
+                  {classes.length} {classes.length === 1 ? "class" : "classes"}
+                </span>
+              </div>
+            )}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1rem" }}>
               {classes.map((cls, i) => <ScheduleCard key={i} cls={cls} day={day} />)}
             </div>
@@ -198,11 +350,23 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
         );
       })}
 
+      {/* Empty state */}
+      {activeDay && (!schedule[activeDay] || schedule[activeDay].length === 0) && (
+        <div style={{
+          textAlign: "center", padding: "4rem 2rem",
+          color: "#9A7860", fontSize: "1rem",
+        }}>
+          <p style={{ fontSize: "2rem", marginBottom: 12 }}>🌿</p>
+          <p>No classes scheduled for {activeDay}.</p>
+          <p style={{ fontSize: "0.85rem", marginTop: 8 }}>Try another day or view all sessions.</p>
+        </div>
+      )}
+
       {/* CTA strip */}
       <div style={{
         background: "linear-gradient(135deg, #F7941D 0%, #E07800 100%)",
         padding: "3.5rem 2rem", textAlign: "center",
-        borderRadius: "1.5rem", marginTop: "1rem",
+        borderRadius: "1.5rem", marginTop: "3rem",
       }}>
         <h2 style={{ fontFamily: "Cormorant Garamond, serif",
           fontSize: "clamp(1.8rem, 4vw, 2.6rem)", fontWeight: 300,

@@ -10,6 +10,7 @@ const DEFAULT_CONFIG = {
     { href: "/class-schedule",        label: "Class Schedule",          icon: "🗓", desc: "Weekly yoga class timetable" },
     { href: "/yoga-teacher-training", label: "200hr Teacher Training",  icon: "🧘", desc: "Yoga Alliance RYS 200 certified" },
     { href: "/yoga-teacher-training", label: "300hr Advanced Training", icon: "⭐", desc: "Yoga Alliance RYS 300 certified" },
+    { href: "/yoga-teacher-training", label: "500hr Master Training",   icon: "🏆", desc: "Yoga Alliance RYS 500 certified" },
     { href: "/sound-healing-therapy#sessions",      label: "Sound Healing Sessions", icon: "🎵", desc: "Individual & group sessions" },
     { href: "/sound-healing-therapy#certification", label: "Sound Healing Cert.",    icon: "📜", desc: "Level I & II certification" },
     { href: "/services",              label: "All Services",            icon: "✨", desc: "Yoga, retreats, therapy, corporate & more" },
@@ -214,7 +215,7 @@ export default function Nav() {
 
             <li>
               <Link href={cfg.bookNowHref} className="cta-lift px-5 py-2 rounded-full text-sm font-medium"
-                style={{ background: "#F7941D", color: "#fff", boxShadow: "0 4px 14px rgba(247,148,29,0.35)" }}>
+                style={{ background: "#A65808", color: "#fff", boxShadow: "0 4px 14px rgba(247,148,29,0.35)" }}>
                 {cfg.bookNowLabel}
               </Link>
             </li>
@@ -291,7 +292,7 @@ export default function Nav() {
               YouTube
             </a>
             <Link href={cfg.bookNowHref} className="cta-lift flex-1 text-center py-2.5 rounded-full font-medium"
-              style={{ background: "#F7941D", color: "#fff" }} onClick={() => setMobileOpen(false)}>
+              style={{ background: "#A65808", color: "#fff" }} onClick={() => setMobileOpen(false)}>
               {cfg.bookNowLabel}
             </Link>
           </div>

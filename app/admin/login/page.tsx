@@ -216,7 +216,7 @@ export default function AdminLoginPage() {
             fontSize: 12,
             color: "rgba(255,255,255,0.2)",
           }}>
-            Yogmandu · Thamel, Kathmandu
+            Yogmandu · Mid-Baneshwor, Kathmandu
           </p>
         </div>
 

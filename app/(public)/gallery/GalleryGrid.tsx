@@ -404,11 +404,11 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
         <p style={{ fontFamily:"Cormorant Garamond, serif",
           fontSize:"clamp(1.5rem, 4vw, 2.5rem)", fontWeight:300,
           color:"#2a1a0a", marginBottom:24 }}>
-          Come practice with us in <em style={{ color:"#F7941D" }}>Kathmandu</em>
+          Come practice with us in <em style={{ color:"#A65808" }}>Kathmandu</em>
         </p>
         <a href="https://wa.me/9779862909469" style={{
           display:"inline-block", padding:"0.85rem 2.4rem",
-          borderRadius:999, background:"#F7941D",
+          borderRadius:999, background:"#A65808",
           color:"#fff", fontSize:"0.9rem", fontWeight:500,
           textDecoration:"none", letterSpacing:"0.04em",
         }}>Book a Session</a>

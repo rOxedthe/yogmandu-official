@@ -193,7 +193,7 @@ export default function SoundHealingPage() {
               <a
                 href="/book?service=sound"
                 className="cta-lift px-8 py-3.5 rounded-full font-medium text-sm text-white"
-                style={{ background: "#F7941D" }}
+                style={{ background: "#A65808" }}
               >
                 Book a Session
               </a>

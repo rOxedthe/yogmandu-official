@@ -228,7 +228,7 @@ const pillars = [
 const stats = [
   { value: "3000+", numeric: 3000, suffix: "+", label: "Teachers trained",       color: "#F7941D" },
   { value: "50+",   numeric: 50,   suffix: "+", label: "Countries represented",  color: "#6B2D8B" },
-  { value: "2015",  numeric: undefined,          label: "Established in Nepal",   color: "#8DC63F" },
+  { value: "2018",  numeric: undefined,          label: "Established in Nepal",   color: "#8DC63F" },
   { value: "RYS",   numeric: undefined,          label: "Yoga Alliance certified", color: "#F7941D" },
 ];
 

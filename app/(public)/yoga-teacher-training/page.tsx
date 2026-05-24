@@ -231,7 +231,7 @@ export default function YogaTeacherTrainingPage() {
             { value: "28 Days",  label: "Program Duration" },
             { value: "RYT 200",  label: "Yoga Alliance Certified" },
             { value: "English",  label: "Language of Instruction" },
-            { value: "2015",     label: "Teaching Since" },
+            { value: "2018",     label: "Teaching Since" },
           ].map(s => (
             <div key={s.value} className="stat-3d"
               style={{

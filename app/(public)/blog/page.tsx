@@ -116,7 +116,7 @@ export default async function BlogPage() {
               <div className="flex items-center gap-6">
                 <Link href={`/blog/${posts[0].slug}`}
                   className="cta-lift px-6 py-2.5 rounded-full text-sm font-medium"
-                  style={{ background: "#F7941D", color: "#FAF6F0" }}>
+                  style={{ background: "#A65808", color: "#FAF6F0" }}>
                   Read Article
                 </Link>
                 <span className="text-xs font-light" style={{ color: "rgba(42,18,8,0.3)" }}>{posts[0].readTime} read</span>

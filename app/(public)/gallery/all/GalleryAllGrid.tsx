@@ -284,11 +284,11 @@ export default function GalleryAllGrid({ items }: Props) {
           color: "#2a1a0a",
           marginBottom: 22,
         }}>
-          Come practice with us in <em style={{ color: "#F7941D" }}>Kathmandu</em>
+          Come practice with us in <em style={{ color: "#A65808" }}>Kathmandu</em>
         </p>
         <a href="https://wa.me/9779862909469" style={{
           display: "inline-block", padding: "0.8rem 2.2rem",
-          borderRadius: 999, background: "#F7941D",
+          borderRadius: 999, background: "#A65808",
           color: "#fff", fontSize: "0.88rem", fontWeight: 500,
           textDecoration: "none", letterSpacing: "0.04em",
         }}>

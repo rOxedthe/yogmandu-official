@@ -13,7 +13,7 @@ const SOCIAL_PATHS = {
 const DEFAULT_CONFIG = {
   tagline:     "Nepal is calling.",
   taglineEm:   "Are you ready?",
-  description: "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. Transforming practitioners since 2015.",
+  description: "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. Transforming practitioners since 2018.",
   programs: [
     { href: "/class-schedule",        label: "Class Schedule" },
     { href: "/yoga-teacher-training", label: "200hr Teacher Training" },
@@ -30,7 +30,7 @@ const DEFAULT_CONFIG = {
     { href: "/terms",   label: "Terms" },
   ],
   contact: [
-    { icon: "📍", text: "Miteri Marg, Mid-Baneshwor-31, Kathmandu, Nepal" },
+    { icon: "📍", text: "Mid-Baneshwor-31, Kathmandu, Nepal" },
     { icon: "📞", text: "+977-9862909469 / +977-9810263277" },
     { icon: "✉️", text: "info@yogmandu.com" },
     { icon: "🕐", text: "Sun–Fri · 5:30–18:30" },
@@ -39,7 +39,7 @@ const DEFAULT_CONFIG = {
   instagramUrl: "https://instagram.com/yogmandu",
   facebookUrl:  "https://facebook.com/yogmandu",
   whatsappUrl:  "https://wa.me/9779862909469",
-  badge:        "Yoga Alliance RYS 200 & 300 · Kathmandu, Nepal",
+  badge:        "Yoga Alliance RYS 200, 300 & 500 · Kathmandu, Nepal",
   ctaTagline:   "Begin your journey",
 };
 
@@ -100,7 +100,7 @@ export default function Footer() {
               <Link key={p.label} href={p.href} className="cta-lift" style={{
                 padding: "0.7rem 1.6rem", borderRadius: 999, textDecoration: "none",
                 fontSize: "0.83rem", fontWeight: i === 0 ? 500 : 400,
-                background: i === 0 ? "#6B2D8B" : i === 1 ? "#F7941D" : "transparent",
+                background: i === 0 ? "#6B2D8B" : i === 1 ? "#A65808" : "transparent",
                 color: i < 2 ? "#fff" : "#6B2D8B",
                 border: i === 2 ? "1.5px solid #6B2D8B" : "none",
                 boxShadow: i === 0 ? "0 6px 24px rgba(107,45,139,0.3)" : i === 1 ? "0 6px 24px rgba(247,148,29,0.35)" : "none",

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | Yogmandu Nepal",
   },
   description:
-    "Yogmandu offers Yoga Alliance certified 200hr & 300hr teacher training and authentic Tibetan singing bowl sound healing in Kathmandu, Nepal. Founded 2015. 3,000+ teachers trained from 50+ countries.",
+    "Yogmandu offers Yoga Alliance certified 200hr, 300hr & 500hr teacher training and authentic Tibetan singing bowl sound healing in Kathmandu, Nepal. Founded 2018. 3,000+ teachers trained from 50+ countries.",
   keywords: [
     "yoga teacher training Nepal",
     "200hr yoga teacher training Kathmandu",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     siteName: "Yogmandu",
     title: "Yogmandu | Yoga Teacher Training & Sound Healing Nepal",
     description:
-      "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. 3,000+ teachers from 50+ countries since 2015.",
+      "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. 3,000+ teachers from 50+ countries since 2018.",
     // images intentionally omitted — app/opengraph-image.png file convention provides it
   },
   twitter: {
@@ -116,7 +116,7 @@ const websiteSchema = {
   "@type": "WebSite",
   name: "Yogmandu",
   url: "https://yogmandu.com",
-  description: "Nepal's premier Yoga Alliance RYS 200 & 300 certified teacher training school and Tibetan sound healing centre.",
+  description: "Nepal's premier Yoga Alliance RYS 200, 300 & 500 certified teacher training school and Tibetan sound healing centre.",
   potentialAction: {
     "@type": "SearchAction",
     target: { "@type": "EntryPoint", urlTemplate: "https://yogmandu.com/blog?q={search_term_string}" },

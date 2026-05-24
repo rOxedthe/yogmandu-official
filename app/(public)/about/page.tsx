@@ -4,21 +4,21 @@ import AboutContent from "./AboutContent";
 export const metadata: Metadata = {
   title: "About Yogmandu | Nepal's First Yoga Alliance Registered School",
   description:
-    "Founded in 2015 by Dr. Chintamani Gautam (PhD Yogic Science, ERYT 500). Nepal's first Yoga Alliance registered school — 3,000+ teachers trained from 50+ countries. Miteri Marg, Kathmandu.",
+    "Founded in 2018 by the teams of experts in the yoga and wellness industry. Led by Dr. Chintamani Gautam (PhD Yogic Science, ERYT 500). Nepal's first Yoga Alliance registered school — 3,000+ teachers trained from 50+ countries. Mid-Baneshwor, Kathmandu.",
   keywords: [
     "Yogmandu about", "Dr Chintamani Gautam", "yoga school Nepal history",
     "Yoga Alliance Nepal", "ERYT 500 Nepal", "yoga teacher Kathmandu",
-    "Nepal yoga school founded 2015",
+    "Nepal yoga school founded 2018",
   ],
   alternates: { canonical: "https://yogmandu.com/about" },
   openGraph: {
     title: "About Yogmandu | Nepal's First Yoga Alliance Registered School",
-    description: "Founded 2015 by Dr. Chintamani Gautam. ERYT 500, PhD Yogic Science. 3,000+ teachers from 50+ countries. Kathmandu, Nepal.",
+    description: "Founded 2018 by Dr. Chintamani Gautam. ERYT 500, PhD Yogic Science. 3,000+ teachers from 50+ countries. Kathmandu, Nepal.",
     url: "https://yogmandu.com/about",
   },
   twitter: {
     title: "About Yogmandu | Nepal's First Yoga Alliance Registered School",
-    description: "Founded 2015 by Dr. Chintamani Gautam. ERYT 500, PhD Yogic Science. 3,000+ teachers from 50+ countries.",
+    description: "Founded 2018 by Dr. Chintamani Gautam. ERYT 500, PhD Yogic Science. 3,000+ teachers from 50+ countries.",
   },
 };
 
@@ -47,8 +47,8 @@ const organizationSchema = {
   name: "Yogmandu",
   url: "https://yogmandu.com",
   logo: "https://yogmandu.com/logo.png",
-  foundingDate: "2015",
-  description: "Nepal's first Yoga Alliance registered school, offering 200hr & 300hr teacher training and Tibetan sound healing in Kathmandu.",
+  foundingDate: "2018",
+  description: "Nepal's first Yoga Alliance registered school, offering 200hr, 300hr & 500hr teacher training and Tibetan sound healing in Kathmandu.",
   numberOfEmployees: { "@type": "QuantitativeValue", value: 10 },
   founder: { "@type": "Person", name: "Dr. Chintamani Gautam" },
   address: {

@@ -205,7 +205,7 @@ export default function AboutContent() {
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Link href="/yoga-teacher-training" style={{
                 padding: "0.85rem 1.8rem", borderRadius: "3rem",
-                background: "#F7941D", color: "#fff",
+                background: "#A65808", color: "#fff",
                 fontWeight: 600, fontSize: "0.85rem", textDecoration: "none",
               }}>
                 Explore Programs
@@ -243,7 +243,7 @@ export default function AboutContent() {
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <p style={{ textAlign: "center", fontSize: "0.72rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#F7941D", marginBottom: 48 }}>By the Numbers</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1.5rem" }}>
-            <AnimatedStat value={2015}  label="Year Founded" color="#F7941D" delay={0} />
+            <AnimatedStat value={2018}  label="Year Founded" color="#F7941D" delay={0} />
             <AnimatedStat value={3000}  suffix="+" label="Teachers Trained" color="#6B2D8B" delay={150} />
             <AnimatedStat value={50}    suffix="+" label="Countries" color="#8DC63F" delay={300} />
             <AnimatedStat value={40000} suffix="+" label="Teaching Hours" color="#F7941D" delay={450} />
@@ -261,7 +261,7 @@ export default function AboutContent() {
             </h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, fontSize: "0.92rem", lineHeight: 1.85, color: "#4A2E1A" }}>
               <p>Yogmandu Yoga and Retreat is a complete one-stop solution for all of your health and fitness needs under one roof. Our mission is to make people healthy physically, mentally, socially, and spiritually at an affordable cost.</p>
-              <p>Established in 2015 as Nepal&apos;s first registered Yoga School and as a sister company to Zumbandu Fitness and Diet Therapy Clinic, we are affiliated with Yoga Alliance USA and Yoga Alliance International Australia.</p>
+              <p>Established in 2018 as Nepal&apos;s first registered Yoga School and as a sister company to Zumbandu Fitness and Diet Therapy Clinic, we are affiliated with Yoga Alliance USA and Yoga Alliance International Australia.</p>
               <p>We collaborate with dietitians, nutritionists, and mental health professionals to offer holistic care — from therapeutic yoga for chronic conditions to weight management programs and diet consultation.</p>
             </div>
           </div>
@@ -269,9 +269,9 @@ export default function AboutContent() {
           {/* Affiliations */}
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             {[
-              { badge: "RYS 200 & 300", org: "Yoga Alliance USA", color: "#6B2D8B" },
+              { badge: "RYS 200, 300 & 500", org: "Yoga Alliance USA", color: "#6B2D8B" },
               { badge: "Certified School", org: "Yoga Alliance International Australia", color: "#F7941D" },
-              { badge: "Since 2015", org: "Nepal's First Registered Yoga School", color: "#8DC63F" },
+              { badge: "Since 2018", org: "Nepal's First Registered Yoga School", color: "#8DC63F" },
             ].map(a => (
               <TiltCard key={a.org} style={{
                 padding: "1.25rem 1.5rem", borderRadius: "1rem",
@@ -371,7 +371,7 @@ export default function AboutContent() {
             {[
               "Hatha Yoga Classes", "Vinyasa Yoga", "Power Yoga",
               "Ashtanga Yoga", "Sanatan Yoga", "Meditation Classes",
-              "200hr Yoga Teacher Training", "300hr Advanced Training", "Sound Healing Therapy",
+              "200hr Yoga Teacher Training", "300hr Advanced Training", "500hr Master Training", "Sound Healing Therapy",
               "Sound Healing Certification (Level I & II)", "Pranayama & Breathwork", "Yoga Therapy",
               "Virtual Live Yoga Classes", "Private & Corporate Yoga", "Children's Yoga",
               "Senior Citizen Yoga", "49-Day Weight Loss Bootcamp", "Diet & Nutrition Consultation",
@@ -425,7 +425,7 @@ export default function AboutContent() {
             The next cohort is forming. Reach out and we will help you find the right program for where you are in your practice.
           </p>
           <div style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/contact" style={{ padding: "0.9rem 2rem", borderRadius: "3rem", background: "#F7941D", color: "#fff", fontWeight: 600, fontSize: "0.88rem", textDecoration: "none" }}>
+            <Link href="/contact" style={{ padding: "0.9rem 2rem", borderRadius: "3rem", background: "#A65808", color: "#fff", fontWeight: 600, fontSize: "0.88rem", textDecoration: "none" }}>
               Get in Touch
             </Link>
             <Link href="/yoga-teacher-training" style={{ padding: "0.9rem 2rem", borderRadius: "3rem", border: "1.5px solid rgba(255,255,255,0.25)", color: "#fff", fontWeight: 500, fontSize: "0.88rem", textDecoration: "none" }}>
