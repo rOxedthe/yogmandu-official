@@ -76,6 +76,20 @@ h1, h2, h3, h4 { font-family: var(--font-cormorant, "Cormorant Garamond"), Georg
   50%       { box-shadow: 0 0 60px 12px rgba(107,45,139,0.15); }
 }
 
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes spin-slow-rev {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+@keyframes drift {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.22; }
+  33%       { transform: translateY(-14px) translateX(6px); opacity: 0.38; }
+  66%       { transform: translateY(-6px) translateX(-8px); opacity: 0.28; }
+}
+
 .animate-float      { animation: float 6s ease-in-out infinite; }
 .animate-fade-up    { animation: fade-up 0.8s ease forwards; }
 .animate-fade-in    { animation: fade-in 1.2s ease forwards; }

@@ -133,10 +133,10 @@ export default function ProgramsSection() {
   const cardStyle = (i: number): React.CSSProperties => {
     const off    = i - active;
     const absOff = Math.abs(off);
-    const rotY   = Math.max(-50, Math.min(50, off * 35));
-    const tx     = off * 480;
-    const scale  = Math.max(0.62, 1 - absOff * 0.14);
-    const op     = Math.max(0, 1 - absOff * 0.42);
+    const rotY   = Math.max(-40, Math.min(40, off * 28)); // less aggressive rotation
+    const tx     = off * 380; // reduced from 480 → side cards stay inside viewport
+    const scale  = Math.max(0.70, 1 - absOff * 0.12);    // wider range: 0.70–1.0
+    const op     = Math.max(0, 1 - absOff * 0.35);        // less fade → side cards more visible
     const zIdx   = 20 - Math.round(absOff * 5);
     return {
       position: "absolute",
@@ -181,14 +181,16 @@ export default function ProgramsSection() {
           <div style={{ width:48, height:2, background:"linear-gradient(90deg,#6B2D8B,#F7941D)", margin:"1rem auto 0" }} />
         </div>
 
-        {/* Carousel viewport */}
+        {/* Carousel viewport — overflow visible so side cards aren't hard-clipped;
+            the parent section carries overflow:hidden for scrollbar prevention,
+            mask gradient handles the soft visual edge fade */}
         <div style={{
-          position:"relative", height:560,
-          perspective:"1400px",
+          position:"relative", height:580,
+          perspective:"1600px",
           perspectiveOrigin:"50% 40%",
-          overflow:"hidden",
-          WebkitMaskImage:"linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%)",
-          maskImage:"linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%)",
+          overflow:"visible",
+          WebkitMaskImage:"linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+          maskImage:"linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
         }}>
           {CARDS.map((card, i) => (
             <div

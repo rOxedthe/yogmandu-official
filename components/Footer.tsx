@@ -49,7 +49,14 @@ export default function Footer() {
   useEffect(() => {
     fetch("/api/admin/site-config")
       .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data?.footer) setCfg(prev => ({ ...prev, ...data.footer })); })
+      .then(data => { if (data?.footer) setCfg(prev => ({
+        ...prev,
+        ...data.footer,
+        // Pin these to code — DB may have stale values from before 2018 rebrand
+        description: DEFAULT_CONFIG.description,
+        badge:       DEFAULT_CONFIG.badge,
+        programs:    DEFAULT_CONFIG.programs,
+      })); })
       .catch(() => {});
   }, []);
 
@@ -96,16 +103,20 @@ export default function Footer() {
             </h3>
           </div>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            {cfg.programs.slice(0, 3).map((p, i) => (
-              <Link key={p.label} href={p.href} className="cta-lift" style={{
-                padding: "0.7rem 1.6rem", borderRadius: 999, textDecoration: "none",
-                fontSize: "1rem", fontWeight: i === 0 ? 500 : 400,
-                background: i === 0 ? "#6B2D8B" : i === 1 ? "#A65808" : "transparent",
-                color: i < 2 ? "#fff" : "#6B2D8B",
-                border: i === 2 ? "1.5px solid #6B2D8B" : "none",
-                boxShadow: i === 0 ? "0 6px 24px rgba(107,45,139,0.3)" : i === 1 ? "0 6px 24px rgba(247,148,29,0.35)" : "none",
-              }}>{p.label}</Link>
-            ))}
+            {cfg.programs.slice(0, 4).map((p, i) => {
+              const styles: React.CSSProperties[] = [
+                { background: "#6B2D8B", color: "#fff", border: "none", boxShadow: "0 6px 24px rgba(107,45,139,0.3)", fontWeight: 500 },
+                { background: "#A65808", color: "#fff", border: "none", boxShadow: "0 6px 24px rgba(166,88,8,0.35)", fontWeight: 500 },
+                { background: "transparent", color: "#6B2D8B", border: "1.5px solid #6B2D8B", fontWeight: 400 },
+                { background: "transparent", color: "#4A6418", border: "1.5px solid #4A6418", fontWeight: 400 },
+              ];
+              return (
+                <Link key={p.label} href={p.href} className="cta-lift" style={{
+                  padding: "0.7rem 1.6rem", borderRadius: 999, textDecoration: "none",
+                  fontSize: "0.95rem", ...styles[i],
+                }}>{p.label}</Link>
+              );
+            })}
           </div>
         </div>
       </div>

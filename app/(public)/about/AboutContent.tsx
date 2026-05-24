@@ -293,13 +293,13 @@ export default function AboutContent() {
 
       {/* ── TEAM ── */}
       <section style={{ background: "#FFFFFF", padding: "6rem 1.5rem" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontSize: "0.88rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "#8DC63F", marginBottom: 12 }}>The Teachers</p>
             <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "3rem", fontWeight: 300, color: "#2A1208" }}>Meet your guides</h2>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "2rem" }}>
             {team.map(member => (
               <TiltCard key={member.name} style={{
                 padding: "2rem", borderRadius: "1.5rem",

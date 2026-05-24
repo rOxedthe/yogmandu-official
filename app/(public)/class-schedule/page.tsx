@@ -54,15 +54,93 @@ export default async function ClassSchedulePage() {
 
       {/* ── Page header ── */}
       <div style={{
-        background: "linear-gradient(135deg, #3D1560 0%, #6B2D8B 100%)",
-        padding: "7rem 2rem 4rem",
+        background: "linear-gradient(155deg, #1a0535 0%, #3D1560 45%, #6B2D8B 100%)",
+        padding: "7rem 2rem 4.5rem",
         position: "relative", overflow: "hidden",
         textAlign: "center",
       }}>
-        <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(247,148,29,0.2) 0%, transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: -40, left: -40, width: 220, height: 220, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(141,198,63,0.1) 0%, transparent 70%)", pointerEvents: "none" }} />
+        {/* ── Yoga-themed decorative background ── */}
+
+        {/* Mandala — large, slowly rotating, centred behind content */}
+        <svg aria-hidden="true" style={{ position:"absolute", left:"50%", top:"50%", marginLeft:"-320px", marginTop:"-320px",
+          width:640, height:640, opacity:0.07, animation:"spin-slow 90s linear infinite", pointerEvents:"none" }}
+          viewBox="0 0 640 640" fill="none">
+          {[40,80,120,160,200,240,280,320].map(r => (
+            <circle key={r} cx="320" cy="320" r={r} stroke="#F7941D" strokeWidth="0.8"/>
+          ))}
+          {[0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345].map(d => (
+            <line key={d} x1="320" y1="0" x2="320" y2="640" stroke="#F7941D" strokeWidth="0.4"
+              transform={`rotate(${d} 320 320)`}/>
+          ))}
+          {[0,45,90,135,180,225,270,315].map(d => (
+            <ellipse key={d} cx="320" cy="160" rx="22" ry="70" fill="none" stroke="#8DC63F" strokeWidth="0.7" opacity="0.6"
+              transform={`rotate(${d} 320 320)`}/>
+          ))}
+          <circle cx="320" cy="320" r="18" stroke="#F7941D" strokeWidth="1.2"/>
+          <circle cx="320" cy="320" r="6" fill="#F7941D" opacity="0.5"/>
+        </svg>
+
+        {/* Inner mandala ring — counter-rotates for depth */}
+        <svg aria-hidden="true" style={{ position:"absolute", left:"50%", top:"50%", marginLeft:"-180px", marginTop:"-180px",
+          width:360, height:360, opacity:0.09, animation:"spin-slow-rev 60s linear infinite", pointerEvents:"none" }}
+          viewBox="0 0 360 360" fill="none">
+          {[60,100,140].map(r => (
+            <circle key={r} cx="180" cy="180" r={r} stroke="#8DC63F" strokeWidth="0.8"/>
+          ))}
+          {[0,30,60,90,120,150,180,210,240,270,300,330].map(d => (
+            <line key={d} x1="180" y1="40" x2="180" y2="320" stroke="#8DC63F" strokeWidth="0.5"
+              transform={`rotate(${d} 180 180)`}/>
+          ))}
+        </svg>
+
+        {/* Lotus — bottom-left */}
+        <svg aria-hidden="true" style={{ position:"absolute", bottom:-30, left:"6%", opacity:0.13, pointerEvents:"none" }}
+          width="220" height="220" viewBox="0 0 220 220">
+          {[0,45,90,135,180,225,270,315].map(d => (
+            <ellipse key={d} cx="110" cy="60" rx="22" ry="62" fill="#F7941D" opacity="0.7"
+              transform={`rotate(${d} 110 110)`}/>
+          ))}
+          <circle cx="110" cy="110" r="14" fill="#8DC63F"/>
+        </svg>
+
+        {/* Small lotus — top right */}
+        <svg aria-hidden="true" style={{ position:"absolute", top:"12%", right:"7%", opacity:0.11, pointerEvents:"none",
+          animation:"drift 8s ease-in-out infinite" }}
+          width="120" height="120" viewBox="0 0 120 120">
+          {[0,60,120,180,240,300].map(d => (
+            <ellipse key={d} cx="60" cy="28" rx="14" ry="36" fill="#8DC63F" opacity="0.7"
+              transform={`rotate(${d} 60 60)`}/>
+          ))}
+          <circle cx="60" cy="60" r="9" fill="#F7941D"/>
+        </svg>
+
+        {/* Om symbol — upper left */}
+        <div aria-hidden="true" style={{ position:"absolute", top:"18%", left:"8%", fontSize:"clamp(80px,10vw,140px)",
+          opacity:0.06, color:"#F7941D", fontFamily:"serif", lineHeight:1, pointerEvents:"none",
+          userSelect:"none", animation:"drift 12s ease-in-out infinite", animationDelay:"2s" }}>
+          ॐ
+        </div>
+
+        {/* Himalayan silhouette at bottom */}
+        <svg aria-hidden="true" style={{ position:"absolute", bottom:0, left:0, width:"100%", pointerEvents:"none" }}
+          viewBox="0 0 1440 100" preserveAspectRatio="none">
+          <polygon points="0,100 180,38 340,100"  fill="rgba(255,255,255,0.04)"/>
+          <polygon points="100,100 360,15 620,100" fill="rgba(255,255,255,0.06)"/>
+          <polygon points="320,100 600,8  880,100"  fill="rgba(255,255,255,0.05)"/>
+          <polygon points="620,100 920,28 1200,100" fill="rgba(255,255,255,0.07)"/>
+          <polygon points="950,100 1180,44 1440,100" fill="rgba(255,255,255,0.04)"/>
+        </svg>
+
+        {/* Floating energy dots */}
+        {([
+          [10,25,4,"#F7941D",0], [20,72,5,"#8DC63F",1.2], [78,18,3,"#fff",0.6],
+          [88,65,5,"#F7941D",2], [48,88,4,"#8DC63F",3], [65,12,3,"#fff",1.8],
+          [35,55,4,"#F7941D",0.4], [92,35,3,"#8DC63F",2.5],
+        ] as [number,number,number,string,number][]).map(([x,y,s,c,delay],i) => (
+          <div key={i} aria-hidden="true" style={{ position:"absolute", left:`${x}%`, top:`${y}%`,
+            width:s, height:s, borderRadius:"50%", background:c, opacity:0.28,
+            animation:"drift 7s ease-in-out infinite", animationDelay:`${delay}s`, pointerEvents:"none" }}/>
+        ))}
 
         {/* Centered logo */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginBottom: 24 }}>
