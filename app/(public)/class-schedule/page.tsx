@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ScheduleGrid from "./ScheduleGrid";
+import HeroDecor from "./HeroDecor";
 import { getActiveSessions, getInstructorMap } from "@/lib/publicData";
 
 export const revalidate = 60;
@@ -93,33 +94,8 @@ export default async function ClassSchedulePage() {
           ))}
         </svg>
 
-        {/* Lotus — bottom-left */}
-        <svg aria-hidden="true" style={{ position:"absolute", bottom:-30, left:"6%", opacity:0.13, pointerEvents:"none" }}
-          width="220" height="220" viewBox="0 0 220 220">
-          {[0,45,90,135,180,225,270,315].map(d => (
-            <ellipse key={d} cx="110" cy="60" rx="22" ry="62" fill="#F7941D" opacity="0.7"
-              transform={`rotate(${d} 110 110)`}/>
-          ))}
-          <circle cx="110" cy="110" r="14" fill="#8DC63F"/>
-        </svg>
-
-        {/* Small lotus — top right */}
-        <svg aria-hidden="true" style={{ position:"absolute", top:"12%", right:"7%", opacity:0.11, pointerEvents:"none",
-          animation:"drift 8s ease-in-out infinite" }}
-          width="120" height="120" viewBox="0 0 120 120">
-          {[0,60,120,180,240,300].map(d => (
-            <ellipse key={d} cx="60" cy="28" rx="14" ry="36" fill="#8DC63F" opacity="0.7"
-              transform={`rotate(${d} 60 60)`}/>
-          ))}
-          <circle cx="60" cy="60" r="9" fill="#F7941D"/>
-        </svg>
-
-        {/* Om symbol — upper left */}
-        <div aria-hidden="true" style={{ position:"absolute", top:"18%", left:"8%", fontSize:"clamp(80px,10vw,140px)",
-          opacity:0.06, color:"#F7941D", fontFamily:"serif", lineHeight:1, pointerEvents:"none",
-          userSelect:"none", animation:"drift 12s ease-in-out infinite", animationDelay:"2s" }}>
-          ॐ
-        </div>
+        {/* Interactive 3-D decorative elements (client component) */}
+        <HeroDecor />
 
         {/* Himalayan silhouette at bottom */}
         <svg aria-hidden="true" style={{ position:"absolute", bottom:0, left:0, width:"100%", pointerEvents:"none" }}

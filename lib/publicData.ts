@@ -54,14 +54,20 @@ export function resolveInstructor(id: string, map: Record<string, string> = FALL
 // ── Style → accent colour ─────────────────────────────────────────────────────
 export function styleToAccent(styles: string[]): string {
   const s = styles?.[0] ?? "";
-  if (s === "Sound Healing") return "#6B2D8B";
-  if (s === "Hatha")         return "#F7941D";
-  if (s === "Vinyasa")       return "#F7941D";
-  if (s === "Ashtanga")      return "#F7941D";
-  if (s === "Yin")           return "#8DC63F";
-  if (s === "Restorative")   return "#8DC63F";
-  if (s === "Meditation")    return "#6B2D8B";
-  if (s === "Pranayama")     return "#6B2D8B";
+  if (s === "Sound Healing")            return "#6B2D8B";
+  if (s === "Hatha")                    return "#F7941D";
+  if (s === "Vinyasa" || s === "Vinyasa Flow") return "#F7941D";
+  if (s === "Ashtanga" || s === "Ashtanga Vinyasa") return "#F7941D";
+  if (s === "Power Yoga" || s === "Power") return "#F7941D";
+  if (s === "Flexibility Yoga")         return "#F7941D";
+  if (s === "Yin")                      return "#8DC63F";
+  if (s === "Restorative")              return "#8DC63F";
+  if (s === "Meditation")               return "#6B2D8B";
+  if (s === "Pranayama" || s === "Pranayama & Surya Namaskar") return "#6B2D8B";
+  if (s === "Asana Flow & Meditation" || s === "Asana & Meditation") return "#6B2D8B";
+  if (s === "Asana & Pranayama")        return "#6B2D8B";
+  if (s === "Online Zoom Meditation" || s === "Online Meditation") return "#6B2D8B";
+  if (s === "Yoga Teacher's Training" || s === "Yoga Teachers Training") return "#4A6418";
   return "#F7941D";
 }
 
