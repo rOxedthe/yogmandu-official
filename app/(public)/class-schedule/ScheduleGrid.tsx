@@ -90,7 +90,9 @@ interface Props {
   instructorMap?: Record<string, string>;
 }
 
-const TEAL = "#1A4A4A";
+const HEADER_BG  = "#3D1560";   // deep purple — matches site brand
+const ACTIVE_BG  = "#3D1560";   // deep purple — active day pill
+const PILL_COLOR = "#6B2D8B";   // purple — inactive pill text/border
 
 export default function ScheduleGrid({ sessions, instructorMap }: Props) {
   const map      = instructorMap || {};
@@ -128,9 +130,13 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
               style={{
                 padding: "0.5rem 1.25rem",
                 borderRadius: 999,
-                border: isActive ? "none" : "1.5px solid #1A4A4A",
-                background: isActive ? TEAL : "transparent",
-                color: isActive ? "#FFFFFF" : TEAL,
+                border: isActive ? "none" : `1.5px solid rgba(107,45,139,0.3)`,
+                background: isActive
+                  ? ACTIVE_BG
+                  : isToday
+                    ? "rgba(107,45,139,0.08)"
+                    : "transparent",
+                color: isActive ? "#FFFFFF" : PILL_COLOR,
                 fontSize: "0.9rem",
                 fontWeight: isActive ? 600 : isToday ? 500 : 400,
                 cursor: "pointer",
@@ -139,10 +145,12 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
                 position: "relative",
               }}
               onMouseEnter={e => {
-                if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "rgba(26,74,74,0.08)";
+                if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "rgba(107,45,139,0.12)";
               }}
               onMouseLeave={e => {
-                if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+                if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = isToday
+                  ? "rgba(107,45,139,0.08)"
+                  : "transparent";
               }}
             >
               {day}
@@ -151,7 +159,7 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
                   position: "absolute", bottom: -3, left: "50%",
                   transform: "translateX(-50%)",
                   width: 4, height: 4, borderRadius: "50%",
-                  background: TEAL,
+                  background: PILL_COLOR,
                 }} />
               )}
             </button>
@@ -163,14 +171,14 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
       <div style={{
         borderRadius: "0.75rem",
         overflow: "hidden",
-        border: "1px solid rgba(26,74,74,0.18)",
+        border: "1px solid rgba(107,45,139,0.18)",
         boxShadow: "0 4px 24px rgba(42,18,8,0.07)",
       }}>
         {/* Header */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
-          background: TEAL,
+          background: HEADER_BG,
           padding: "0.85rem 1.25rem",
         }}>
           {["Time", "Teacher", "Class Type"].map((h) => (
@@ -208,13 +216,13 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
                     gridTemplateColumns: "1fr 1fr 1fr",
                     padding: "1rem 1.25rem",
                     background: isEven ? "#FFFFFF" : "#F7F4F0",
-                    borderTop: "1px solid rgba(26,74,74,0.1)",
+                    borderTop: "1px solid rgba(107,45,139,0.1)",
                     transition: "background 0.15s",
                     cursor: "pointer",
                     alignItems: "center",
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLDivElement).style.background = "rgba(26,74,74,0.06)";
+                    (e.currentTarget as HTMLDivElement).style.background = "rgba(247,148,29,0.07)";
                   }}
                   onMouseLeave={e => {
                     (e.currentTarget as HTMLDivElement).style.background = isEven ? "#FFFFFF" : "#F7F4F0";
