@@ -44,7 +44,11 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
+          # Plain FTP: FTPS fails here because the encrypted control channel
+          # hides the PASV response from the network's FTP helper, so the
+          # passive data port never opens (data-connection timeout). The
+          # `deploy` account is jailed to yogmandu-next to limit exposure.
+          protocol: ftp
           # Trailing slashes are required by this action. The `deploy` FTP
           # account is jailed to /home/yogmandu/yogmandu-next, so its login
           # root IS the app folder — server-dir is therefore ./.
