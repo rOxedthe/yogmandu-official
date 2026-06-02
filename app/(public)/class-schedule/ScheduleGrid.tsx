@@ -169,9 +169,56 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
 
   return (
     <div style={{ maxWidth:860, margin:"0 auto", padding:"2rem 1rem 3rem" }}>
+      <style>{`
+        /* ── Day tabs: horizontal scroll on small screens ── */
+        @media (max-width: 599px) {
+          .sg-day-tabs {
+            flex-wrap: nowrap !important;
+            overflow-x: auto;
+            justify-content: flex-start !important;
+            padding: 0 0.25rem 8px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .sg-day-tabs::-webkit-scrollbar { display: none; }
+          .sg-day-btn { flex-shrink: 0; scroll-snap-align: start; }
+          .sg-day-full { display: none; }
+
+          /* ── Hide 3-col header, switch rows to card layout ── */
+          .sg-thead { display: none !important; }
+          .sg-row {
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 0.85rem 1rem !important;
+            gap: 2px;
+          }
+          .sg-cell-time {
+            order: 1;
+            font-size: 0.72rem !important;
+            font-weight: 600 !important;
+            color: rgba(107,45,139,0.85) !important;
+            letter-spacing: 0.04em;
+          }
+          .sg-cell-name {
+            order: 2;
+            font-size: 0.96rem !important;
+            font-weight: 600 !important;
+            margin: 2px 0;
+          }
+          .sg-cell-teacher {
+            order: 3;
+            font-size: 0.8rem !important;
+            color: #7A5840 !important;
+          }
+        }
+        @media (min-width: 600px) {
+          .sg-day-short { display: none; }
+        }
+      `}</style>
 
       {/* ── Day tabs ──────────────────────────────────────────────────────── */}
-      <div style={{ display:"flex", flexWrap:"wrap", gap:"0.55rem",
+      <div className="sg-day-tabs" style={{ display:"flex", flexWrap:"wrap", gap:"0.55rem",
         justifyContent:"center", marginBottom:"2.25rem" }}>
         {DAYS.map((day) => {
           const isActive = activeDay === day;
@@ -179,6 +226,7 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
           return (
             <motion.button
               key={day}
+              className="sg-day-btn"
               onClick={() => setActiveDay(day)}
               whileHover={isActive ? {} : { y:-5, boxShadow:"0 12px 28px rgba(107,45,139,0.35)" }}
               whileTap={{ scale:0.93, y:0 }}
@@ -201,7 +249,8 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
                   : "0 2px 8px rgba(107,45,139,0.1)",
               }}
             >
-              {day}
+              <span className="sg-day-full">{day}</span>
+              <span className="sg-day-short">{day.slice(0, 3)}</span>
               {isToday && (
                 <motion.span
                   layoutId="today-dot"
@@ -248,7 +297,7 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
           />
 
           {/* Header */}
-          <div style={{
+          <div className="sg-thead" style={{
             display:"grid", gridTemplateColumns:"1fr 1fr 1fr",
             padding:"1rem 1.5rem",
             background:"linear-gradient(135deg, #4A1A72 0%, #3D1560 50%, #2E0F4A 100%)",
@@ -302,6 +351,7 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
                         boxShadow: `inset 4px 0 0 ${cls.accent}`,
                         transition:{ duration:0.18 },
                       }}
+                      className="sg-row"
                       style={{
                         display:"grid", gridTemplateColumns:"1fr 1fr 1fr",
                         padding:"0.95rem 1.5rem",
@@ -312,14 +362,15 @@ export default function ScheduleGrid({ sessions, instructorMap }: Props) {
                       }}
                     >
                       <Link href={bookHref} style={{ display:"contents", textDecoration:"none" }}>
-                        <span style={{ fontSize:"0.9rem", color:"#2A1208",
+                        <span className="sg-cell-time" style={{ fontSize:"0.9rem", color:"#2A1208",
                           fontWeight:500, lineHeight:1.45 }}>
                           {cls.time}
                         </span>
-                        <span style={{ fontSize:"0.9rem", color:"#4A3020", lineHeight:1.45 }}>
+                        <span className="sg-cell-teacher" style={{ fontSize:"0.9rem", color:"#4A3020", lineHeight:1.45 }}>
                           {cls.instructor}
                         </span>
                         <motion.span
+                          className="sg-cell-name"
                           style={{ fontSize:"0.9rem", color:cls.accent,
                             fontWeight:600, lineHeight:1.45 }}
                           whileHover={{ letterSpacing:"0.03em" }}

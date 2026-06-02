@@ -54,12 +54,17 @@ export default async function ClassSchedulePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
       {/* ── Page header ── */}
-      <div style={{
+      <div className="schedule-hero" style={{
         background: "linear-gradient(155deg, #1a0535 0%, #3D1560 45%, #6B2D8B 100%)",
         padding: "7rem 2rem 4.5rem",
         position: "relative", overflow: "hidden",
         textAlign: "center",
       }}>
+        <style>{`
+          @media (max-width: 480px) {
+            .schedule-hero { padding: 6rem 1.25rem 3rem !important; }
+          }
+        `}</style>
         {/* ── Yoga-themed decorative background ── */}
 
         {/* Mandala — large, slowly rotating, centred behind content */}
