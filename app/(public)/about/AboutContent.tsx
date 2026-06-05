@@ -118,7 +118,19 @@ function AnimatedStat({ value, suffix, label, color, delay = 0 }: { value: numbe
   );
 }
 
-const team = [
+type TeamMember = {
+  name: string;
+  role: string;
+  bio: string;
+  color: string;
+  initials: string;
+  credentials: string[];
+  certifications?: string;
+  photo?: string;
+};
+
+// Fallback team — used when the admin Instructors list is empty or Supabase is down.
+const DEFAULT_TEAM: TeamMember[] = [
   {
     name: "Dr. Chintamani Gautam",
     role: "President & Lead Yoga Teacher",
@@ -152,7 +164,8 @@ const values = [
   { n: "04", title: "Holistic Wellness", body: "A one-stop solution for health and fitness in collaboration with dietitians, nutritionists, and mental health professionals.", color: "#F7941D" },
 ];
 
-export default function AboutContent() {
+export default function AboutContent({ team }: { team?: TeamMember[] }) {
+  const teamMembers = team && team.length ? team : DEFAULT_TEAM;
   return (
     <>
       {/* ── HERO ── */}
@@ -300,7 +313,7 @@ export default function AboutContent() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(320px,100%), 1fr))", gap: "2rem" }}>
-            {team.map(member => (
+            {teamMembers.map(member => (
               <TiltCard key={member.name} style={{
                 padding: "2rem", borderRadius: "1.5rem",
                 background: "#FFFFFF", border: `1.5px solid ${member.color}15`,
@@ -314,12 +327,15 @@ export default function AboutContent() {
                   background: `${member.color}15`, border: `2px solid ${member.color}30`,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontWeight: 700, fontSize: "1.1rem", color: member.color,
-                  marginBottom: 16,
+                  marginBottom: 16, overflow: "hidden",
                 }}>
-                  {member.initials}
+                  {member.photo
+                    ? <img src={member.photo} alt={member.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    : member.initials}
                 </div>
                 <h3 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "1.5rem", fontWeight: 400, color: "#2A1208", marginBottom: 4 }}>{member.name}</h3>
-                <p style={{ fontSize: "0.88rem", fontWeight: 600, color: member.color, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>{member.role}</p>
+                {member.role ? <p style={{ fontSize: "0.88rem", fontWeight: 600, color: member.color, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: member.certifications ? 4 : 12 }}>{member.role}</p> : null}
+                {member.certifications ? <p style={{ fontSize: "0.8rem", lineHeight: 1.5, color: "#7A5840", marginBottom: 12 }}>{member.certifications}</p> : null}
                 <p style={{ fontSize: "0.88rem", lineHeight: 1.75, color: "#4A2E1A", marginBottom: 16 }}>{member.bio}</p>
                 {/* Credentials */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>

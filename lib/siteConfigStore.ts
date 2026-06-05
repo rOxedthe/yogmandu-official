@@ -29,7 +29,7 @@ export const defaultNavConfig = {
 export const defaultFooterConfig = {
   tagline:     "Nepal is calling.",
   taglineEm:   "Are you ready?",
-  description: "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. Transforming practitioners since 2015.",
+  description: "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. Transforming practitioners since 2018.",
   programs: [
     { href: "/class-schedule",        label: "Class Schedule" },
     { href: "/yoga-teacher-training", label: "200hr Teacher Training" },
@@ -47,7 +47,7 @@ export const defaultFooterConfig = {
     { icon: "📍", text: "Miteri Marg, Mid-Baneshwor-31, Kathmandu, Nepal" },
     { icon: "📞", text: "+977-9810263277" },
     { icon: "✉️", text: "info@yogmandu.com" },
-    { icon: "🕐", text: "Mon–Sun · 6:00–20:00" },
+    { icon: "🕐", text: "Sun–Fri · 5:30–18:30" },
   ],
   youtubeUrl:   "https://www.youtube.com/@yogmandu",
   instagramUrl: "https://instagram.com/yogmandu",

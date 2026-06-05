@@ -34,6 +34,12 @@ import {
   Users,
   X,
 } from "lucide-react";
+import {
+  sessionInstructorName,
+  sessionSpotsLabel,
+  sessionScheduleLabel,
+  sessionTracksCapacity,
+} from "@/lib/adminSessionDisplay";
 
 const STORAGE_KEY = "yogmandu-admin-state-v2";
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -120,8 +126,9 @@ const initialInstructors = [
   {
     id: "inst-chintamani",
     name: "Dr. Chintamani Gautam",
+    role: "President & Lead Yoga Teacher",
     photo: "",
-    bio: "Founder & President of Yogmandu. PhD in Yogic Science, E-RYT 500. Has trained over 3,000 teachers from 50+ countries since 2015. Expert in Tibetan singing bowl sound healing and classical yoga lineage.",
+    bio: "Founder & President of Yogmandu. PhD in Yogic Science, E-RYT 500. Has trained over 3,000 teachers from 50+ countries since 2018. Expert in Tibetan singing bowl sound healing and classical yoga lineage.",
     specialties: ["Hatha", "Meditation", "Sound Healing", "Pranayama"],
     certifications: "PhD Yogic Science, E-RYT 500, Yoga Alliance USA, Yoga Alliance International (Australia)",
     years: 20,
@@ -131,6 +138,7 @@ const initialInstructors = [
   {
     id: "inst-arjun",
     name: "Arjun Rakhal Magar",
+    role: "Senior Yoga Teacher & Trainer",
     photo: "/images/teachers/arjun-rakhal-magar.jpg",
     bio: "Senior Yoga Teacher at Yogmandu specialising in Hatha, Vinyasa, and Ashtanga. Leads morning flows, intensive workshops, and teacher training practical sessions.",
     specialties: ["Hatha", "Vinyasa", "Ashtanga"],
@@ -142,6 +150,7 @@ const initialInstructors = [
   {
     id: "inst-dipika",
     name: "Arjun Neupane",
+    role: "Yoga Teacher & Therapist",
     photo: "/images/teachers/arjun-neupane.jpg",
     bio: "Yoga Teacher at Yogmandu. Specialises in restorative yoga, Yin, Yoga Nidra, pranayama, and therapeutic applications of yoga for wellness and rehabilitation.",
     specialties: ["Yin", "Restorative", "Yoga Nidra", "Pranayama"],
@@ -621,7 +630,7 @@ const blogTopics = [
 function makeInitialState() {
   const pages = [
     makeSeo("/", "Home | Yogmandu", "Yoga Alliance certified teacher training, sound healing, and daily yoga classes in Kathmandu."),
-    makeSeo("/about", "About Yogmandu | Founded 2015, 3,000+ Teachers Trained", "Dr. Chintamani Gautam leads Yogmandu — Nepal's first Yoga Alliance registered school. ERYT 500, PhD Yogic Science, 3,000+ teachers from 50+ countries."),
+    makeSeo("/about", "About Yogmandu | Founded 2018, 3,000+ Teachers Trained", "Dr. Chintamani Gautam leads Yogmandu — Nepal's first Yoga Alliance registered school. ERYT 500, PhD Yogic Science, 3,000+ teachers from 50+ countries."),
     makeSeo("/class-schedule", "Yoga Class Schedule Kathmandu | Yogmandu", "Weekly yoga timetable at Yogmandu Kathmandu — Hatha, Vinyasa, Ashtanga, Yin, Pranayama, Meditation and Sound Healing sessions.", "Event"),
     makeSeo("/blog", "Yogmandu Blog", "Yoga philosophy, breathwork, retreat notes, and Kathmandu wellness stories.", "Article"),
     makeSeo("/contact", "Contact Yogmandu | Miteri Marg, Mid-Baneshwor, Kathmandu", "Book a class or teacher training at Yogmandu. WhatsApp +977-9862909469. Miteri Marg, Mid-Baneshwor-31, Kathmandu."),
@@ -694,12 +703,45 @@ function makeInitialState() {
   };
 }
 
+// Records pulled from Supabase (or an older localStorage cache) can be missing
+// array fields, which crashes the Sessions/Blog managers (e.g. `session.tags.join`
+// / `session.days.includes`). Guarantee the arrays exist at every data boundary.
+function asArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+function normalizeSession(session) {
+  return {
+    ...session,
+    tags:    asArray(session?.tags),
+    days:    asArray(session?.days),
+    styles:  asArray(session?.styles),
+    gallery: asArray(session?.gallery),
+  };
+}
+function normalizeBlog(blog) {
+  return { ...blog, tags: asArray(blog?.tags) };
+}
+function normalizeCmsState(state) {
+  if (!state || typeof state !== "object") return state;
+  return {
+    ...state,
+    sessions: asArray(state.sessions).map(normalizeSession),
+    blogs:    asArray(state.blogs).map(normalizeBlog),
+  };
+}
+
 function usePersistentAdminState() {
   const [state, setState] = useState(makeInitialState);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) setState(JSON.parse(stored));
+    if (stored) {
+      try {
+        setState(normalizeCmsState(JSON.parse(stored)));
+      } catch {
+        /* corrupt cache — fall back to seeded initial state */
+      }
+    }
     setReady(true);
   }, []);
   useEffect(() => {
@@ -729,8 +771,8 @@ async function loadRemoteCms() {
 
   return {
     configured: blogs.configured || sessions.configured || media.configured || gallery.configured || instructors.configured,
-    blogs: blogs.data || [],
-    sessions: sessions.data || [],
+    blogs: asArray(blogs.data).map(normalizeBlog),
+    sessions: asArray(sessions.data).map(normalizeSession),
     media: media.data || [],
     gallery: gallery.data || [],
     instructors: instructors.data || [],
@@ -986,7 +1028,7 @@ function Dashboard({ data, setActive }) {
   }, []);
 
   const activeSessions = data.sessions.filter((s) => s.status === "Active");
-  const lowSpots       = data.sessions.filter((s) => s.capacity - s.enrolled < 3 && s.status !== "Archived");
+  const lowSpots       = data.sessions.filter((s) => sessionTracksCapacity(s) && s.capacity - s.enrolled < 3 && s.status !== "Archived");
   const mostPopular    = [...data.sessions].sort((a, b) => b.views - a.views)[0];
   const pendingBookings = bookings.filter((b) => b.status === "pending").length;
   const publishedPosts  = data.blogs.filter((b) => b.status === "Published").length;
@@ -1014,14 +1056,14 @@ function Dashboard({ data, setActive }) {
           <div className="rounded-lg bg-emerald-50 p-3"><p className="text-xs text-emerald-700">Active this week</p><p className="mt-1 text-2xl font-semibold text-emerald-900">{activeSessions.length}</p></div>
           <div className="rounded-lg bg-teal-50 p-3 min-w-0"><p className="text-xs text-teal-700">Most popular</p><p className="mt-1 truncate text-sm font-semibold text-teal-900" title={mostPopular?.name}>{mostPopular?.name || "—"}</p></div>
           <div className="rounded-lg bg-amber-50 p-3"><p className="text-xs text-amber-700">Low spots (&lt;3)</p><p className="mt-1 text-2xl font-semibold text-amber-900">{lowSpots.length}</p></div>
-          <div className="rounded-lg bg-red-50 p-3"><p className="text-xs text-red-700">Fully booked</p><p className="mt-1 text-2xl font-semibold text-red-900">{data.sessions.filter((s) => s.enrolled >= s.capacity).length}</p></div>
+          <div className="rounded-lg bg-red-50 p-3"><p className="text-xs text-red-700">Fully booked</p><p className="mt-1 text-2xl font-semibold text-red-900">{data.sessions.filter((s) => sessionTracksCapacity(s) && s.enrolled >= s.capacity).length}</p></div>
           <div className="rounded-lg bg-stone-100 p-3"><p className="text-xs text-stone-600">Upcoming</p><p className="mt-1 text-2xl font-semibold text-stone-900">{data.sessions.filter((s) => s.status === "Upcoming").length}</p></div>
         </div>
       </section>
 
       <div className="grid gap-4 xl:grid-cols-3">
         <MiniTable title="Recent Blog Posts" action={() => setActive("blog")} columns={["Title", "Status"]} rows={data.blogs.slice(0, 5).map((post) => [post.title, post.status])} />
-        <MiniTable title="Upcoming Sessions" action={() => setActive("sessions")} columns={["Session", "Instructor", "Spots"]} rows={data.sessions.slice(0, 5).map((session) => [session.name, data.instructors.find((item) => item.id === session.instructorId)?.name || "", `${session.capacity - session.enrolled}/${session.capacity}`])} />
+        <MiniTable title="Upcoming Sessions" action={() => setActive("sessions")} columns={["Session", "Instructor", "Spots"]} rows={data.sessions.slice(0, 5).map((session) => [session.name, sessionInstructorName(session, data.instructors), sessionSpotsLabel(session)])} />
         <MiniTable title="SEO Health Overview" action={() => setActive("seo")} columns={["Page", "Score", "Missing"]} rows={data.seoPages.slice(0, 5).map((page) => [page.pageName, `${scoreSeo(page, data.seoPages)}/100`, scoreSeo(page, data.seoPages) > 80 ? "None" : "Review tags"])} />
       </div>
     </div>
@@ -1398,7 +1440,7 @@ function SessionsTable({ sessions, instructors, onEdit, setSessions, toast }) {
     <section className="overflow-hidden rounded-xl border border-stone-200 bg-white">
       <table className="w-full text-left text-sm">
         <thead className="bg-stone-50 text-xs uppercase text-stone-500"><tr>{["Session Name", "Type", "Instructor", "Schedule", "Duration", "Level", "Capacity", "Price", "Status", "Actions"].map((item) => <th key={item} className="p-3">{item}</th>)}</tr></thead>
-        <tbody className="divide-y divide-stone-100">{sessions.map((session) => <tr key={session.id} className="hover:bg-stone-50"><td className="p-3 font-medium text-stone-900">{session.name}</td><td className="p-3"><Badge className={typeColor(session.type)}>{session.type}</Badge></td><td className="p-3 text-emerald-700">{instructors.find((item) => item.id === session.instructorId)?.name}</td><td className="p-3 text-stone-600">{session.recurring ? session.days.join(", ") : session.date} - {session.startTime}</td><td className="p-3 text-stone-600">{session.duration} min</td><td className="p-3"><Badge className="bg-stone-100 text-stone-700">{session.level}</Badge></td><td className="p-3 text-stone-600">{session.enrolled}/{session.capacity || "∞"}</td><td className="p-3 text-stone-600">{toMoney(session.price)}</td><td className="p-3"><Badge className={session.status === "Active" ? "bg-emerald-100 text-emerald-700" : session.status === "Cancelled" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}>{session.status}</Badge></td><td className="p-3"><div className="flex gap-1"><Button variant="ghost" onClick={() => onEdit(session)}><Edit3 size={16} /></Button><Button variant="ghost" onClick={() => { setSessions((items) => [{ ...session, id: uid("session"), name: `${session.name} Copy`, status: "Paused" }, ...items]); toast("Session duplicated"); }}><Copy size={16} /></Button><Button variant="ghost" onClick={() => setSessions((items) => items.map((item) => item.id === session.id ? { ...item, status: "Archived" } : item))}><Archive size={16} /></Button><Button variant="ghost" onClick={() => { if (confirm("Delete this session?")) setSessions((items) => items.filter((item) => item.id !== session.id)); }}><Trash2 size={16} /></Button></div></td></tr>)}</tbody>
+        <tbody className="divide-y divide-stone-100">{sessions.map((session) => <tr key={session.id} className="hover:bg-stone-50"><td className="p-3 font-medium text-stone-900">{session.name}</td><td className="p-3"><Badge className={typeColor(session.type)}>{session.type}</Badge></td><td className="p-3 text-emerald-700">{sessionInstructorName(session, instructors)}</td><td className="p-3 text-stone-600">{sessionScheduleLabel(session)}</td><td className="p-3 text-stone-600">{session.duration} min</td><td className="p-3"><Badge className="bg-stone-100 text-stone-700">{session.level}</Badge></td><td className="p-3 text-stone-600">{sessionSpotsLabel(session)}</td><td className="p-3 text-stone-600">{toMoney(session.price)}</td><td className="p-3"><Badge className={session.status === "Active" ? "bg-emerald-100 text-emerald-700" : session.status === "Cancelled" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}>{session.status}</Badge></td><td className="p-3"><div className="flex gap-1"><Button variant="ghost" onClick={() => onEdit(session)}><Edit3 size={16} /></Button><Button variant="ghost" onClick={() => { setSessions((items) => [{ ...session, id: uid("session"), name: `${session.name} Copy`, status: "Paused" }, ...items]); toast("Session duplicated"); }}><Copy size={16} /></Button><Button variant="ghost" onClick={() => setSessions((items) => items.map((item) => item.id === session.id ? { ...item, status: "Archived" } : item))}><Archive size={16} /></Button><Button variant="ghost" onClick={() => { if (confirm("Delete this session?")) setSessions((items) => items.filter((item) => item.id !== session.id)); }}><Trash2 size={16} /></Button></div></td></tr>)}</tbody>
       </table>
     </section>
   );
@@ -1464,7 +1506,7 @@ function WeeklySchedule({ sessions, instructors, onEdit }) {
         <div className="grid min-w-[850px] grid-cols-[80px_repeat(7,1fr)] gap-2">
           <div />
           {DAYS.map((day) => <div key={day} className="rounded-lg bg-stone-100 p-2 text-center text-sm font-semibold text-stone-700">{day}</div>)}
-          {times.map((time) => <React.Fragment key={time}><div className="py-3 text-sm text-stone-500">{time}</div>{DAYS.map((day) => <div key={`${day}-${time}`} className="min-h-24 rounded-lg border border-stone-100 bg-stone-50 p-1">{filtered.filter((session) => session.days.includes(day) && session.startTime === time).map((session) => <button key={session.id} onClick={() => onEdit(session)} className={classNames("mb-1 block w-full rounded-lg p-2 text-left text-xs", typeColor(session.type))}><strong>{session.name}</strong><br />{session.enrolled}/{session.capacity} spots</button>)}</div>)}</React.Fragment>)}
+          {times.map((time) => <React.Fragment key={time}><div className="py-3 text-sm text-stone-500">{time}</div>{DAYS.map((day) => <div key={`${day}-${time}`} className="min-h-24 rounded-lg border border-stone-100 bg-stone-50 p-1">{filtered.filter((session) => session.days.includes(day) && session.startTime === time).map((session) => <button key={session.id} onClick={() => onEdit(session)} className={classNames("mb-1 block w-full rounded-lg p-2 text-left text-xs", typeColor(session.type))}><strong>{session.name}</strong><br />{sessionTracksCapacity(session) ? `${sessionSpotsLabel(session)} spots` : sessionInstructorName(session, instructors)}</button>)}</div>)}</React.Fragment>)}
         </div>
       </section>
     </div>
@@ -1488,7 +1530,7 @@ function InstructorEditor({ instructor, instructors, setInstructors, onClose, to
   const [draft, setDraft] = useState(instructor);
   const exists = instructors.some((item) => item.id === instructor.id);
   const update = (key, value) => setDraft({ ...draft, [key]: value });
-  return <Modal title="Instructor" onClose={onClose}><div className="grid gap-4"><Field label="Full name"><TextInput value={draft.name} onChange={(e) => update("name", e.target.value)} /></Field><Field label="Profile photo"><TextInput value={draft.photo} onChange={(e) => update("photo", e.target.value)} /></Field><input type="file" accept="image/*" onChange={(e) => uploadFile(e, (url) => update("photo", url))} className="text-sm" />{draft.photo && <img src={draft.photo} alt="" className="h-32 w-32 rounded-full object-cover" />}<Field label="Short bio"><TextArea value={draft.bio} onChange={(e) => update("bio", e.target.value)} /></Field><TagChooser label="Specialties" options={STYLES} value={draft.specialties} onChange={(value) => update("specialties", value)} /><Field label="Certifications"><TextArea value={draft.certifications} onChange={(e) => update("certifications", e.target.value)} /></Field><Field label="Years of experience"><TextInput type="number" value={draft.years} onChange={(e) => update("years", Number(e.target.value))} /></Field><div className="grid gap-3 md:grid-cols-3"><Field label="Instagram"><TextInput value={draft.social.instagram} onChange={(e) => update("social", { ...draft.social, instagram: e.target.value })} /></Field><Field label="Facebook"><TextInput value={draft.social.facebook} onChange={(e) => update("social", { ...draft.social, facebook: e.target.value })} /></Field><Field label="Website"><TextInput value={draft.social.website} onChange={(e) => update("social", { ...draft.social, website: e.target.value })} /></Field></div><Field label="Status"><Select value={draft.status} onChange={(e) => update("status", e.target.value)}>{["Active", "On Leave", "Archived"].map((item) => <option key={item}>{item}</option>)}</Select></Field><div className="flex justify-end gap-2"><Button variant="danger" onClick={() => { if (exists && confirm("Archive this instructor?")) { setInstructors(instructors.map((item) => item.id === draft.id ? { ...item, status: "Archived" } : item)); toast("Instructor archived"); onClose(); } }}>Archive</Button><Button onClick={() => { setInstructors(exists ? instructors.map((item) => item.id === draft.id ? draft : item) : [draft, ...instructors]); toast("Instructor saved"); onClose(); }}><Save size={16} /> Save</Button></div></div></Modal>;
+  return <Modal title="Instructor" onClose={onClose}><div className="grid gap-4"><Field label="Full name"><TextInput value={draft.name} onChange={(e) => update("name", e.target.value)} /></Field><Field label="Role / Title" hint="shown under the name on the About page"><TextInput value={draft.role || ""} placeholder="e.g. Senior Yoga Teacher & Trainer" onChange={(e) => update("role", e.target.value)} /></Field><Field label="Profile photo"><TextInput value={draft.photo} onChange={(e) => update("photo", e.target.value)} /></Field><input type="file" accept="image/*" onChange={(e) => uploadFile(e, (url) => update("photo", url))} className="text-sm" />{draft.photo && <img src={draft.photo} alt="" className="h-32 w-32 rounded-full object-cover" />}<Field label="Short bio"><TextArea value={draft.bio} onChange={(e) => update("bio", e.target.value)} /></Field><TagChooser label="Specialties" options={STYLES} value={draft.specialties} onChange={(value) => update("specialties", value)} /><Field label="Certifications"><TextArea value={draft.certifications} onChange={(e) => update("certifications", e.target.value)} /></Field><Field label="Years of experience"><TextInput type="number" value={draft.years} onChange={(e) => update("years", Number(e.target.value))} /></Field><div className="grid gap-3 md:grid-cols-3"><Field label="Instagram"><TextInput value={draft.social.instagram} onChange={(e) => update("social", { ...draft.social, instagram: e.target.value })} /></Field><Field label="Facebook"><TextInput value={draft.social.facebook} onChange={(e) => update("social", { ...draft.social, facebook: e.target.value })} /></Field><Field label="Website"><TextInput value={draft.social.website} onChange={(e) => update("social", { ...draft.social, website: e.target.value })} /></Field></div><Field label="Status"><Select value={draft.status} onChange={(e) => update("status", e.target.value)}>{["Active", "On Leave", "Archived"].map((item) => <option key={item}>{item}</option>)}</Select></Field><div className="flex justify-end gap-2"><Button variant="danger" onClick={() => { if (exists && confirm("Archive this instructor?")) { setInstructors(instructors.map((item) => item.id === draft.id ? { ...item, status: "Archived" } : item)); toast("Instructor archived"); onClose(); } }}>Archive</Button><Button onClick={() => { setInstructors(exists ? instructors.map((item) => item.id === draft.id ? draft : item) : [draft, ...instructors]); toast("Instructor saved"); onClose(); }}><Save size={16} /> Save</Button></div></div></Modal>;
 }
 
 function MediaLibrary({ media, setMedia, blogs, sessions, toast }) {
@@ -1891,6 +1933,147 @@ function BookingsManager({ toast }) {
   );
 }
 
+/* ─────────────────────────────────────────────
+   Sitemap Manager  (custom URLs + GSC deep-link)
+───────────────────────────────────────────── */
+const SITEMAP_URL = "https://yogmandu.com/sitemap.xml";
+const GSC_SITEMAPS_URL = "https://search.google.com/search-console/sitemaps?resource_id=sc-domain:yogmandu.com";
+const CHANGE_FREQ_OPTIONS = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"];
+
+function SitemapManager({ toast }) {
+  const [urls, setUrls] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [configured, setConfigured] = useState(true);
+  const [path, setPath] = useState("");
+  const [priority, setPriority] = useState("0.5");
+  const [changeFrequency, setChangeFrequency] = useState("monthly");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/admin/sitemap-urls")
+      .then((r) => r.json())
+      .then((json) => {
+        if (Array.isArray(json.data)) setUrls(json.data);
+        if (json.configured === false) setConfigured(false);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const addUrl = async () => {
+    if (!path.trim()) { toast("Enter a path first"); return; }
+    setSaving(true);
+    try {
+      const response = await fetch("/api/admin/sitemap-urls", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: path.trim(), priority, changeFrequency }),
+      });
+      const json = await response.json();
+      if (!response.ok) { toast(json.error || "Could not add URL"); return; }
+      setUrls((items) => [...items, json.data]);
+      setPath("");
+      setPriority("0.5");
+      setChangeFrequency("monthly");
+      toast("Added to sitemap");
+    } catch {
+      toast("Network error");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const removeUrl = async (id) => {
+    if (!confirm("Remove this URL from the sitemap?")) return;
+    const prev = urls;
+    setUrls((items) => items.filter((item) => item.id !== id));
+    try {
+      const response = await fetch(`/api/admin/sitemap-urls?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+      if (!response.ok) { setUrls(prev); toast("Could not remove URL"); return; }
+      toast("Removed");
+    } catch {
+      setUrls(prev);
+      toast("Network error");
+    }
+  };
+
+  const copySitemap = async () => {
+    try {
+      await navigator.clipboard.writeText(SITEMAP_URL);
+      toast("Sitemap URL copied");
+    } catch {
+      toast("Copy failed — select the URL manually");
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <section className="rounded-xl border border-stone-200 bg-white p-4">
+        <h2 className="text-lg font-semibold text-stone-900">Your sitemap</h2>
+        <p className="mt-1 text-sm text-stone-500">
+          The sitemap is built automatically from your main pages and published blog posts.
+          Add standalone landing pages below so Google can find them too.
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <code className="rounded-lg bg-stone-100 px-3 py-2 text-sm text-stone-700">{SITEMAP_URL}</code>
+          <Button variant="secondary" onClick={copySitemap}><Copy size={16} /> Copy URL</Button>
+          <Button variant="secondary" onClick={() => window.open(SITEMAP_URL, "_blank", "noopener")}><Eye size={16} /> View sitemap.xml</Button>
+          <Button onClick={() => window.open(GSC_SITEMAPS_URL, "_blank", "noopener")}><Search size={16} /> Open in Search Console</Button>
+        </div>
+        <p className="mt-2 text-xs text-stone-400">
+          Google crawls the sitemap on its own. The Search Console button is for a one-click manual re-submit
+          (automatic API submission isn’t available for this property).
+        </p>
+      </section>
+
+      {!configured && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+          Supabase isn’t configured, so custom URLs can’t be saved. The sitemap still includes all main pages and blog posts.
+        </div>
+      )}
+
+      <section className="rounded-xl border border-stone-200 bg-white p-4">
+        <h3 className="font-semibold text-stone-800">Add a custom URL</h3>
+        <div className="mt-3 grid gap-4 md:grid-cols-[1fr_auto_auto_auto] md:items-end">
+          <Field label="Path" hint="same-site, starts with /">
+            <TextInput placeholder="/yoga-for-beginners" value={path} onChange={(e) => setPath(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") addUrl(); }} />
+          </Field>
+          <Field label="Priority">
+            <TextInput type="number" min="0" max="1" step="0.1" className="w-24" value={priority} onChange={(e) => setPriority(e.target.value)} />
+          </Field>
+          <Field label="Frequency">
+            <Select className="w-36" value={changeFrequency} onChange={(e) => setChangeFrequency(e.target.value)}>
+              {CHANGE_FREQ_OPTIONS.map((item) => <option key={item} value={item}>{item}</option>)}
+            </Select>
+          </Field>
+          <Button onClick={addUrl} disabled={saving || !configured}><Plus size={16} /> Add</Button>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-stone-200 bg-white p-4">
+        <h3 className="font-semibold text-stone-800">Custom URLs</h3>
+        {loading ? (
+          <div className="mt-3 space-y-2">{Array.from({ length: 3 }, (_, i) => <div key={i} className="h-10 animate-pulse rounded-lg bg-stone-100" />)}</div>
+        ) : urls.length === 0 ? (
+          <div className="mt-3"><EmptyState icon={Link} title="No custom URLs yet" text="Add a standalone landing page above and it will appear in your sitemap.xml." /></div>
+        ) : (
+          <div className="mt-3 divide-y divide-stone-100">
+            {urls.map((item) => (
+              <div key={item.id} className="flex items-center justify-between gap-3 py-2">
+                <div className="min-w-0">
+                  <p className="truncate font-medium text-stone-900">{item.path}</p>
+                  <p className="text-xs text-stone-500">priority {item.priority} · {item.change_frequency}</p>
+                </div>
+                <Button variant="ghost" onClick={() => removeUrl(item.id)} aria-label="Remove URL"><Trash2 size={16} /></Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
 function AdminWorkspace({ onLogout }) {
   const [state, setState, ready] = usePersistentAdminState();
   const [active, setActive] = useState("dashboard");
@@ -1969,6 +2152,7 @@ function AdminWorkspace({ onLogout }) {
     ["bookings",    "Bookings",     FileText],
     ["siteLayout",  "Site Layout",  Globe2],
     ["seo",         "SEO Manager",  ShieldCheck],
+    ["sitemap",     "Sitemap",      Link],
     ["blog",        "Blog Manager", BookOpen],
     ["sessions",    "Sessions",     CalendarDays],
     ["instructors", "Instructors",  Users],
@@ -2003,6 +2187,7 @@ function AdminWorkspace({ onLogout }) {
           {active === "bookings"   && <BookingsManager toast={notify} />}
           {active === "siteLayout" && <SiteLayoutManager toast={notify} />}
           {active === "seo"        && <SeoManager pages={state.seoPages} setPages={setPart("seoPages")} toast={notify} />}
+          {active === "sitemap"    && <SitemapManager toast={notify} />}
           {active === "blog" && <BlogManager blogs={state.blogs} setBlogs={setPart("blogs")} media={state.media} setMedia={setPart("media")} toast={notify} />}
           {active === "sessions" && <SessionsManager sessions={state.sessions} setSessions={setPart("sessions")} instructors={state.instructors} setInstructors={setPart("instructors")} media={state.media} setMedia={setPart("media")} toast={notify} />}
           {active === "instructors" && <InstructorsManager instructors={state.instructors} setInstructors={setPart("instructors")} sessions={state.sessions} toast={notify} />}
@@ -2039,7 +2224,7 @@ const DEFAULT_FOOTER = {
   tagline:     "Nepal is calling.",
   taglineEm:   "Are you ready?",
   ctaTagline:  "Begin your journey",
-  description: "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. Transforming practitioners since 2015.",
+  description: "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. Transforming practitioners since 2018.",
   programs: [
     { href: "/class-schedule",        label: "Class Schedule" },
     { href: "/yoga-teacher-training", label: "200hr Teacher Training" },

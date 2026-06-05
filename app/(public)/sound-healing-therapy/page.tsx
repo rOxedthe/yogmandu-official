@@ -44,51 +44,40 @@ const serviceSchema = {
   ],
 };
 
+// Single source of truth: the visible FAQ section below and the FAQPage
+// structured data are both generated from this array, so they can never drift
+// apart (Google requires FAQ markup to match content visible on the page).
+const faqs = [
+  {
+    q: "What is a Tibetan singing bowl sound healing session?",
+    a: "A sound healing session uses hand-hammered Tibetan singing bowls placed on and around the body. The resonating frequencies promote deep relaxation, stress relief, and energetic balance. Sessions typically last 90 minutes.",
+  },
+  {
+    q: "How much does a sound healing session cost at Yogmandu?",
+    a: "Individual sessions are USD 20 (NPR 2,000). Group sessions are USD 10 per person with a minimum of 5 participants. A 3-session package is available for USD 55.",
+  },
+  {
+    q: "Do I need experience for a sound healing session?",
+    a: "No experience is needed. Sessions are suitable for complete beginners, yoga practitioners, and anyone seeking stress relief or energetic balance. Simply arrive, lie down, and allow the sound to do the work.",
+  },
+  {
+    q: "Can I become a certified sound healing practitioner at Yogmandu?",
+    a: "Yes. Yogmandu offers Level I (Foundational, 20 hours) and Level II (Advanced) sound healing certification courses with internationally recognised certificates.",
+  },
+  {
+    q: "How do I book a sound healing session in Kathmandu?",
+    a: "All sessions require pre-booking. Contact us via WhatsApp at +977-9810263277 or email info@yogmandu.com. We are located at Miteri Marg, Mid-Baneshwor-31, Kathmandu.",
+  },
+];
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is a Tibetan singing bowl sound healing session?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "A sound healing session uses hand-hammered Tibetan singing bowls placed on and around the body. The resonating frequencies promote deep relaxation, stress relief, and energetic balance. Sessions typically last 90 minutes.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How much does a sound healing session cost at Yogmandu?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Individual sessions are USD 20 (NPR 2,000). Group sessions are USD 10 per person with a minimum of 5 participants. A 3-session package is available for USD 55.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Do I need experience for a sound healing session?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No experience is needed. Sessions are suitable for complete beginners, yoga practitioners, and anyone seeking stress relief or energetic balance. Simply arrive, lie down, and allow the sound to do the work.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Can I become a certified sound healing practitioner at Yogmandu?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. Yogmandu offers Level I (Foundational, 20 hours) and Level II (Advanced) sound healing certification courses with internationally recognised certificates.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I book a sound healing session in Kathmandu?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "All sessions require pre-booking. Contact us via WhatsApp at +977-9810263277 or email info@yogmandu.com. We are located at Miteri Marg, Mid-Baneshwor-31, Kathmandu.",
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 
 const breadcrumbSchema = {
@@ -558,6 +547,36 @@ export default function SoundHealingPage() {
             with your preferred dates and Level.
           </p>
         </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-24 px-6" style={{ background: "#FFFFFF" }}>
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs tracking-[0.3em] uppercase mb-4 font-medium" style={{ color: "#F7941D" }}>Questions</p>
+            <h2 className="text-4xl md:text-5xl font-light" style={{ fontFamily: "Cormorant Garamond, serif", color: "#2A1208" }}>
+              Frequently asked
+            </h2>
+            <div className="section-divider mt-6" />
+          </div>
+          <div className="space-y-3">
+            {faqs.map((f) => (
+              <details key={f.q} className="faq-item rounded-2xl"
+                style={{ background: "#F9F5FF", border: "1px solid rgba(247,148,29,0.18)" }}>
+                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5">
+                  <span className="text-base font-medium" style={{ color: "#2A1208" }}>{f.q}</span>
+                  <span className="faq-mark flex-shrink-0 text-xl font-light leading-none" style={{ color: "#F7941D" }}>+</span>
+                </summary>
+                <p className="px-6 pb-5 text-sm leading-relaxed" style={{ color: "#4A2E1A" }}>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+        <style>{`
+          .faq-item > summary::-webkit-details-marker { display: none; }
+          .faq-item .faq-mark { transition: transform 0.2s ease; }
+          .faq-item[open] .faq-mark { transform: rotate(45deg); }
+        `}</style>
       </section>
     </>
   );

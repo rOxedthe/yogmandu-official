@@ -13,6 +13,7 @@ export const INSTRUCTORS: Record<string, string> = FALLBACK_INSTRUCTORS;
 export interface DBInstructor {
   id:             string;
   name:           string;
+  role?:          string;
   photo?:         string;
   bio?:           string;
   specialties?:   string[];
@@ -139,6 +140,27 @@ export async function getPublishedBlogs(): Promise<DBBlog[] | null> {
       .order("published_at", { ascending: false });
     if (error) return null;
     return (data ?? []).map((row) => row.data as DBBlog);
+  } catch {
+    return null;
+  }
+}
+
+export interface DBSitemapUrl {
+  path:            string;
+  priority:        number;
+  change_frequency: string;
+}
+
+export async function getCustomSitemapUrls(): Promise<DBSitemapUrl[] | null> {
+  if (!isSupabaseConfigured) return null;
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from("yogmandu_sitemap_urls")
+      .select("path, priority, change_frequency")
+      .order("created_at", { ascending: true });
+    if (error) return null;
+    return (data ?? []) as DBSitemapUrl[];
   } catch {
     return null;
   }

@@ -7,6 +7,8 @@
     "build": "next build --webpack",
     "start": "next start",
     "deploy:cpanel": "next build --webpack && node scripts/package-cpanel.mjs",
+    "deploy": "next build --webpack && node scripts/assemble-standalone.mjs && node scripts/deploy-webdav.mjs",
+    "deploy:sync": "node scripts/assemble-standalone.mjs && node scripts/deploy-webdav.mjs",
     "build:cf": "opennextjs-cloudflare build && wrangler deploy --config wrangler-bundle.jsonc --dry-run --outdir .open-next/cf-bundle && cp .open-next/cf-bundle/worker.js .open-next/assets/_worker.js && node scripts/gen-routes.mjs",
     "build:cf:debug": "npm run build:cf && node scripts/debug-patch.mjs"
   },

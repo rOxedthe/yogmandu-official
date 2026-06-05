@@ -232,7 +232,7 @@ export default function HomePage() {
               accent: "#F7941D", textAccent: "#A65808",
               icon: "🌅",
               title: "Our Story",
-              desc: "Founded in 2018 by the teams of experts in the yoga and wellness industry. Led by Yogi Arjun Rakhal and Dr. Chintamani Gautam (PhD Yogic Science, ERYT 500). Nepal's first Yoga Alliance registered school.",
+              desc: "Founded in 2018 by the teams of experts in the yoga and wellness industry. Led by Yogi Arjun Rakhal (ERYT 500, YACEP) and Dr. Chintamani Gautam (PhD Yogic Science, ERYT 500). Nepal's first Yoga Alliance registered school.",
               cta: "Meet the Team",
             },
             {

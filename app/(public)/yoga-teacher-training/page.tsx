@@ -56,59 +56,44 @@ const courseSchema = {
   ],
 };
 
+// Single source of truth: the visible FAQ section below and the FAQPage
+// structured data are both generated from this array, so they can never drift
+// apart (Google requires FAQ markup to match content visible on the page).
+const faqs = [
+  {
+    q: "Is the 200-hour yoga teacher training Yoga Alliance certified?",
+    a: "Yes. Yogmandu is a Yoga Alliance Registered Yoga School (RYS 200). Graduates receive a certificate eligible for Yoga Alliance RYT 200 registration worldwide.",
+  },
+  {
+    q: "What is the difference between residential and non-residential training?",
+    a: "The residential course (USD 1,400) includes 28 days of tuition plus accommodation and all meals at the Yogmandu studio in Kathmandu. The non-residential course (USD 600) covers tuition only — you arrange your own accommodation in Kathmandu.",
+  },
+  {
+    q: "How long is the 200-hour yoga teacher training course?",
+    a: "The course runs for 28 days. Daily sessions begin at 6:30 AM and cover asana, pranayama, anatomy, yoga philosophy, Sanskrit, and teaching methodology. Evenings include self-study until 9:30 PM.",
+  },
+  {
+    q: "When are the 2026 yoga teacher training start dates?",
+    a: "2026 batches run in June, July, and August. Each cohort is limited to 12 students. Contact us on WhatsApp (+977-9810263277) to reserve your place.",
+  },
+  {
+    q: "What level of yoga experience do I need to join?",
+    a: "The program is open to beginners and intermediate practitioners. No prior teaching experience is required — only a sincere commitment to daily practice and learning.",
+  },
+  {
+    q: "Who teaches the 200-hour yoga teacher training at Yogmandu?",
+    a: "The program is led by Dr. Chintamani Gautam (PhD Yogic Science, E-RYT 500) and supported by senior faculty including Yogi Arjun Rakhal and Dr. Dipika. Dr. Gautam has trained 3,000+ teachers from 50+ countries.",
+  },
+];
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Is the 200-hour yoga teacher training Yoga Alliance certified?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. Yogmandu is a Yoga Alliance Registered Yoga School (RYS 200). Graduates receive a certificate eligible for Yoga Alliance RYT 200 registration worldwide.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What is the difference between residential and non-residential training?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "The residential course (USD 1,400) includes 28 days of tuition plus accommodation and all meals at the Yogmandu studio in Kathmandu. The non-residential course (USD 600) covers tuition only — you arrange your own accommodation in Kathmandu.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How long is the 200-hour yoga teacher training course?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "The course runs for 28 days. Daily sessions begin at 6:30 AM and cover asana, pranayama, anatomy, yoga philosophy, Sanskrit, and teaching methodology. Evenings include self-study until 9:30 PM.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "When are the 2026 yoga teacher training start dates?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "2026 batches run in June, July, and August. Each cohort is limited to 12 students. Contact us on WhatsApp (+977-9810263277) to reserve your place.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What level of yoga experience do I need to join?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "The program is open to beginners and intermediate practitioners. No prior teaching experience is required — only a sincere commitment to daily practice and learning.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Who teaches the 200-hour yoga teacher training at Yogmandu?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "The program is led by Dr. Chintamani Gautam (PhD Yogic Science, E-RYT 500) and supported by senior faculty including Yogi Arjun Rakhal and Dr. Dipika. Dr. Gautam has trained 3,000+ teachers from 50+ countries.",
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 
 const breadcrumbSchema = {
@@ -378,6 +363,36 @@ export default function YogaTeacherTrainingPage() {
             <p className="text-xs mt-3" style={{ color: "#9A7860" }}>USD 200 deposit is non-refundable but transferable within the same year.</p>
           </div>
         </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-24 px-6" style={{ background: "#FFFFFF" }}>
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs tracking-[0.3em] uppercase mb-4 font-medium" style={{ color: "#6B2D8B" }}>Questions</p>
+            <h2 className="text-4xl md:text-5xl font-light" style={{ fontFamily: "Cormorant Garamond, serif", color: "#2A1208" }}>
+              Frequently asked
+            </h2>
+            <div className="section-divider mt-6" />
+          </div>
+          <div className="space-y-3">
+            {faqs.map((f) => (
+              <details key={f.q} className="faq-item rounded-2xl"
+                style={{ background: "#F9F5FF", border: "1px solid rgba(107,45,139,0.12)" }}>
+                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5">
+                  <span className="text-base font-medium" style={{ color: "#2A1208" }}>{f.q}</span>
+                  <span className="faq-mark flex-shrink-0 text-xl font-light leading-none" style={{ color: "#6B2D8B" }}>+</span>
+                </summary>
+                <p className="px-6 pb-5 text-sm leading-relaxed" style={{ color: "#4A2E1A" }}>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+        <style>{`
+          .faq-item > summary::-webkit-details-marker { display: none; }
+          .faq-item .faq-mark { transition: transform 0.2s ease; }
+          .faq-item[open] .faq-mark { transform: rotate(45deg); }
+        `}</style>
       </section>
 
       {/* CTA */}

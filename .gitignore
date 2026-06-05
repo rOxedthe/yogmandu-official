@@ -46,3 +46,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /.wrangler/
+
+# WebDAV deploy credentials (local only)
+scripts/.deploy.env
+
+# server file backups (local only)
+.deploy-backup/

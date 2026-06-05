@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { statSync } from "fs";
 import { join } from "path";
-import { getPublishedBlogs } from "@/lib/publicData";
+import { getPublishedBlogs, getCustomSitemapUrls } from "@/lib/publicData";
 
 // Cache mtime lookups at module load so we don't stat repeatedly per request.
 function mtime(relPath: string): Date {
@@ -23,6 +23,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/yoga-teacher-training`,         lastModified: mtime("app/(public)/yoga-teacher-training/page.tsx"), changeFrequency: "monthly", priority: 0.95 },
     { url: `${base}/sound-healing-therapy`,         lastModified: mtime("app/(public)/sound-healing-therapy/page.tsx"), changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/class-schedule`,                lastModified: mtime("app/(public)/class-schedule/page.tsx"),        changeFrequency: "weekly",  priority: 0.85 },
+    { url: `${base}/yoga-for-beginners`,            lastModified: mtime("app/(public)/yoga-for-beginners/page.tsx"),    changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/yoga-retreat-nepal`,            lastModified: mtime("app/(public)/yoga-retreat-nepal/page.tsx"),    changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/services`,                      lastModified: mtime("app/(public)/services/page.tsx"),              changeFrequency: "monthly", priority: 0.85 },
     { url: `${base}/about`,                         lastModified: mtime("app/(public)/about/page.tsx"),                 changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/contact`,                       lastModified: mtime("app/(public)/contact/page.tsx"),               changeFrequency: "yearly",  priority: 0.75 },
@@ -59,5 +61,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }))
     : [];
 
-  return [...staticRoutes, ...blogRoutes, ...fallbackRoutes];
+  // Admin-managed custom URLs (Supabase). Degrades gracefully if unavailable.
+  const custom = await getCustomSitemapUrls().catch(() => null);
+  const customRoutes: MetadataRoute.Sitemap = (custom ?? []).map((row) => ({
+    url:             `${base}${row.path}`,
+    lastModified:    BUILD_DATE,
+    changeFrequency: row.change_frequency as MetadataRoute.Sitemap[number]["changeFrequency"],
+    priority:        row.priority,
+  }));
+
+  return [...staticRoutes, ...blogRoutes, ...fallbackRoutes, ...customRoutes];
 }

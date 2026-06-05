@@ -1,5 +1,19 @@
 import type { Metadata } from "next";
 import AboutContent from "./AboutContent";
+import { getInstructors } from "@/lib/publicData";
+
+// Brand palette + initials are derived here since the admin record doesn't store them.
+const TEAM_PALETTE = ["#6B2D8B", "#F7941D", "#8DC63F"];
+const HONORIFICS = new Set(["dr", "dr.", "yogi", "mr", "mr.", "ms", "ms.", "mrs", "mrs.", "sri", "prof", "prof."]);
+function initialsOf(name: string): string {
+  const words = name.trim().split(/\s+/);
+  const meaningful = words.filter((w) => !HONORIFICS.has(w.toLowerCase()));
+  const pick = (meaningful.length ? meaningful : words).slice(0, 2);
+  return pick.map((w) => w[0]?.toUpperCase() ?? "").join("") || "·";
+}
+
+// Revalidate so admin edits to instructors appear without a redeploy (matches blog/schedule).
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: { absolute: "About Yogmandu — Yoga School in Kathmandu, Nepal" },
@@ -69,13 +83,29 @@ const breadcrumbSchema = {
   ],
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  // Admin-managed instructors (Supabase). Falls back to AboutContent's built-in
+  // team when Supabase is unconfigured/empty/unreachable (getInstructors → null).
+  const instructors = await getInstructors().catch(() => null);
+  const team = (instructors ?? [])
+    .filter((i) => (i.status ?? "Active") === "Active")
+    .map((i, idx) => ({
+      name:           i.name,
+      role:           i.role ?? "",
+      bio:            i.bio ?? "",
+      certifications: i.certifications ?? "",
+      credentials:    Array.isArray(i.specialties) ? i.specialties : [],
+      photo:          i.photo ?? "",
+      color:          TEAM_PALETTE[idx % TEAM_PALETTE.length],
+      initials:       initialsOf(i.name),
+    }));
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <AboutContent />
+      <AboutContent team={team} />
     </>
   );
 }

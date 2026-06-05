@@ -16,8 +16,10 @@ const DEFAULT_CONFIG = {
   description: "Yoga Alliance certified teacher training & authentic Tibetan Sound Healing in Kathmandu, Nepal. Transforming practitioners since 2018.",
   programs: [
     { href: "/class-schedule",        label: "Class Schedule" },
+    { href: "/yoga-for-beginners",    label: "Yoga for Beginners" },
     { href: "/yoga-teacher-training", label: "200hr Teacher Training" },
     { href: "/yoga-teacher-training", label: "300hr Advanced Training" },
+    { href: "/yoga-retreat-nepal",    label: "Yoga Retreat Nepal" },
     { href: "/sound-healing-therapy", label: "Sound Healing Sessions" },
     { href: "/sound-healing-therapy", label: "Sound Healing Cert." },
   ],
@@ -224,27 +226,40 @@ export default function Footer() {
           <h4 style={{ fontSize: "0.95rem", letterSpacing: "0.26em", textTransform: "uppercase",
             color: "#7A5840", marginBottom: 20, fontWeight: 500 }}>Find Us</h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
-            {cfg.contact.map(c => (
-              <li key={c.text} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                <span style={{ fontSize: "0.95rem" }}>{c.icon}</span>
-                {c.icon === "📍" ? (
-                  <a
-                    href="https://www.google.com/maps?q=31+Miteri+Marg,+Mid-Baneshwor-31,+Kathmandu+44600,+Nepal&geocode=KXmrYpZQGes5MVNIqRARKuxM"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ fontSize: "0.9rem", fontWeight: 400, color: "#5C3D2E", lineHeight: 1.6,
-                      textDecoration: "underline", textDecorationColor: "rgba(166,88,8,0.4)",
-                      textUnderlineOffset: 3, transition: "color 0.2s" }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = "#A65808")}
-                    onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = "#5C3D2E")}
-                  >
-                    {c.text}
-                  </a>
-                ) : (
-                  <span style={{ fontSize: "0.9rem", fontWeight: 400, color: "#5C3D2E", lineHeight: 1.6 }}>{c.text}</span>
-                )}
-              </li>
-            ))}
+            {cfg.contact.map(c => {
+              // Detect link type by content, not by emoji (the icon can come from
+              // remote site-config and may not byte-match a hard-coded emoji).
+              const text = (c.text || "").trim();
+              const isEmail = /\S+@\S+\.\S+/.test(text);
+              const isPhone = !isEmail && /^[+(]?\d[\d\s().-]{5,}$/.test(text);
+              const isLocation = c.icon === "📍";
+              const linkHref =
+                isLocation ? "https://www.google.com/maps?q=31+Miteri+Marg,+Mid-Baneshwor-31,+Kathmandu+44600,+Nepal&geocode=KXmrYpZQGes5MVNIqRARKuxM"
+                : isEmail ? `mailto:${text}`
+                : isPhone ? `tel:${text.replace(/[^+\d]/g, "")}`
+                : null;
+              const external = isLocation;
+              return (
+                <li key={c.text} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                  <span style={{ fontSize: "0.95rem" }}>{c.icon}</span>
+                  {linkHref ? (
+                    <a
+                      href={linkHref}
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      style={{ fontSize: "0.9rem", fontWeight: 400, color: "#5C3D2E", lineHeight: 1.6,
+                        textDecoration: "underline", textDecorationColor: "rgba(166,88,8,0.4)",
+                        textUnderlineOffset: 3, transition: "color 0.2s" }}
+                      onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = "#A65808")}
+                      onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = "#5C3D2E")}
+                    >
+                      {c.text}
+                    </a>
+                  ) : (
+                    <span style={{ fontSize: "0.9rem", fontWeight: 400, color: "#5C3D2E", lineHeight: 1.6 }}>{c.text}</span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

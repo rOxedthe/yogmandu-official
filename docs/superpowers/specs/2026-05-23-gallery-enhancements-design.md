@@ -1,4 +1,4 @@
-# Gallery Enhancements — Design Spec
+ # Gallery Enhancements — Design Spec
 **Date:** 2026-05-23  
 **Status:** Approved
 
