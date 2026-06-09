@@ -189,8 +189,12 @@ function TestimonialCard({
           </div>
           <div>
             <p className="font-medium text-sm" style={{ color: "#2A1208" }}>{t.name}</p>
-            <p className="text-xs font-light mt-0.5" style={{ color: "rgba(42,18,8,0.45)" }}>
-              {t.flag} {t.origin}&nbsp;&middot;&nbsp;
+            <p className="text-xs font-light mt-0.5 flex items-center gap-1" style={{ color: "rgba(42,18,8,0.45)" }}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={t.color} strokeWidth="2" style={{ flexShrink: 0 }} aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              {t.origin}&nbsp;&middot;&nbsp;
               <span style={{ color: t.color }}>{t.program}</span>
             </p>
           </div>

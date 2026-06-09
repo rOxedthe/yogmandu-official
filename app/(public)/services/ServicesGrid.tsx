@@ -80,7 +80,7 @@ const SERVICES: Service[] = [
     title: "Yoga Therapy",
     subtitle: "Lifestyle disease support",
     body: "Therapeutic yoga for back pain, joint pain, diabetes, uric acid, gastritis, high/low BP, arthritis, mood disorders, depression, stress, and anxiety. Tailored after a full medical assessment.",
-    icon: "🪷",
+    icon: "🌺",
   },
   {
     id: "sound", group: "Therapy & Wellness", color: "#F7941D",
@@ -169,7 +169,7 @@ const SERVICES: Service[] = [
     title: "Acupressure Yoga",
     subtitle: "Marma + yoga",
     body: "A blend of traditional acupressure / marma points with yoga and breathwork — targeted relief for tension, fatigue, and chronic discomfort.",
-    icon: "🪡",
+    icon: "👐",
   },
 ];
 

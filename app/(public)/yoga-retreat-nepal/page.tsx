@@ -105,7 +105,7 @@ const included = [
   { icon: "🎵", title: "Tibetan Sound Healing", desc: "Authentic singing-bowl sound baths to release tension and deepen rest — a signature of our retreats.", color: "#F7941D" },
   { icon: "🌬️", title: "Pranayama & Breathwork", desc: "Traditional breathing practices to calm the nervous system and steady the mind.", color: "#8DC63F" },
   { icon: "🏔️", title: "Himalayan Setting", desc: "Mountain air, ancient temples and the living lineage of yoga — Nepal as the practice itself.", color: "#6B2D8B" },
-  { icon: "🛕", title: "Cultural Excursions", desc: "Optional visits to Kathmandu's stupas, temples and sacred sites between practice sessions.", color: "#F7941D" },
+  { icon: "🏛️", title: "Cultural Excursions", desc: "Optional visits to Kathmandu's stupas, temples and sacred sites between practice sessions.", color: "#F7941D" },
   { icon: "🌿", title: "Small, Personal Groups", desc: "Intimate cohorts and experienced teachers mean real attention and a genuine sense of community.", color: "#8DC63F" },
 ];
 

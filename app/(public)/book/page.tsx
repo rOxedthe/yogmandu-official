@@ -23,7 +23,7 @@ const SERVICES: BookingService[] = [
   { id: "bootcamp",   group: "Special Programs",     color: "#F7941D", icon: "🔥", title: "Weight Loss Bootcamp",    subtitle: "49-day transformation" },
   { id: "corporate",  group: "Special Programs",     color: "#8DC63F", icon: "💼", title: "Corporate Yoga",          subtitle: "For your team & office" },
   // Therapy & Wellness
-  { id: "therapy",    group: "Therapy & Wellness",   color: "#6B2D8B", icon: "🪷", title: "Yoga Therapy",            subtitle: "Lifestyle disease support" },
+  { id: "therapy",    group: "Therapy & Wellness",   color: "#6B2D8B", icon: "🌺", title: "Yoga Therapy",            subtitle: "Lifestyle disease support" },
   { id: "sound",      group: "Therapy & Wellness",   color: "#F7941D", icon: "🎵", title: "Sound Healing Therapy",   subtitle: "Tibetan singing bowls" },
   { id: "diet",       group: "Therapy & Wellness",   color: "#8DC63F", icon: "🥗", title: "Diet Consultation",       subtitle: "Sister clinic — Zumbandu" },
   { id: "reiki",      group: "Therapy & Wellness",   color: "#6B2D8B", icon: "✨", title: "Reiki Healing",           subtitle: "Energy work" },
@@ -37,7 +37,7 @@ const SERVICES: BookingService[] = [
   { id: "trekking",   group: "Workshops & Extras",   color: "#6B2D8B", icon: "🏔", title: "Yoga Trekking",           subtitle: "Yoga + Himalayan trails" },
   { id: "hotel",      group: "Workshops & Extras",   color: "#F7941D", icon: "🏨", title: "Yoga at Hotel",           subtitle: "For travellers & retreats" },
   { id: "chair",      group: "Workshops & Extras",   color: "#8DC63F", icon: "💺", title: "Chair Yoga",              subtitle: "For limited mobility" },
-  { id: "acupressure",group: "Workshops & Extras",   color: "#6B2D8B", icon: "🪡", title: "Acupressure Yoga",        subtitle: "Marma + yoga" },
+  { id: "acupressure",group: "Workshops & Extras",   color: "#6B2D8B", icon: "👐", title: "Acupressure Yoga",        subtitle: "Marma + yoga" },
 ];
 
 const GROUPS = ["All", "Yoga Programs", "Special Programs", "Therapy & Wellness", "For Specific Groups", "Workshops & Extras"] as const;

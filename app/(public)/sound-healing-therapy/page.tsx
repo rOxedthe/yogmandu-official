@@ -456,7 +456,7 @@ export default function SoundHealingPage() {
             <div className="section-divider mt-6" />
             <p className="mt-6 text-base font-light max-w-2xl mx-auto" style={{ color: "#4A2E1A" }}>
               Two levels — Foundational and Advanced. Internationally recognised certificates upon completion.
-              Train with Dr. Chintamani Gautam and our senior faculty in the lineage's home: Kathmandu, Nepal.
+              Train with experienced and international certified Sound Healing Trainers.
             </p>
           </div>
 
