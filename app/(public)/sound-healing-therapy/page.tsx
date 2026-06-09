@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SingingBowl from "@/components/SingingBowlClient";
+import StatsOrbs from "@/components/StatsOrbs";
 
 export const metadata: Metadata = {
   title: { absolute: "Sound Healing & Tibetan Singing Bowls | Yogmandu Nepal" },
@@ -212,6 +213,18 @@ export default function SoundHealingPage() {
             </p>
           </div>
         </div>
+      </section>
+
+      {/* Stats strip */}
+      <section className="py-16 px-6" style={{ background: "#FFFFFF" }}>
+        <StatsOrbs
+          stats={[
+            { value: "50k+", numeric: 50000, suffix: "+", label: "Satisfied Yoga Students", color: "#6B2D8B", textColor: "#6B2D8B" },
+            { value: "500+", numeric: 500,   suffix: "+", label: "Sound Healers Trained",   color: "#F7941D", textColor: "#A65808" },
+            { value: "25+",  numeric: 25,    suffix: "+", label: "Countries Represented",   color: "#8DC63F", textColor: "#4A6418" },
+            { value: "2018", numeric: undefined,          label: "Established in Nepal",    color: "#F7941D", textColor: "#A65808" },
+          ]}
+        />
       </section>
 
       {/* How it works */}
