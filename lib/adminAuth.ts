@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "crypto";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 const COOKIE_NAME = "yogmandu_admin_session";
 const SESSION_MAX_AGE = 60 * 60 * 8;
@@ -66,12 +66,35 @@ export async function clearAdminSessionCookie() {
   cookieStore.delete(COOKIE_NAME);
 }
 
+/**
+ * CSRF defence-in-depth: when a browser sends an Origin header (it does on all
+ * cross-site fetch/XHR and on state-changing requests), it must match the Host.
+ * Same-origin requests and non-browser callers (no Origin) are allowed — the
+ * httpOnly + sameSite=lax session cookie already blocks most cross-site abuse;
+ * this closes the remaining gap. Returns true when the request is acceptable.
+ */
+export async function isSameOriginRequest() {
+  const headerStore = await headers();
+  const origin = headerStore.get("origin");
+  if (!origin) return true; // no Origin (same-origin navigation / server-to-server)
+  const host = headerStore.get("host");
+  try {
+    return new URL(origin).host === host;
+  } catch {
+    return false;
+  }
+}
+
 export async function requireAdminSession() {
   if (!isAdminPasswordConfigured()) {
     return Response.json(
       { error: "Admin password is not configured. Set ADMIN_PASSWORD to enable remote CMS APIs." },
       { status: 503 },
     );
+  }
+
+  if (!(await isSameOriginRequest())) {
+    return Response.json({ error: "Cross-origin request blocked." }, { status: 403 });
   }
 
   if (!(await isAdminAuthenticated())) {

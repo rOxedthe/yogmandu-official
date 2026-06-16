@@ -2,10 +2,12 @@ import {
   clearAdminSessionCookie,
   isAdminAuthenticated,
   isAdminPasswordConfigured,
+  isSameOriginRequest,
   setAdminSessionCookie,
   verifyAdminPassword,
 } from "@/lib/adminAuth";
 import { rateLimit, getClientIp } from "@/lib/rateLimit";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +22,11 @@ export async function GET() {
 export async function POST(request: Request) {
   if (!isAdminPasswordConfigured()) {
     return Response.json({ error: "Set ADMIN_PASSWORD before enabling the remote admin." }, { status: 503 });
+  }
+
+  // CSRF defence-in-depth: reject cross-origin login attempts.
+  if (!(await isSameOriginRequest())) {
+    return Response.json({ error: "Cross-origin request blocked." }, { status: 403 });
   }
 
   // Rate limit: 10 attempts per IP per 15 minutes
@@ -45,6 +52,12 @@ export async function POST(request: Request) {
 
   const body = await request.json().catch(() => ({}));
   const password = String(body?.password ?? "").slice(0, 1000);
+
+  // Turnstile (no-op until TURNSTILE_SECRET is set — see lib/turnstile.ts).
+  const turnstile = await verifyTurnstile(body?.turnstileToken, ip);
+  if (!turnstile.ok) {
+    return Response.json({ error: turnstile.error || "Captcha verification failed." }, { status: 400 });
+  }
 
   if (!verifyAdminPassword(password)) {
     return Response.json(

@@ -1,6 +1,7 @@
 import { requireAdminSession } from "@/lib/adminAuth";
 import { getStorageBucket, getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabaseAdmin";
 import { optimizeImage } from "@/lib/imageOptimize";
+import { validateImageUpload } from "@/lib/uploadValidation";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,11 @@ export async function POST(request: Request) {
 
   if (!(file instanceof File)) {
     return Response.json({ error: "Missing image file." }, { status: 400 });
+  }
+
+  const validationError = validateImageUpload(file);
+  if (validationError) {
+    return Response.json({ error: validationError }, { status: 400 });
   }
 
   const supabase = getSupabaseAdmin();

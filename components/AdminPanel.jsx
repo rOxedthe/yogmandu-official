@@ -43,6 +43,7 @@ import {
   sessionScheduleLabel,
   sessionTracksCapacity,
 } from "@/lib/adminSessionDisplay";
+import Turnstile from "@/components/Turnstile";
 
 const STORAGE_KEY = "yogmandu-admin-state-v2";
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -1701,6 +1702,7 @@ function SettingsCard({ title, children }) {
 
 function AdminLogin({ onAuthenticated, passwordConfigured }) {
   const [password, setPassword] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -1709,7 +1711,10 @@ function AdminLogin({ onAuthenticated, passwordConfigured }) {
     setBusy(true);
     setError("");
     try {
-      await fetchJson("/api/admin/auth", { method: "POST", body: JSON.stringify({ password }) });
+      await fetchJson("/api/admin/auth", {
+        method: "POST",
+        body: JSON.stringify({ password, turnstileToken }),
+      });
       onAuthenticated();
     } catch (nextError) {
       setError(nextError.message || "Could not sign in.");
@@ -1745,6 +1750,11 @@ function AdminLogin({ onAuthenticated, passwordConfigured }) {
           />
         </Field>
         {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
+        {/* Renders nothing until NEXT_PUBLIC_TURNSTILE_SITE_KEY is set; the
+            server skips verification in the same unconfigured state. */}
+        <div className="mt-4">
+          <Turnstile onVerify={setTurnstileToken} action="admin-login" />
+        </div>
         <Button disabled={!passwordConfigured || busy} className="mt-5 w-full">
           <ShieldCheck size={16} /> {busy ? "Signing in" : "Sign In"}
         </Button>
